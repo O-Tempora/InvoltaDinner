@@ -16,7 +16,7 @@ builder.Services.AddIdentity<DAL.Entities.User, IdentityRole>(options => options
     .AddEntityFrameworkStores<DAL.Entities.DinnerContext>();
 
 /*
-    Если это раскомментить, там будет URL говна
+    хз надо ли это    
 */
 // builder.Services.AddAuthorization(options=>
 // {

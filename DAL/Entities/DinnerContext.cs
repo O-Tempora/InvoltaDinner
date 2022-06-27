@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DAL.Entities
 {
-    public partial class DinnerContext : DbContext
+    public partial class DinnerContext : IdentityDbContext<User>
     {
         public DinnerContext()
         {
@@ -21,7 +22,7 @@ namespace DAL.Entities
         public virtual DbSet<DishMenu> DishMenus { get; set; } = null!;
         public virtual DbSet<Record> Records { get; set; } = null!;
         public virtual DbSet<RecordDish> RecordDishes { get; set; } = null!;
-        public virtual DbSet<User> Users { get; set; } = null!;
+        public new virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -33,6 +34,7 @@ namespace DAL.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<DinnerMenu>(entity =>
             {
                 entity.ToTable("DinnerMenu");

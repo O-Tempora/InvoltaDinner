@@ -1,5 +1,29 @@
-var builder = WebApplication.CreateBuilder(args);
+using System.Globalization;
+using System.Threading.Tasks.Dataflow;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authorization;
 
+var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<DAL.Entities.DinnerContext>(options =>
+    options.UseSqlServer(connectionString));
+builder.Services.AddIdentity<DAL.Entities.User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<DAL.Entities.DinnerContext>();
+
+/*
+    Если это раскомментить, там будет URL говна
+*/
+// builder.Services.AddAuthorization(options=>
+// {
+//     options.FallbackPolicy = new AuthorizationPolicyBuilder()
+//         .RequireAuthenticatedUser()
+//         .Build();
+// });
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -17,7 +41,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
+app.UseRouting();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

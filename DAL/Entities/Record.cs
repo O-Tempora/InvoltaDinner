@@ -12,7 +12,7 @@ namespace DAL.Entities
 
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public decimal? Price { get; set; }
 
         public virtual User User { get; set; } = null!;

@@ -10,6 +10,10 @@ namespace DAL.Interfaces
     {
         IRepository<Record> RecordRepository {get; }
         IRepository<DinnerMenu> DinnerMenuRepository {get; }
+        IRepository<DishMenu> DishMenuRepository {get; }
+        IRepository<Dish> DishRepository {get; }
+        IRepository<RecordDish> RecordDishRepository {get; }
+
         int Save();
     }
 }

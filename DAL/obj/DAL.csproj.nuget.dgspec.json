@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\valen\\Desktop\\Dinner\\DAL\\DAL.csproj": {}
+    "C:\\Users\\valen\\Desktop\\Обеды\\Dinner\\DAL\\DAL.csproj": {}
   },
   "projects": {
-    "C:\\Users\\valen\\Desktop\\Dinner\\DAL\\DAL.csproj": {
+    "C:\\Users\\valen\\Desktop\\Обеды\\Dinner\\DAL\\DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\valen\\Desktop\\Dinner\\DAL\\DAL.csproj",
+        "projectUniqueName": "C:\\Users\\valen\\Desktop\\Обеды\\Dinner\\DAL\\DAL.csproj",
         "projectName": "DAL",
-        "projectPath": "C:\\Users\\valen\\Desktop\\Dinner\\DAL\\DAL.csproj",
+        "projectPath": "C:\\Users\\valen\\Desktop\\Обеды\\Dinner\\DAL\\DAL.csproj",
         "packagesPath": "C:\\Users\\valen\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\valen\\Desktop\\Dinner\\DAL\\obj\\",
+        "outputPath": "C:\\Users\\valen\\Desktop\\Обеды\\Dinner\\DAL\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\valen\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,18 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.AspNetCore": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.6, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.6, )"

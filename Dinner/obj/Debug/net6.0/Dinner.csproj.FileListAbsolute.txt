@@ -209,3 +209,4 @@ C:\Users\valen\Desktop\Обеды\Dinner\Dinner\obj\Debug\net6.0\refint\Dinner.d
 C:\Users\valen\Desktop\Обеды\Dinner\Dinner\obj\Debug\net6.0\Dinner.pdb
 C:\Users\valen\Desktop\Обеды\Dinner\Dinner\obj\Debug\net6.0\Dinner.genruntimeconfig.cache
 C:\Users\valen\Desktop\Обеды\Dinner\Dinner\obj\Debug\net6.0\ref\Dinner.dll
+C:\Users\valen\Desktop\Обеды\Dinner\Dinner\bin\Debug\net6.0\Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll

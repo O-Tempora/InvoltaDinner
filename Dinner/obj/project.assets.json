@@ -190,6 +190,21 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Diagnostics.Abstractions.dll": {}
         }
       },
+      "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore/6.0.6": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "6.0.6"
+        },
+        "compile": {
+          "lib/net6.0/Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "Microsoft.AspNetCore.HostFiltering/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -1812,6 +1827,21 @@
         "lib/netstandard2.0/Microsoft.AspNetCore.Diagnostics.Abstractions.xml",
         "microsoft.aspnetcore.diagnostics.abstractions.2.2.0.nupkg.sha512",
         "microsoft.aspnetcore.diagnostics.abstractions.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore/6.0.6": {
+      "sha512": "kXznF3FSjukLhrvDSCSU2rZCmgn2eJtFkKKUFWB57eQu3zatLqCJAKWQwjmtumMv6Uke0YBBuY7ecqF3T2YpbQ==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.diagnostics.entityframeworkcore/6.0.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net6.0/Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll",
+        "lib/net6.0/Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.xml",
+        "microsoft.aspnetcore.diagnostics.entityframeworkcore.6.0.6.nupkg.sha512",
+        "microsoft.aspnetcore.diagnostics.entityframeworkcore.nuspec"
       ]
     },
     "Microsoft.AspNetCore.HostFiltering/2.2.0": {
@@ -4015,6 +4045,7 @@
     "net6.0": [
       "BLL >= 1.0.0",
       "DAL >= 1.0.0",
+      "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore >= 6.0.6",
       "Microsoft.AspNetCore.Identity >= 2.2.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 6.0.6",
       "Microsoft.EntityFrameworkCore >= 6.0.6",
@@ -4070,6 +4101,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[6.0.6, )"
+          },
           "Microsoft.AspNetCore.Identity": {
             "target": "Package",
             "version": "[2.2.0, )"

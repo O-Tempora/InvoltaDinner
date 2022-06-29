@@ -9,6 +9,7 @@ namespace BLL.Models
     public class SignInModel
     {
         [Required]
+        [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         public string Email {get;set;}
 
@@ -16,7 +17,5 @@ namespace BLL.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password {get;set;}
-
-        public string Url {get;set;}
     }
 }

@@ -16,7 +16,6 @@ namespace DAL.Entities
             : base(options)
         {
         }
-
         public virtual DbSet<DinnerMenu> DinnerMenus { get; set; } = null!;
         public virtual DbSet<Dish> Dishes { get; set; } = null!;
         public virtual DbSet<DishMenu> DishMenus { get; set; } = null!;
@@ -35,6 +34,7 @@ namespace DAL.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<DinnerMenu>(entity =>
             {
                 entity.ToTable("DinnerMenu");
@@ -57,6 +57,10 @@ namespace DAL.Entities
             {
                 entity.ToTable("Dish_Menu");
 
+                entity.HasIndex(e => e.Dish, "IX_Dish_Menu_Dish");
+
+                entity.HasIndex(e => e.Menu, "IX_Dish_Menu_Menu");
+
                 entity.HasOne(d => d.DishNavigation)
                     .WithMany(p => p.DishMenus)
                     .HasForeignKey(d => d.Dish)
@@ -74,6 +78,8 @@ namespace DAL.Entities
             {
                 entity.ToTable("Record");
 
+                entity.HasIndex(e => e.UserId, "IX_Record_UserId");
+
                 entity.Property(e => e.Date).HasColumnType("date");
 
                 entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
@@ -88,6 +94,10 @@ namespace DAL.Entities
             modelBuilder.Entity<RecordDish>(entity =>
             {
                 entity.ToTable("Record_Dish");
+
+                entity.HasIndex(e => e.Dish, "IX_Record_Dish_Dish");
+
+                entity.HasIndex(e => e.Record, "IX_Record_Dish_Record");
 
                 entity.HasOne(d => d.DishNavigation)
                     .WithMany(p => p.RecordDishes)
@@ -108,9 +118,13 @@ namespace DAL.Entities
 
                 entity.Property(e => e.Debt).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.Email).HasMaxLength(256);
+
                 entity.Property(e => e.Password)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.UserName).HasMaxLength(256);
             });
 
             OnModelCreatingPartial(modelBuilder);

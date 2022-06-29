@@ -120,7 +120,7 @@ async Task CreateUserRoles(IServiceProvider serviceProvider)
 
     #endregion
 }
-CreateUserRoles(serviceProvider).Wait();
+//CreateUserRoles(serviceProvider).Wait();
 
 // Add services to the container.
 

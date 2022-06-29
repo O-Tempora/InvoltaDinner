@@ -24,29 +24,26 @@ namespace Dinner.Controllers
         }
 
         [HttpPost]
-        [Route("api/Account/Register")]
-        public async Task<IActionResult> Register([FromBody] SignUpModel model)
+        [Route("api/account/signup")]
+        public async Task<IActionResult> SignUp([FromBody] SignUpModel model)
         {
             if (ModelState.IsValid)
             {
                 User user = new User
                 {
                     Email = model.Email,
-                    Password = model.Password,
+                    Password = model.Password!,
                     UserName = model.UserName
                 };
 
-                //Добавление нового пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
-
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "User");
-                    //Установка куки
                     await _signInManager.SignInAsync(user, false);
                     var msg = new
                     {
-                        message = "Добавлен новый пользователь: " + user.UserName
+                        message = "Добавлен новый пользователь: " + user.Email
                     };
                     return Ok(msg);
                 }
@@ -72,6 +69,43 @@ namespace Dinner.Controllers
                     error = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
                 };
                 return Ok(errorMsg);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/account/signin")]
+        public async Task<IActionResult> SignIn([FromBody] SignInModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+                if (result.Succeeded)
+                {
+                    var msg = new
+                    {
+                        message = "Вход успешно выполнен"
+                    };
+                    return Ok(msg);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Неверный логин или пароль");
+                    var errorMsg = new
+                    {
+                        message = "Вход не выполнен",
+                        error = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
+                    };
+                    return BadRequest(errorMsg);
+                }
+            }
+            else
+            {
+                var errorMsg = new
+                {
+                    message = "Вход не выполнен",
+                    error = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
+                };
+                return BadRequest(errorMsg);
             }
         }
     }

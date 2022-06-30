@@ -12,10 +12,10 @@ namespace DAL.Repository
         private DinnerContext? _context;
         public DinnerMenuRepos(DinnerContext context)
         {
-            if(context is not null)
-            {
+            // if(context is not null)
+            // {
                 _context = context;
-            }
+            // }
         }
         public List<DinnerMenu> GetAll()
         {
@@ -40,6 +40,7 @@ namespace DAL.Repository
             {
                 _context.DinnerMenus.Remove(menuItem);
             }
+            Save();
         }
         public bool Save()
         {

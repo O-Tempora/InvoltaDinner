@@ -9,9 +9,22 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 using DAL.Entities;
+using DAL.Interfaces;
+using DAL.Repository;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+
+builder.Services.AddControllers().AddNewtonsoftJson(x => 
+ x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+builder.Services.AddScoped<IRepository<DinnerMenu>, DinnerMenuRepos>();
+builder.Services.AddScoped<IRepository<DishMenu>, DishMenuRepos>();
+builder.Services.AddScoped<IRepository<Dish>, DishRepos>();
+
 
 builder.Services.AddDbContext<DAL.Entities.DinnerContext>(options =>
     options.UseSqlServer(connectionString));

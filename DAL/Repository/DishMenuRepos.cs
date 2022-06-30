@@ -37,6 +37,7 @@ namespace DAL.Repository
             {
                 _context.DishMenus.Remove(menuItem);
             }
+            Save();
         }
         public bool Save()
         {

@@ -16,7 +16,5 @@ namespace BLL.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password {get;set;}
-
-        public string Url {get;set;}
     }
 }

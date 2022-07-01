@@ -12,7 +12,7 @@ namespace DAL.Data
         }
 
         public int Id { get; set; }
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
         public sbyte IsActive { get; set; }
 
         public virtual ICollection<MenuDish> MenuDishes { get; set; }

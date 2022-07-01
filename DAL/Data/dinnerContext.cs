@@ -52,6 +52,8 @@ namespace DAL.Data
                 entity.ToTable("menu");
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<MenuDish>(entity =>
@@ -108,6 +110,8 @@ namespace DAL.Data
                 entity.HasIndex(e => e.User, "user_idx");
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
 
                 entity.Property(e => e.Price).HasPrecision(5, 2);
 

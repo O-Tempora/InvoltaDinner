@@ -20,7 +20,7 @@ namespace DAL.Repository
             _dbSet = context.Set<T>();
         }
 
-        public virtual IEnumerable<T> GetAll()
+        public virtual List<T> GetAll()
         {
             return _dbSet.ToList();
         }

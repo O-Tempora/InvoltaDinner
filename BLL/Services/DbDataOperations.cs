@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BLL.Interfaces;
-using DAL.Entities;
+using DAL.Data;
 using BLL.Models;
 using System.Collections.ObjectModel;
 
@@ -31,60 +31,55 @@ namespace BLL.Services
         public List<DishModel> GetAllDishes() {
             return dataBase.DishRepository.GetAll().Select(i => new DishModel(i)).ToList();
         }
-         public List<RecordDishModel> GetAllRecordDishes() {
-            return dataBase.RecordDishRepository.GetAll().Select(i => new RecordDishModel(i)).ToList();
-        }
 
         public void DeleteDinnnerMenu(DateTime date)
         {
-            DinnerMenu dinnerMenu = dataBase.DinnerMenuRepository.GetAll().Where(i => i.Date == date).FirstOrDefault();
-            List<DishMenu> dishMenus = dataBase.DishMenuRepository.GetAll().Where(i => i.Menu == dinnerMenu.Id).ToList();
+            Menu dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date == date).FirstOrDefault();
+            List<MenuDish> dishMenus = dataBase.MenuDishRepository.GetAll().Where(i => i.Menu == dinnerMenu.Id).ToList();
             if (dinnerMenu != null)
             {
-                foreach (DishMenu dm in dishMenus)
+                foreach (MenuDish dm in dishMenus)
                 {
-                    dataBase.DishMenuRepository.Delete(dm.Id);
+                    dataBase.MenuDishRepository.Delete(dm.Id);
                 }
-                dataBase.DinnerMenuRepository.Delete(dinnerMenu.Id);
+                dataBase.MenuRepository.Delete(dinnerMenu.Id);
                 Save();
             }
 
         }
         public void DeletePeriodDinnnerMenu(DateTime dateFirst, DateTime dateSecond)
         {
-            List<DinnerMenu> dinnerMenu = dataBase.DinnerMenuRepository.GetAll().Where(i => i.Date >= dateFirst).Where(i => i.Date <= dateSecond).ToList();
-            foreach (DinnerMenu dim in dinnerMenu)
+            List<Menu> dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date >= dateFirst).Where(i => i.Date <= dateSecond).ToList();
+            foreach (Menu dim in dinnerMenu)
             {
-                List<DishMenu> dishMenus = dataBase.DishMenuRepository.GetAll().Where(i => i.Menu == dim.Id).ToList();
+                List<MenuDish> dishMenus = dataBase.MenuDishRepository.GetAll().Where(i => i.Menu == dim.Id).ToList();
                 if (dim != null)
                 {
-                    foreach (DishMenu dm in dishMenus)
+                    foreach (MenuDish dm in dishMenus)
                     {
-                        dataBase.DishMenuRepository.Delete(dm.Id);
+                        dataBase.MenuDishRepository.Delete(dm.Id);
                     }
-                    dataBase.DinnerMenuRepository.Delete(dim.Id);
+                    dataBase.MenuRepository.Delete(dim.Id);
                     Save();
                 }
             }  
         }
         public void DeleteDishMenu(int id)
         {
-            DishMenu dishMenu = dataBase.DishMenuRepository.Get(id);
+            MenuDish dishMenu = dataBase.MenuDishRepository.Get(id);
             if (dishMenu != null)
             {
-                dataBase.DishMenuRepository.Delete(dishMenu.Id);
+                dataBase.MenuDishRepository.Delete(dishMenu.Id);
                 Save();
             }
         }
         public void DeleteDish(int id)
         {
             Dish dish = dataBase.DishRepository.Get(id);
-            DishMenu dishMenu = dataBase.DishMenuRepository.GetAll().Where(i => i.Dish == dish.Id).FirstOrDefault();
-            RecordDish recordDish = dataBase.RecordDishRepository.GetAll().Where(i => i.Dish == dish.Id).FirstOrDefault();
+            MenuDish dishMenu = dataBase.MenuDishRepository.GetAll().Where(i => i.Dish == dish.Id).FirstOrDefault();
             if (dish != null)
             {
-                dataBase.RecordDishRepository.Delete(recordDish.Id);
-                dataBase.DishMenuRepository.Delete(dishMenu.Id);
+                dataBase.MenuDishRepository.Delete(dishMenu.Id);
                 dataBase.DishRepository.Delete(dish.Id);
                 Save();
             }          
@@ -92,40 +87,24 @@ namespace BLL.Services
         public void DeleteRecord(int id)
         {
             Record record = dataBase.RecordRepository.Get(id);
-            RecordDish recordDish = dataBase.RecordDishRepository.GetAll().Where(i => i.Record == record.Id).FirstOrDefault();
             if (record != null)
             {
-                dataBase.RecordDishRepository.Delete(recordDish.Id);
                 dataBase.RecordRepository.Delete(record.Id);
-                Save();
-            }
-
-        }
-        public void DeleteRecordDish(int id)
-        {
-            RecordDish recordDish = dataBase.RecordDishRepository.Get(id);
-            if (recordDish != null)
-            {
-                dataBase.RecordDishRepository.Delete(recordDish.Id);
                 Save();
             }
 
         }
         public DinnerMenuModel GetDinnerMenu(int id)
         {
-            return dataBase.DinnerMenuRepository.GetAll().Select(i => new DinnerMenuModel(i)).Where(i => i.Id == id).FirstOrDefault();
+            return dataBase.MenuRepository.GetAll().Select(i => new DinnerMenuModel(i)).Where(i => i.Id == id).FirstOrDefault();
         }
         public DishMenuModel GetDishMenu(int id)
         {
-            return dataBase.DishMenuRepository.GetAll().Select(i => new DishMenuModel(i)).Where(i => i.Id == id).FirstOrDefault();
+            return dataBase.MenuDishRepository.GetAll().Select(i => new DishMenuModel(i)).Where(i => i.Id == id).FirstOrDefault();
         }
         public DishModel GetDish(int id)
         {
             return dataBase.DishRepository.GetAll().Select(i => new DishModel(i)).Where(i => i.Id == id).FirstOrDefault();
-        }
-        public RecordDishModel GetRecordDish(int id)
-        {
-            return dataBase.RecordDishRepository.GetAll().Select(i => new RecordDishModel(i)).Where(i => i.Id == id).FirstOrDefault();
         }
         public RecordModel GetRecord(int id)
         {
@@ -133,8 +112,8 @@ namespace BLL.Services
         }
         public List<DishModel> GetDishesByDate(DateTime date)
         {
-            DinnerMenuModel dinnerMenu = dataBase.DinnerMenuRepository.GetAll().Select(i => new DinnerMenuModel(i)).Where(i => i.Date == date).FirstOrDefault();
-            List<DishMenuModel> dishMenus = dataBase.DishMenuRepository.GetAll().Select(i => new DishMenuModel(i)).Where(i => i.Menu == dinnerMenu.Id).ToList();
+            DinnerMenuModel dinnerMenu = dataBase.MenuRepository.GetAll().Select(i => new DinnerMenuModel(i)).Where(i => i.Date == date).FirstOrDefault();
+            List<DishMenuModel> dishMenus = dataBase.MenuDishRepository.GetAll().Select(i => new DishMenuModel(i)).Where(i => i.Menu == dinnerMenu.Id).ToList();
             List<DishModel> dishes = new List<DishModel>(); 
             foreach (DishMenuModel di in dishMenus) 
             {
@@ -144,11 +123,11 @@ namespace BLL.Services
         }
         public Dictionary<DateTime, List<DishModel>> GetPeriodDish(DateTime dateFirst,DateTime dateSecond)
         {
-            List<DinnerMenuModel> dinnerMenu = dataBase.DinnerMenuRepository.GetAll().Select(i => new DinnerMenuModel(i)).Where(i => i.Date >= dateFirst).Where(i => i.Date <= dateSecond).ToList();
+            List<DinnerMenuModel> dinnerMenu = dataBase.MenuRepository.GetAll().Select(i => new DinnerMenuModel(i)).Where(i => i.Date >= dateFirst).Where(i => i.Date <= dateSecond).ToList();
             Dictionary<DateTime, List<DishModel>> datesAndDishesDict = new Dictionary<DateTime, List<DishModel>>();
             for (int j = 0; j < dinnerMenu.Count(); j++)
             { 
-                List<DishMenuModel> dishMenus = dataBase.DishMenuRepository.GetAll().Select(i => new DishMenuModel(i)).Where(i => i.Menu == dinnerMenu[j].Id).ToList();
+                List<DishMenuModel> dishMenus = dataBase.MenuDishRepository.GetAll().Select(i => new DishMenuModel(i)).Where(i => i.Menu == dinnerMenu[j].Id).ToList();
                 List<DishModel> dishes = new List<DishModel>();
                 foreach (DishMenuModel di in dishMenus) 
                 {
@@ -164,39 +143,39 @@ namespace BLL.Services
         }
         public void CreateDishAndDinnerMenu(DateTime date, List<int> dishesList)
         {
-            DinnerMenu dinnerMenuItems = new DinnerMenu 
+            Menu dinnerMenuItems = new Menu 
             {
                 Date = date,
             };
 
-            dataBase.DinnerMenuRepository.Create(dinnerMenuItems);
+            dataBase.MenuRepository.Create(dinnerMenuItems);
 
             Save();
 
-            List<DinnerMenu> dinners = dataBase.DinnerMenuRepository.GetAll();
+            List<Menu> dinners = dataBase.MenuRepository.GetAll();
             int dinnerKey = dinners[dinners.Count - 1].Id;
 
-            List<DishMenu> dishMenuItems = new List<DishMenu>();
+            List<MenuDish> dishMenuItems = new List<MenuDish>();
 
             foreach (int d in dishesList) 
             {
-                dishMenuItems.Add(new DishMenu 
+                dishMenuItems.Add(new MenuDish 
                 {
                     Menu = dinnerKey,
                     Dish = d
                 });
             }              
-            foreach (DishMenu i in dishMenuItems)
+            foreach (MenuDish i in dishMenuItems)
             {
-                dataBase.DishMenuRepository.Create(i);
+                dataBase.MenuDishRepository.Create(i);
             }
             Save();
         }
         public void UpdateDishMenu(DateTime date, List<int> dishesList) 
         {
-            DinnerMenuModel dinnerMenu = dataBase.DinnerMenuRepository.GetAll().Select(i => new DinnerMenuModel(i)).Where(i => i.Date == date).FirstOrDefault();
+            DinnerMenuModel dinnerMenu = dataBase.MenuRepository.GetAll().Select(i => new DinnerMenuModel(i)).Where(i => i.Date == date).FirstOrDefault();
            // List<DishMenuModel> dishMenus = dataBase.DishMenuRepository.GetAll().Select(i => new DishMenuModel(i)).Where(i => i.Menu == dinnerMenu.Id).ToList();
-            List<DishMenu> dishMenuItems = dataBase.DishMenuRepository.GetAll().Where(i => i.Menu == dinnerMenu.Id).ToList();
+            List<MenuDish> dishMenuItems = dataBase.MenuDishRepository.GetAll().Where(i => i.Menu == dinnerMenu.Id).ToList();
             int i = 0;
             foreach (int di in dishesList)
             {
@@ -213,14 +192,10 @@ namespace BLL.Services
         {
 
         }
-        public void CreateRecordDish()
-        {
-
-        }
         public bool Save()
         {
-            if (dataBase.Save() > 0) return true;
-            return false;
+            dataBase.Save();
+            return true;
         }
     }
 }

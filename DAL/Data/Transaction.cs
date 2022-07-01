@@ -9,7 +9,7 @@ namespace DAL.Data
         public int User { get; set; }
         public int Admin { get; set; }
         public decimal Price { get; set; }
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
 
         public virtual User AdminNavigation { get; set; } = null!;
         public virtual User UserNavigation { get; set; } = null!;

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DAL.Entities;
+using DAL.Data;
 
 namespace BLL.Models
 {
@@ -20,6 +20,5 @@ namespace BLL.Models
             Name = d.Name;
             Price = d.Price;
         }
-
     }
 }

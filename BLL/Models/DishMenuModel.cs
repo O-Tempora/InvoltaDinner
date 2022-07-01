@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DAL.Entities;
+using DAL.Data;
 
 namespace BLL.Models
 {
@@ -11,16 +11,11 @@ namespace BLL.Models
         public int Id { get; set; }
         public int Dish { get; set; }
         public int Menu { get; set; }
-        
-        public DishModel DishNavigation { get; set; }
-        public DinnerMenuModel MenuNavigation { get; set; }
         public DishMenuModel() { }
-        public DishMenuModel(DishMenu dm) {
+        public DishMenuModel(MenuDish dm) {
             Id = dm.Id;
             Dish = dm.Dish;
             Menu = dm.Menu;
-            DishNavigation = new DishModel(dm.DishNavigation);
-            MenuNavigation = new DinnerMenuModel(dm.MenuNavigation);
         }
     }
 }

@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using DAL.Entities;
-using DAL.Repository;
-using DAL.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using BLL.Models;
 using BLL.Interfaces;
@@ -18,9 +15,6 @@ namespace Dinner.Controllers
     [Route("api/menu")]
     public class MenuController : ControllerBase
     {
-         private readonly IRepository<DinnerMenu> _dinnerMenuRepos;
-         private readonly IRepository<DishMenu> _dishMenuRepos;
-         private readonly IRepository<Dish> _dishRepos;
          private readonly IDbCrud _iDbCrud;
         public MenuController(IDbCrud iDbCrud)
         {      

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DAL.Entities;
+using DAL.Data;
 
 namespace BLL.Models
 {
@@ -12,7 +12,7 @@ namespace BLL.Models
         public DateTime Date { get; set; }
         
         public DinnerMenuModel() { }
-        public DinnerMenuModel(DinnerMenu dm)
+        public DinnerMenuModel(Menu dm)
         {
             Id = dm.Id;
             Date = dm.Date;

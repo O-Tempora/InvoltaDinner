@@ -7,7 +7,7 @@ namespace DAL.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
+        List<T> GetAll();
         T? Get(int id);
         void Create(T entity);
         bool Delete(int id);

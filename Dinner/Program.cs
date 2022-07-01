@@ -1,3 +1,5 @@
+using System.Data.Common;
+using System.Data;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Globalization;
@@ -14,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using BLL.Interfaces;
 using BLL.Models;
 using BLL.Services;
+using DAL.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -29,7 +32,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(x =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IDbCrud, DBDataOperations>();
 
-builder.Services.AddDbContext<DAL.Entities.DinnerContext>(options =>
+builder.Services.AddDbContext<dinnerContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 // builder.Services.AddIdentity<DAL.Entities.User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)

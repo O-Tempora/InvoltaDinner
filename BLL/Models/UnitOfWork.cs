@@ -18,9 +18,9 @@ namespace BLL.Models
         private IGenericRepository<Menu> _menuRep;
         private IGenericRepository<Transaction> _transactionRep;
         private IGenericRepository<MenuDish> _menuDishRep;
-        public UnitOfWork(dinnerContext context)
+        public UnitOfWork()
         {
-            _context = context;
+            _context = new dinnerContext();
         }
         public IGenericRepository<Record> RecordRepository => _recordRep ??= new GenericRepository<Record>(_context);
         public IGenericRepository<Dish> DishRepository => _dishRep ??= new GenericRepository<Dish>(_context);

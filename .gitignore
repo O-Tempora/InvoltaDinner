@@ -5,3 +5,5 @@
 /DAL/obj
 /Dinner/bin
 /Dinner/obj
+/Dinner/appsettings.json
+/DAL/Migrations

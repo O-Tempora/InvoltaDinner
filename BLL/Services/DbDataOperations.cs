@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 using BLL.Interfaces;
 using DAL.Entities;
 using BLL.Models;
-using DAL.Interfaces;
 using System.Collections.ObjectModel;
 
-namespace BLL
+namespace BLL.Services
 {
     public class DBDataOperations : IDbCrud
     {
@@ -21,19 +20,16 @@ namespace BLL
         }
 
         public List<DinnerMenuModel> GetAllDinnerMenus() {
-            return dataBase.DinnerMenuRepository.GetAll().Select(i => new DinnerMenuModel(i)).ToList();
+            return dataBase.MenuRepository.GetAll().Select(i => new DinnerMenuModel(i)).ToList();
         }
         public List<DishMenuModel> GetAllDishMenus() {
-            return dataBase.DishMenuRepository.GetAll().Select(i => new DishMenuModel(i)).ToList();
+            return dataBase.MenuDishRepository.GetAll().Select(i => new DishMenuModel(i)).ToList();
         }
         public List<RecordModel> GetAllRecords() {
             return dataBase.RecordRepository.GetAll().Select(i => new RecordModel(i)).ToList();
         }
         public List<DishModel> GetAllDishes() {
             return dataBase.DishRepository.GetAll().Select(i => new DishModel(i)).ToList();
-        }
-         public List<RecordDishModel> GetAllRecordDishes() {
-            return dataBase.RecordDishRepository.GetAll().Select(i => new RecordDishModel(i)).ToList();
         }
 
 

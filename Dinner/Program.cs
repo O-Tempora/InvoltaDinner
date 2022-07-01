@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Globalization;
 using System.Threading.Tasks.Dataflow;
@@ -8,41 +9,44 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
-using DAL.Entities;
-using DAL.Interfaces;
-using DAL.Repository;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
+using BLL.Interfaces;
+using BLL.Models;
+using BLL.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("MyDefaultConnection");
 
 
 builder.Services.AddControllers().AddNewtonsoftJson(x => 
  x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-builder.Services.AddScoped<IRepository<DinnerMenu>, DinnerMenuRepos>();
-builder.Services.AddScoped<IRepository<DishMenu>, DishMenuRepos>();
-builder.Services.AddScoped<IRepository<Dish>, DishRepos>();
-
+// builder.Services.AddScoped<IRepository<DinnerMenu>, DinnerMenuRepos>();
+// builder.Services.AddScoped<IRepository<DishMenu>, DishMenuRepos>();
+// builder.Services.AddScoped<IRepository<Dish>, DishRepos>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IDbCrud, DBDataOperations>();
 
 builder.Services.AddDbContext<DAL.Entities.DinnerContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddIdentity<DAL.Entities.User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<DAL.Entities.DinnerContext>();
+// builder.Services.AddIdentity<DAL.Entities.User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+//     .AddRoles<IdentityRole>()
+//     .AddEntityFrameworkStores<DAL.Entities.DinnerContext>();
 
-builder.Services.Configure<IdentityOptions>(options => {
-    options.Password.RequiredLength = 5;
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-+@_= <>#$%";
-    options.User.RequireUniqueEmail = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-});
+// builder.Services.Configure<IdentityOptions>(options => {
+//     options.Password.RequiredLength = 5;
+//     options.Lockout.MaxFailedAccessAttempts = 5;
+//     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-+@_= <>#$%";
+//     options.User.RequireUniqueEmail = false;
+//     options.Password.RequireNonAlphanumeric = false;
+//     options.Password.RequireUppercase = false;
+// });
 
 var serviceProvider = builder.Services.BuildServiceProvider();
+/*
 async Task CreateUserRoles(IServiceProvider serviceProvider)
 {
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -133,7 +137,8 @@ async Task CreateUserRoles(IServiceProvider serviceProvider)
 
     #endregion
 }
-//CreateUserRoles(serviceProvider).Wait();
+CreateUserRoles(serviceProvider).Wait(); 
+*/
 
 // Add services to the container.
 
@@ -152,9 +157,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-
 app.UseRouting();
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();

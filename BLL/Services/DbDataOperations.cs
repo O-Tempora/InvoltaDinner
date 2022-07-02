@@ -31,6 +31,9 @@ namespace BLL.Services
         public List<DishModel> GetAllDishes() {
             return dataBase.DishRepository.GetAll().Select(i => new DishModel(i)).ToList();
         }
+        public List<UserModel> GetAllUsers() {
+            return dataBase.UserRepository.GetAll().Select(i => new UserModel(i)).ToList();
+        }
 
         public void DeleteDinnnerMenu(DateTime date)
         {
@@ -109,6 +112,10 @@ namespace BLL.Services
         public RecordModel GetRecord(int id)
         {
             return dataBase.RecordRepository.GetAll().Select(i => new RecordModel(i)).Where(i => i.Id == id).FirstOrDefault();
+        }
+        public UserModel GetUser(int id)
+        {
+            return new UserModel(dataBase.UserRepository.Get(id));
         }
         public List<DishModel> GetDishesByDate(DateTime date)
         {

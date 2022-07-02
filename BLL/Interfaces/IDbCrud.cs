@@ -14,6 +14,7 @@ namespace BLL.Interfaces
         List<DishMenuModel> GetAllDishMenus();
         List<RecordModel> GetAllRecords();
         List<DishModel> GetAllDishes();
+        List<UserModel> GetAllUsers();
         void DeleteDinnnerMenu(DateTime date);
         void DeletePeriodDinnnerMenu(DateTime dateFirst, DateTime dateSecond);
         void DeleteDishMenu(int id);
@@ -23,6 +24,7 @@ namespace BLL.Interfaces
         DishMenuModel GetDishMenu(int id);
         DishModel GetDish(int id);
         RecordModel GetRecord(int id);
+        UserModel GetUser(int id);
         void CreateDinnerMenu();
         void CreateDishAndDinnerMenu(DateTime date, List<int> dishesList);
         void CreateDish();
@@ -30,5 +32,6 @@ namespace BLL.Interfaces
         List<DishModel> GetDishesByDate(DateTime date);
         Dictionary<DateTime, List<DishModel>> GetPeriodDish(DateTime datefirst,DateTime seconddate);
         void UpdateDishMenu(DateTime date, List<int> dishesList);
+
     }
 }

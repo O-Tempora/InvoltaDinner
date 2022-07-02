@@ -17,7 +17,7 @@ namespace DAL.Data.Configuration
 
             builder.HasIndex(e => e.Record, "recordId_idx");
 
-            builder.Property(e => e.Id).ValueGeneratedNever();
+            builder.Property(e => e.Id).ValueGeneratedOnAdd();
 
             builder.HasOne(d => d.DishNavigation)
                 .WithMany(p => p.RecordDishes)

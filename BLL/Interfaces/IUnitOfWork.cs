@@ -15,6 +15,7 @@ namespace BLL.Interfaces
         IGenericRepository<Menu> MenuRepository {get; }
         IGenericRepository<Transaction> TransactionRepository {get; }
         IGenericRepository<MenuDish> MenuDishRepository {get; }
+        IGenericRepository<RecordDish> RecordDishRepository {get; }
         Task Save();
     }
 }

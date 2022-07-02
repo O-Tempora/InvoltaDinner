@@ -18,6 +18,7 @@ namespace BLL.Models
         private IGenericRepository<Menu> _menuRep;
         private IGenericRepository<Transaction> _transactionRep;
         private IGenericRepository<MenuDish> _menuDishRep;
+        private IGenericRepository<RecordDish> _recordDishRep;
         public UnitOfWork()
         {
             _context = new dinnerContext();
@@ -28,6 +29,7 @@ namespace BLL.Models
         public IGenericRepository<Menu> MenuRepository => _menuRep ??= new GenericRepository<Menu>(_context);
         public IGenericRepository<Transaction> TransactionRepository => _transactionRep ??= new GenericRepository<Transaction>(_context);
         public IGenericRepository<MenuDish> MenuDishRepository => _menuDishRep ??= new GenericRepository<MenuDish>(_context);
+        public IGenericRepository<RecordDish> RecordDishRepository => _recordDishRep ??= new GenericRepository<RecordDish>(_context);
         public async Task Save()
         {
             await _context.SaveChangesAsync();

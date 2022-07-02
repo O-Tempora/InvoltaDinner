@@ -9,7 +9,7 @@ namespace DAL.Data.Configuration
         {
             builder.ToTable("dish");
 
-            builder.Property(e => e.Id).ValueGeneratedNever();
+            builder.Property(e => e.Id).ValueGeneratedOnAdd();
 
             builder.Property(e => e.Name).HasMaxLength(50);
 

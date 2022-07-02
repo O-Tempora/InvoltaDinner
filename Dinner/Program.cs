@@ -17,6 +17,7 @@ using BLL.Interfaces;
 using BLL.Models;
 using BLL.Services;
 using DAL.Data;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -144,6 +145,28 @@ async Task CreateUserRoles(IServiceProvider serviceProvider)
 }
 CreateUserRoles(serviceProvider).Wait(); 
 */
+
+// Добавление функциональности JWT-токенов
+//public AuthOptions authOptions;
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.RequireHttpsMetadata = false;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidIssuer = authOptions.ISSUER,
+ 
+                            ValidateAudience = true,
+                            ValidAudience = authOptions.AUDIENCE,
+                            ValidateLifetime = true,
+ 
+                            IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
+                            ValidateIssuerSigningKey = true,
+                        };
+                    });
+//builder.Services.AddControllersWithViews();
+
 
 // Add services to the container.
 

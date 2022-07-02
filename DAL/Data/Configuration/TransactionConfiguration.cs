@@ -13,7 +13,7 @@ namespace DAL.Data.Configuration
 
             builder.HasIndex(e => e.User, "user_idx");
 
-            builder.Property(e => e.Id).ValueGeneratedNever();
+            builder.Property(e => e.Id).ValueGeneratedOnAdd();
 
             builder.Property(e => e.Date).HasColumnType("datetime");
 

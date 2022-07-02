@@ -9,7 +9,7 @@ namespace DAL.Data.Configuration
         {
             
             builder.ToTable("menu");
-            builder.Property(e => e.Id).ValueGeneratedNever();
+            builder.Property(e => e.Id).ValueGeneratedOnAdd();
             builder.Property(e => e.Date).HasColumnType("datetime");
 
             builder.HasData(

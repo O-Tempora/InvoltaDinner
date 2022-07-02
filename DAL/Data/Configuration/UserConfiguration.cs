@@ -9,7 +9,7 @@ namespace DAL.Data.Configuration
         {
             builder.ToTable("user");
 
-            builder.Property(e => e.Id).ValueGeneratedNever();
+            builder.Property(e => e.Id).ValueGeneratedOnAdd();
 
             builder.Property(e => e.Balance).HasPrecision(6, 2);
 

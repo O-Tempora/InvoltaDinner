@@ -91,7 +91,8 @@ namespace BLL.Services
         public void DeleteDinnnerMenu(DateTime date)
         {
             Menu dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date == date).FirstOrDefault();
-            List<MenuDish> dishMenus = dataBase.MenuDishRepository.GetAll().Where(i => i.Menu == dinnerMenu.Id).ToList();
+            List<MenuDish> dishMenus = dataBase.MenuDishRepository.GetAll()
+                                        .Where(i => i.Menu == dinnerMenu.Id).ToList();
             if (dinnerMenu != null)
             {
                 foreach (MenuDish dm in dishMenus)
@@ -105,10 +106,12 @@ namespace BLL.Services
         }
         public void DeletePeriodDinnnerMenu(DateTime dateFirst, DateTime dateSecond)
         {
-            List<Menu> dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date >= dateFirst).Where(i => i.Date <= dateSecond).ToList();
+            List<Menu> dinnerMenu = dataBase.MenuRepository.GetAll().
+                                    Where(i => i.Date >= dateFirst).Where(i => i.Date <= dateSecond).ToList();
             foreach (Menu dim in dinnerMenu)
             {
-                List<MenuDish> dishMenus = dataBase.MenuDishRepository.GetAll().Where(i => i.Menu == dim.Id).ToList();
+                List<MenuDish> dishMenus = dataBase.MenuDishRepository.GetAll()
+                                            .Where(i => i.Menu == dim.Id).ToList();
                 if (dim != null)
                 {
                     foreach (MenuDish dm in dishMenus)
@@ -132,7 +135,8 @@ namespace BLL.Services
         public void DeleteDish(int id)
         {
             Dish dish = dataBase.DishRepository.Get(id);
-            MenuDish dishMenu = dataBase.MenuDishRepository.GetAll().Where(i => i.Dish == dish.Id).FirstOrDefault();
+            MenuDish dishMenu = dataBase.MenuDishRepository.GetAll()
+                                .Where(i => i.Dish == dish.Id).FirstOrDefault();
             if (dish != null)
             {
                 dataBase.MenuDishRepository.Delete(dishMenu.Id);
@@ -184,7 +188,9 @@ namespace BLL.Services
         
         public void UpdateDishMenu(DateTime date, List<int> dishesList) 
         {
-            DinnerMenuModel dinnerMenu = dataBase.MenuRepository.GetAll().Select(i => new DinnerMenuModel(i)).Where(i => i.Date == date).FirstOrDefault();
+            DinnerMenuModel dinnerMenu = dataBase.MenuRepository.GetAll()
+                                        .Select(i => new DinnerMenuModel(i))
+                                        .Where(i => i.Date == date).FirstOrDefault();
            // List<DishMenuModel> dishMenus = dataBase.DishMenuRepository.GetAll().Select(i => new DishMenuModel(i)).Where(i => i.Menu == dinnerMenu.Id).ToList();
             List<MenuDish> dishMenuItems = dataBase.MenuDishRepository.GetAll().Where(i => i.Menu == dinnerMenu.Id).ToList();
             int i = 0;

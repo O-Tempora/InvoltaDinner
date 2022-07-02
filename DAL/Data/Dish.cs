@@ -8,6 +8,7 @@ namespace DAL.Data
         public Dish()
         {
             MenuDishes = new HashSet<MenuDish>();
+            RecordDishes = new HashSet<RecordDish>();
         }
 
         public int Id { get; set; }
@@ -16,5 +17,6 @@ namespace DAL.Data
         public int Position { get; set; }
 
         public virtual ICollection<MenuDish> MenuDishes { get; set; }
+        public virtual ICollection<RecordDish> RecordDishes { get; set; }
     }
 }

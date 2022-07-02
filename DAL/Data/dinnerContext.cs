@@ -21,6 +21,7 @@ namespace DAL.Data
         public virtual DbSet<Menu> Menus { get; set; } = null!;
         public virtual DbSet<MenuDish> MenuDishes { get; set; } = null!;
         public virtual DbSet<Record> Records { get; set; } = null!;
+        public virtual DbSet<RecordDish> RecordDishes { get; set; } = null!;
         public virtual DbSet<Transaction> Transactions { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
@@ -28,7 +29,7 @@ namespace DAL.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql("server=localhost;user=root;password=pepper;database=dinner", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
+                optionsBuilder.UseMySql("server=localhost;user=root;password=1944Rommel1944;database=dinner", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
             }
         }
 
@@ -43,6 +44,7 @@ namespace DAL.Data
             modelBuilder.ApplyConfiguration(new RecordConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new RecordDishConfiguration());
 
             OnModelCreatingPartial(modelBuilder);
         }

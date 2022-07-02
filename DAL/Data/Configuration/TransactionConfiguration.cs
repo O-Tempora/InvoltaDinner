@@ -29,6 +29,17 @@ namespace DAL.Data.Configuration
                 .WithMany(p => p.TransactionUserNavigations)
                 .HasForeignKey(d => d.User)
                 .HasConstraintName("user");
+            
+            builder.HasData(
+                new Transaction
+                {
+                    Id = 1,
+                    User = 3,
+                    Admin = 1,
+                    Price = 225,
+                    Date = new DateTime(2022, 07, 12) 
+                }
+            );
         }
     }
 }

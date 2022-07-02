@@ -25,7 +25,7 @@ namespace BLL.Interfaces
         RecordModel GetRecord(int id);
         void CreateDinnerMenu();
         void CreateDishAndDinnerMenu(DateTime date, List<int> dishesList);
-        void CreateDish();
+        void CreateDish(string name, decimal price, int position);
         void CreateRecord();
         List<DishModel> GetDishesByDate(DateTime date);
         Dictionary<DateTime, List<DishModel>> GetPeriodDish(DateTime datefirst, DateTime secondate);

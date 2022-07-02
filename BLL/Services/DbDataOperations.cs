@@ -238,9 +238,17 @@ namespace BLL.Services
             }
             Save(); 
         }
-        public void CreateDish()
+        public void CreateDish(string name, decimal price, int position)
         {
+            Dish dish = new Dish
+            {
+                Name = name,
+                Price = price,
+                Position = position
+            };
+            dataBase.DishRepository.Create(dish);
 
+            Save();
         }
         public void CreateRecord()
         {

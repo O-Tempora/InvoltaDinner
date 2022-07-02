@@ -20,6 +20,7 @@ namespace Dinner.Controllers
         {      
             _iDbCrud = iDbCrud;
         }
+
         //api/dinnermenu/2022-07-12
         [HttpGet]
         public List<UserModel> GetAll()
@@ -31,11 +32,12 @@ namespace Dinner.Controllers
             }
             return null;
         }
+        
         //api/dinnermenu/2022-07-12
         [HttpGet("id")]
-        public UserModel GetUser(int id)
+        public UserModel GetUserById(int id)
         {
-            UserModel returnUser = _iDbCrud.GetUser(id);
+            UserModel returnUser = _iDbCrud.GetUserById(id);
             return returnUser;
         }
     }

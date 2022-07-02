@@ -15,7 +15,7 @@ namespace Dinner.Controllers
     [Route("api/menu")]
     public class MenuController : ControllerBase
     {
-         private readonly IDbCrud _iDbCrud;
+        private readonly IDbCrud _iDbCrud;
         public MenuController(IDbCrud iDbCrud)
         {      
             _iDbCrud = iDbCrud;

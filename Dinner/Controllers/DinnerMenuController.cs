@@ -15,14 +15,18 @@ namespace Dinner.Controllers
     [Route("api/menu")]
     public class MenuController : ControllerBase
     {
-         private readonly IDbCrud _iDbCrud;
+        private readonly IDbCrud _iDbCrud;
         public MenuController(IDbCrud iDbCrud)
         {      
             _iDbCrud = iDbCrud;
         }
         
+        [HttpGet]
+        public Tuple<List<MenuModel>, List<MenuModel>> GetCurrentAndNextMonth()
+        {
+            return _iDbCrud.GetPeriodMenu();
+        }
 
-        //api/dinnermenu/2022-07-12
         [HttpGet("{date}")]
         public List<DishModel> Get(DateTime date)
         {
@@ -61,7 +65,6 @@ namespace Dinner.Controllers
             }
         }
         
-        //api/dinnermenu/2022-07-12
         [HttpGet("{dateFirst}/{dateSecond}")]
         public Dictionary<DateTime, List<DishModel>> GetPeriod(DateTime dateFirst, DateTime dateSecond)
         {
@@ -91,7 +94,6 @@ namespace Dinner.Controllers
         [HttpDelete("{dateFirst}/{dateSecond}")]
         public async Task<IActionResult> DeletePeriod(DateTime dateFirst, DateTime dateSecond)
         {
-            //List<DinnerMenu> dinnerMenu = (from d in _dinnerMenuRepos.GetAll() where d.Date >= dateFirst & d.Date <= dateSecond select d).ToList();
             try
             {
                 _iDbCrud.DeletePeriodDinnnerMenu(dateFirst, dateSecond);      

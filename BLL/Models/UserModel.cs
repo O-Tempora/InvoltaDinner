@@ -9,7 +9,7 @@ namespace BLL.Models
     public class UserModel
     {
         public int Id { get; set; }
-        public decimal Debt { get; set; }
+        public decimal Balance { get; set; }
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string Name { get; set; } = null!;
@@ -18,7 +18,7 @@ namespace BLL.Models
         public UserModel() { }
         public UserModel(User u) { 
             Id = u.Id;
-            Debt = u.Debt;
+            Balance = u.Balance;
             Email = u.Email;
             Password = u.Password;
             Name = u.Name;

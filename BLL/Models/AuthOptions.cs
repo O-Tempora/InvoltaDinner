@@ -8,7 +8,7 @@ namespace BLL.Models
         public const string ISSUER = "InvLunchBackEnd";
         public const string AUDIENCE = "InvLunchFrontEnd";
         const string KEY = "nuichtosudapisatznakvoprosa"; 
-        public const int LIFETIME = 60; //Не знаю, какое время жизни ставить
+        public const int LIFETIME = 600; //Не знаю, какое время жизни ставить
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));

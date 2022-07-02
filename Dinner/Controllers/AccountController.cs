@@ -52,12 +52,12 @@ namespace Dinner.Controllers
             }
         }
         
-        private User AuthenticateUser (string email, string password)
+        private UserModel AuthenticateUser (string email, string password)
         {
-            return _iDbCrud.GetUserByEmailAndPassword(email, password); //Поменять
+            return _iDbCrud.GetUserByEmailAndPassword(email, password);
         }
 
-        private string GenerateJWT (User user)
+        private string GenerateJWT (UserModel user)
         {
             var securityKey  = AuthOptions.GetSymmetricSecurityKey();
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

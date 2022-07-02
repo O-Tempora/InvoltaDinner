@@ -37,6 +37,7 @@ namespace Dinner.Controllers
             }
             return null;
         }
+        
         [HttpPost]
         public async Task<IActionResult> Post(DateTime date, List<int> dishesList)
         {

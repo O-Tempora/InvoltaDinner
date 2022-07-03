@@ -252,9 +252,129 @@ namespace BLL.Services
 
             Save();
         }
-        public void CreateRecord()
+        public void CreateRecord(DateTime date, int userId, int position)
         {
+            RecordModel record = dataBase.RecordRepository.GetAll()
+                                                            .Select(i => new RecordModel(i))
+                                                            .Where(i => i.Date == date && i.UserId == userId)
+                                                            .FirstOrDefault();
 
+            //если запись на дату уже сделана и стоит позиция "не ест", то удаляем запись
+            if (position == 4 && record != default(RecordModel))
+            {
+                dataBase.RecordRepository.Delete(record.Id);
+                return;
+            }
+
+            void createRecordDish (int dishId, int recordId)
+            {
+                RecordDish recordDishItems = new RecordDish
+                    {
+                        Record = recordId,
+                        Dish = dishId
+                    };
+                dataBase.RecordDishRepository.Create(recordDishItems);
+                Save();
+            }
+
+            List<DishModel> dishes = GetDishesByDate(date);
+            //запись на еще не установленное блюдо создается на блюдо с id 0
+            int dishFirstId = 0; 
+            int DishSecondId = 0;
+            DishModel dishFirst = dishes.Select(i => new DishModel(i)).Where(i => i.Position == 1).LastOrDefault();
+            if (dishFirst != default(DishModel))
+            {
+                dishFirstId = dishFirst.Id;
+            }
+            DishModel DishSecond = dishes.Select(i => new DishModel(i)).Where(i => i.Position == 2).LastOrDefault();
+            if (DishSecond != default(DishModel))
+            {
+                DishSecondId = DishSecond.Id;
+            }
+
+            //если запись на дату уже сделана
+            if (record != default(RecordModel))
+            {
+                //составляем список перектрестной таблицы по записям на блюда
+                List<RecordDishModel> recordDishes = dataBase.RecordDishRepository.GetAll()
+                                                .Select(i => new RecordDishModel(i))
+                                                .Where(i => i.Record == record.Id).ToList();
+
+                //если список пустой, то добавляем пустой объект для использования Count()
+                recordDishes = (recordDishes == null) ? new List<RecordDishModel>() : recordDishes;
+
+                //для более простой обработки запроса удалим записи на блюда, 
+                //а впоследствии добавим необходимые
+                if (recordDishes.Count() != 0)
+                {
+                    foreach (RecordDishModel recordDish in recordDishes)
+                    {
+                        dataBase.RecordDishRepository.Delete(recordDish.Id);
+                        Save();
+                    }
+                }
+
+                //если стоит позиция "комплекс" и в бд уже есть запись на оба блюда,
+                //то изменять нечего, выходим из метода
+                if (recordDishes.Count() > 1 && position == 3)
+                    return;
+                //если стоит позиция "комплекс", то создаем записи на оба блюда
+                if (position == 3)
+                {
+                    createRecordDish(dishFirstId, record.Id);
+                    createRecordDish(DishSecondId, record.Id);
+                    return;
+                }
+                //если стоит позиция "второе блюдо"
+                if (position == 2)
+                {
+                    createRecordDish(DishSecondId, record.Id);
+                    return;
+                }
+                //если стоит позиция "первое блюдо"
+                if (position == 1)
+                {
+                    createRecordDish(dishFirstId, record.Id);
+                    return;
+                }
+            }
+            //если записи на дату еще нет
+            else
+            {
+                Record recordItems = new Record
+                {
+                    Date = date,
+                    UserId = userId,
+                    Price = 0,
+                    IsReady = 0
+                };
+                dataBase.RecordRepository.Create(recordItems);
+                Save();
+
+                List<Record> records = dataBase.RecordRepository.GetAll();
+                records = (records == null) ? new List<Record>() : records;
+                int recordKey = 1;
+                if (records.Count() != 0)
+                {
+                    recordKey = records[records.Count - 1].Id;
+                }
+                if (position == 3)
+                {
+                    createRecordDish(dishFirstId, recordKey);
+                    createRecordDish(DishSecondId, recordKey);
+                    return;
+                }
+                if (position == 2)
+                {
+                    createRecordDish(DishSecondId, recordKey);
+                    return;
+                }
+                if (position == 1)
+                {
+                    createRecordDish(dishFirstId, recordKey);
+                    return;
+                }
+            }
         }
         public bool Save()
         {

@@ -266,7 +266,7 @@ namespace BLL.Services
                 return;
             }
 
-            void createRecordDish (int dishId, int recordId)
+            void createRecordDish (int? dishId, int recordId)
             {
                 RecordDish recordDishItems = new RecordDish
                     {
@@ -276,11 +276,33 @@ namespace BLL.Services
                 dataBase.RecordDishRepository.Create(recordDishItems);
                 Save();
             }
+            void createRecordsOnPos (int recordId, int? dishFirst, int? dishSecond)
+            {
+                //если стоит позиция "комплекс", то создаем записи на оба блюда
+                if (position == 3)
+                {
+                    createRecordDish(dishFirst, recordId);
+                    createRecordDish(dishSecond, recordId);
+                    return;
+                }
+                //если стоит позиция "второе блюдо"
+                if (position == 2)
+                {
+                    createRecordDish(dishSecond, recordId);
+                    return;
+                }
+                //если стоит позиция "первое блюдо"
+                if (position == 1)
+                {
+                    createRecordDish(dishFirst, recordId);
+                    return;
+                }
+            }
 
             List<DishModel> dishes = GetDishesByDate(date);
             //запись на еще не установленное блюдо создается на блюдо с id 0
-            int dishFirstId = 0; 
-            int DishSecondId = 0;
+            int? dishFirstId = null; 
+            int? DishSecondId = null;
             DishModel dishFirst = dishes.Select(i => new DishModel(i)).Where(i => i.Position == 1).LastOrDefault();
             if (dishFirst != default(DishModel))
             {
@@ -319,24 +341,7 @@ namespace BLL.Services
                 if (recordDishes.Count() > 1 && position == 3)
                     return;
                 //если стоит позиция "комплекс", то создаем записи на оба блюда
-                if (position == 3)
-                {
-                    createRecordDish(dishFirstId, record.Id);
-                    createRecordDish(DishSecondId, record.Id);
-                    return;
-                }
-                //если стоит позиция "второе блюдо"
-                if (position == 2)
-                {
-                    createRecordDish(DishSecondId, record.Id);
-                    return;
-                }
-                //если стоит позиция "первое блюдо"
-                if (position == 1)
-                {
-                    createRecordDish(dishFirstId, record.Id);
-                    return;
-                }
+                createRecordsOnPos(record.Id, dishFirstId, DishSecondId);
             }
             //если записи на дату еще нет
             else
@@ -358,22 +363,7 @@ namespace BLL.Services
                 {
                     recordKey = records[records.Count - 1].Id;
                 }
-                if (position == 3)
-                {
-                    createRecordDish(dishFirstId, recordKey);
-                    createRecordDish(DishSecondId, recordKey);
-                    return;
-                }
-                if (position == 2)
-                {
-                    createRecordDish(DishSecondId, recordKey);
-                    return;
-                }
-                if (position == 1)
-                {
-                    createRecordDish(dishFirstId, recordKey);
-                    return;
-                }
+                createRecordsOnPos(recordKey, dishFirstId, DishSecondId);
             }
         }
         public bool Save()

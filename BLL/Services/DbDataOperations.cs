@@ -217,7 +217,7 @@ namespace BLL.Services
             List<MenuModel> next = new List<MenuModel>();
             List<DinnerMenuModel> dinnerMenus = dataBase.MenuRepository.GetAll()
                                                 .Select(i => new DinnerMenuModel(i))
-                                                .Where(i => i.Date >= date).Take(61).ToList();
+                                                .Where(i => i.Date >= date).Take(62).ToList();
             List<MenuModel> cycle (List<MenuModel> menuList)
             {
                 for (DateTime counter = date; counter.Month == date.Month; counter = counter.AddDays(1))
@@ -252,6 +252,58 @@ namespace BLL.Services
 
             Save();
         }
+
+        public Tuple<List<RecordPosModel>, List<RecordPosModel>> GetPeriodRecord(int id)
+        {
+            DateTime date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            List<RecordPosModel> current = new List<RecordPosModel>();
+            List<RecordPosModel> next = new List<RecordPosModel>();
+
+            List<RecordModel> allUserRecords = dataBase.RecordRepository.GetAll()
+                                                .Select(i => new RecordModel(i))
+                                                .Where(i => i.UserId == id && i.Date >= date).Take(62).ToList();  
+            allUserRecords = (allUserRecords == null) ? new List<RecordModel>() : allUserRecords;
+
+            List<RecordPosModel> cycle (List<RecordPosModel> recordPosList)
+            {
+                for (DateTime counter = date; counter.Month == date.Month; counter = counter.AddDays(1))
+                {
+                    int positionCounter = allUserRecords.Where(i => i.Date == counter).Count();
+                    if (positionCounter == 0)
+                    {
+                        recordPosList.Add(new RecordPosModel(counter, 4));  //не ест
+                    }
+                    if (positionCounter == 2)
+                    {
+                        recordPosList.Add(new RecordPosModel(counter, 3));  //комплекс
+                    }
+                    if (positionCounter == 1)
+                    {
+                        RecordModel currDayRecords = allUserRecords.Where(i => i.Date == counter).FirstOrDefault();
+                        RecordDishModel currRecordDish = dataBase.RecordDishRepository.GetAll()
+                                                .Select(i => new RecordDishModel(i))
+                                                .Where(i => i.Record == currDayRecords.Id).FirstOrDefault();
+                        DishModel currDish = dataBase.DishRepository.GetAll()
+                                                .Select(i => new DishModel(i))
+                                                .Where(i => i.Id == currRecordDish.Dish).FirstOrDefault();
+                        if (currDish.Position == 1)
+                        {
+                            recordPosList.Add(new RecordPosModel(counter, 1));  //первое
+                        }
+                        else
+                        {
+                            recordPosList.Add(new RecordPosModel(counter, 2));  //второе
+                        }
+                    }
+                }
+                return recordPosList;
+            }
+            current = cycle(current);
+            date = date.AddMonths(1);
+            next = cycle(next);
+            return Tuple.Create(current, next);
+        }
+
         public void CreateRecord(DateTime date, int userId, int position)
         {
             RecordModel record = dataBase.RecordRepository.GetAll()

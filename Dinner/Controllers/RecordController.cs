@@ -38,5 +38,11 @@ namespace Dinner.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        public Tuple<List<RecordPosModel>, List<RecordPosModel>> GetCurrentAndNextMonth(int id)
+        {
+            return _iDbCrud.GetPeriodRecord(id);
+        }
     }
 }

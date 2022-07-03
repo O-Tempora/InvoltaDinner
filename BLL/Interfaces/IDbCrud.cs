@@ -20,6 +20,7 @@ namespace BLL.Interfaces
         DishMenuModel GetDishMenu(int id);
         DishModel GetDish(int id);
         RecordModel GetRecord(int id);
+        public Tuple<List<RecordPosModel>, List<RecordPosModel>> GetPeriodRecord(int id);
         UserModel GetUserById(int id);
         UserModel GetUserByEmailAndPassword(string email, string password);
         Dictionary<DateTime, List<DishModel>> GetPeriodDish(DateTime datefirst,DateTime seconddate);

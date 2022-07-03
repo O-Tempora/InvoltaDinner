@@ -24,17 +24,24 @@ namespace Dinner.Controllers
 
         [HttpPost]
         [Route("api/account/signup")]
-        public async Task<IActionResult> SignUp([FromBody] User user)
+        public async Task<IActionResult> SignUp([FromBody] SignUpModel user)
         {
-            
-
-            return Ok();
+            if (ModelState.IsValid) {
+                _iDbCrud.CreateUser(user);
+                return Ok("Новый пользователь добавлен!");
+            }
+            return BadRequest("Не удалось добавить пользователя");
         }
 
         [HttpPost]
         [Route("api/account/signin")]
         public async Task<IActionResult> SignIn([FromBody] SignInModel model)
         {
+            UserModel AuthenticateUser (string email, string password)
+            {
+                return _iDbCrud.GetUserByEmailAndPassword(email, password);
+            }
+
             var user = AuthenticateUser(model.Email, model.Password);
 
             if (user != null)
@@ -50,11 +57,6 @@ namespace Dinner.Controllers
             {
                 return Unauthorized();
             }
-        }
-        
-        private UserModel AuthenticateUser (string email, string password)
-        {
-            return _iDbCrud.GetUserByEmailAndPassword(email, password);
         }
 
         private string GenerateJWT (UserModel user)

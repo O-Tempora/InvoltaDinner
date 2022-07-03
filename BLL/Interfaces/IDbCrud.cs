@@ -34,6 +34,7 @@ namespace BLL.Interfaces
         void CreateDishAndDinnerMenu(DateTime date, List<int> dishesList);
         void CreateDish(string name, decimal price, int position);
         void CreateRecord();
+        void CreateUser(SignUpModel upm);
         Tuple<List<MenuModel>, List<MenuModel>> GetPeriodMenu();
         void UpdateDishMenu(DateTime date, List<int> dishesList);
     }

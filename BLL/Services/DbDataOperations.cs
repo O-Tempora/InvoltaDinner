@@ -57,7 +57,11 @@ namespace BLL.Services
         }
         public UserModel GetUserByEmailAndPassword(string email, string password) 
         {
-            return dataBase.UserRepository.GetAll().Select(i => new UserModel(i)).Where(i => i.Password == password).Where(i => i.Email == email).FirstOrDefault();
+            return dataBase.UserRepository.GetAll()
+                .Select(i => new UserModel(i))
+                .Where(i => i.Email == email)
+                .Where(i => HashPassword.VerifyUserPassword(password, i.Password) == true)
+                .FirstOrDefault();
         }
 
         public List<DishModel> GetDishesByDate(DateTime date)
@@ -431,6 +435,19 @@ namespace BLL.Services
                 }
                 createRecordsOnPos(recordKey, dishFirstId, DishSecondId);
             }
+        }
+        public void CreateUser(SignUpModel upm)
+        {
+            User user = new User
+            {
+                Role = "user",
+                Name = upm.UserName,
+                Password = HashPassword.HashUserPassword(upm.Password),
+                Email = upm.Email,
+                Balance = 0
+            };
+            dataBase.UserRepository.Create(user);
+            Save();
         }
         public bool Save()
         {

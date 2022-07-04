@@ -24,37 +24,38 @@ namespace Dinner.Controllers
 
         [HttpPost]
         [Route("api/account/signup")]
-        public async Task<IActionResult> SignUp([FromBody] User user)
+        public async Task<IActionResult> SignUp([FromBody] SignUpModel user)
         {
-            
-
-            return Ok();
+            if (ModelState.IsValid) {
+                _iDbCrud.CreateUser(user);
+                return Ok("Новый пользователь добавлен!");
+            }
+            return BadRequest("Не удалось добавить пользователя");
         }
 
         [HttpPost]
         [Route("api/account/signin")]
         public async Task<IActionResult> SignIn([FromBody] SignInModel model)
         {
+            UserModel AuthenticateUser (string email, string password)
+            {
+                return _iDbCrud.GetUserByEmailAndPassword(email, password);
+            }
+
             var user = AuthenticateUser(model.Email, model.Password);
 
             if (user != null)
             {
                 //Генерация токена
                 var token = GenerateJWT(user);
-                return Ok(new 
-                {
-                    access_token = token
-                });
+                return Ok(
+                    token
+                );
             }
             else
             {
                 return Unauthorized();
             }
-        }
-        
-        private UserModel AuthenticateUser (string email, string password)
-        {
-            return _iDbCrud.GetUserByEmailAndPassword(email, password);
         }
 
         private string GenerateJWT (UserModel user)
@@ -64,9 +65,11 @@ namespace Dinner.Controllers
 
             var claims = new List<Claim>() {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Name, user.Name),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
             };
             claims.Add(new Claim("role", user.Role));
+            claims.Add(new Claim("balance", user.Balance.ToString()));
 
             var token = new JwtSecurityToken( AuthOptions.ISSUER,
                 AuthOptions.AUDIENCE,

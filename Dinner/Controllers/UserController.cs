@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using BLL.Models;
 using BLL.Interfaces;
 using BLL;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
  
 namespace Dinner.Controllers
@@ -20,25 +24,28 @@ namespace Dinner.Controllers
         {      
             _iDbCrud = iDbCrud;
         }
-
-        //api/dinnermenu/2022-07-12
-        [HttpGet]
-        public List<UserModel> GetAll()
-        {
-            List<UserModel> returnAllUsers = _iDbCrud.GetAllUsers();
-            if (returnAllUsers.Count() != 0)
-            { 
-                return returnAllUsers;
-            }
-            return null;
-        }
         
-        //api/dinnermenu/2022-07-12
         [HttpGet("id")]
-        public UserModel GetUserById(int id)
+        public UserModel GetUserById(string token)
         {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwt = tokenHandler.ReadJwtToken(token);
+            int id = Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value);
+
             UserModel returnUser = _iDbCrud.GetUserById(id);
             return returnUser;
+        }
+
+        [HttpGet]
+        public (string UserName, decimal Balance, int Id) GetUserData(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwt = tokenHandler.ReadJwtToken(token);
+            var tuple = (
+                UserName: jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Name).Value, 
+                Balance: Convert.ToDecimal(jwt.Claims.First(claim => claim.Type == "balance").Value),
+                Id: Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value));
+            return tuple;
         }
     }
 }

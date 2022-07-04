@@ -17,7 +17,7 @@ namespace DAL.Data.Configuration
 
             builder.Property(e => e.Name).HasMaxLength(45);
 
-            builder.Property(e => e.Password).HasMaxLength(45);
+            builder.Property(e => e.Password).HasMaxLength(200);
 
             builder.Property(e => e.Role).HasMaxLength(45);
 

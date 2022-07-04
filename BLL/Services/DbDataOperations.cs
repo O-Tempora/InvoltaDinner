@@ -217,7 +217,7 @@ namespace BLL.Services
             List<MenuModel> next = new List<MenuModel>();
             List<DinnerMenuModel> dinnerMenus = dataBase.MenuRepository.GetAll()
                                                 .Select(i => new DinnerMenuModel(i))
-                                                .Where(i => i.Date >= date).Take(61).ToList();
+                                                .Where(i => i.Date >= date).Take(62).ToList();
             List<MenuModel> cycle (List<MenuModel> menuList)
             {
                 for (DateTime counter = date; counter.Month == date.Month; counter = counter.AddDays(1))
@@ -252,9 +252,185 @@ namespace BLL.Services
 
             Save();
         }
-        public void CreateRecord()
-        {
 
+        public Tuple<List<RecordPosModel>, List<RecordPosModel>> GetPeriodRecord(int id)
+        {
+            DateTime date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            List<RecordPosModel> current = new List<RecordPosModel>();
+            List<RecordPosModel> next = new List<RecordPosModel>();
+
+            List<RecordModel> allUserRecords = dataBase.RecordRepository.GetAll()
+                                                .Select(i => new RecordModel(i))
+                                                .Where(i => i.UserId == id && i.Date >= date).Take(62).ToList();  
+            allUserRecords = (allUserRecords == null) ? new List<RecordModel>() : allUserRecords;
+
+            List<RecordPosModel> cycle (List<RecordPosModel> recordPosList)
+            {
+                for (DateTime counter = date; counter.Month == date.Month; counter = counter.AddDays(1))
+                {
+                    int positionCounter = allUserRecords.Where(i => i.Date == counter).Count();
+                    if (positionCounter == 0)
+                    {
+                        recordPosList.Add(new RecordPosModel(counter, 4));  //не ест
+                    }
+                    if (positionCounter == 2)
+                    {
+                        recordPosList.Add(new RecordPosModel(counter, 3));  //комплекс
+                    }
+                    if (positionCounter == 1)
+                    {
+                        RecordModel currDayRecords = allUserRecords.Where(i => i.Date == counter).FirstOrDefault();
+                        RecordDishModel currRecordDish = dataBase.RecordDishRepository.GetAll()
+                                                .Select(i => new RecordDishModel(i))
+                                                .Where(i => i.Record == currDayRecords.Id).FirstOrDefault();
+                        DishModel currDish = dataBase.DishRepository.GetAll()
+                                                .Select(i => new DishModel(i))
+                                                .Where(i => i.Id == currRecordDish.Dish).FirstOrDefault();
+                        if (currDish.Position == 1)
+                        {
+                            recordPosList.Add(new RecordPosModel(counter, 1));  //первое
+                        }
+                        else
+                        {
+                            recordPosList.Add(new RecordPosModel(counter, 2));  //второе
+                        }
+                    }
+                }
+                return recordPosList;
+            }
+            current = cycle(current);
+            date = date.AddMonths(1);
+            next = cycle(next);
+            return Tuple.Create(current, next);
+        }
+
+        public void CreateOrUpdateRecord(DateTime date, int userId, int position)
+        {
+            RecordModel record = dataBase.RecordRepository.GetAll()
+                                                            .Select(i => new RecordModel(i))
+                                                            .Where(i => i.Date == date && i.UserId == userId)
+                                                            .FirstOrDefault();
+
+            //если запись на дату уже сделана и стоит позиция "не ест", то удаляем запись
+            if (position == 4 && record != default(RecordModel))
+            {
+                dataBase.RecordRepository.Delete(record.Id);
+                return;
+            }
+
+            void createRecordDish (int dishId, int recordId)
+            {
+                RecordDish recordDishItems = new RecordDish
+                {
+                    Record = recordId,
+                    Dish = dishId
+                };
+                dataBase.RecordDishRepository.Create(recordDishItems);
+                Save();
+                Record recordItem = new Record
+                {
+                    Id = record.Id,
+                    Date = record.Date,
+                    UserId = record.UserId,
+                    Price = record.Price + GetDish(dishId).Price,
+                    IsReady = record.isReady
+                };
+                // record.Price += GetDish(dishId).Price;
+                dataBase.RecordRepository.Update(recordItem);
+                // dataBase.RecordDishRepository.Create(recordDishItems);
+                // dataBase.RecordRepository.Update(recordItem);
+                Save();
+            }
+            void createRecordsOnPos (int recordId, int dishFirst, int dishSecond)
+            {
+                //если стоит позиция "комплекс", то создаем записи на оба блюда
+                if (position == 3)
+                {
+                    createRecordDish(dishFirst, recordId);
+                    createRecordDish(dishSecond, recordId);
+                    return;
+                }
+                //если стоит позиция "второе блюдо"
+                if (position == 2)
+                {
+                    createRecordDish(dishSecond, recordId);
+                    return;
+                }
+                //если стоит позиция "первое блюдо"
+                if (position == 1)
+                {
+                    createRecordDish(dishFirst, recordId);
+                    return;
+                }
+            }
+
+            List<DishModel> dishes = GetDishesByDate(date);
+            //запись на еще не установленное блюдо создается на блюдо с id 1 или 2
+            int dishFirstId = 1; 
+            int DishSecondId = 2;
+            DishModel dishFirst = dishes.Select(i => new DishModel(i)).Where(i => i.Position == 1).LastOrDefault();
+            if (dishFirst != default(DishModel))
+            {
+                dishFirstId = dishFirst.Id;
+            }
+            DishModel DishSecond = dishes.Select(i => new DishModel(i)).Where(i => i.Position == 2).LastOrDefault();
+            if (DishSecond != default(DishModel))
+            {
+                DishSecondId = DishSecond.Id;
+            }
+
+            //если запись на дату уже сделана
+            if (record != default(RecordModel))
+            {
+                //составляем список перектрестной таблицы по записям на блюда
+                List<RecordDishModel> recordDishes = dataBase.RecordDishRepository.GetAll()
+                                                .Select(i => new RecordDishModel(i))
+                                                .Where(i => i.Record == record.Id).ToList();
+
+                //если список пустой, то добавляем пустой объект для использования Count()
+                recordDishes = (recordDishes == null) ? new List<RecordDishModel>() : recordDishes;
+
+                //для более простой обработки запроса удалим записи на блюда, 
+                //а впоследствии добавим необходимые
+                if (recordDishes.Count() != 0)
+                {
+                    foreach (RecordDishModel recordDish in recordDishes)
+                    {
+                        dataBase.RecordDishRepository.Delete(recordDish.Id);
+                    }
+                    record.Price = 0;
+                    Save();
+                }
+
+                //если стоит позиция "комплекс" и в бд уже есть запись на оба блюда,
+                //то изменять нечего, выходим из метода
+                if (recordDishes.Count() > 1 && position == 3)
+                    return;
+                //если стоит позиция "комплекс", то создаем записи на оба блюда
+                createRecordsOnPos(record.Id, dishFirstId, DishSecondId);
+            }
+            //если записи на дату еще нет
+            else
+            {
+                Record recordItems = new Record
+                {
+                    Date = date,
+                    UserId = userId,
+                    Price = 0,
+                    IsReady = 0
+                };
+                dataBase.RecordRepository.Create(recordItems);
+                Save();
+
+                List<Record> records = dataBase.RecordRepository.GetAll();
+                records = (records == null) ? new List<Record>() : records;
+                int recordKey = 1;
+                if (records.Count() != 0)
+                {
+                    recordKey = records[records.Count - 1].Id;
+                }
+                createRecordsOnPos(recordKey, dishFirstId, DishSecondId);
+            }
         }
         public bool Save()
         {

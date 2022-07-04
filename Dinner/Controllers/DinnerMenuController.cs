@@ -27,16 +27,16 @@ namespace Dinner.Controllers
             return _iDbCrud.GetPeriodMenu();
         }
 
-        [HttpGet("{date}")]
-        public List<DishModel> Get(DateTime date)
-        {
-            List<DishModel> returnDishesFromMenu = _iDbCrud.GetDishesByDate(date);
-            if (returnDishesFromMenu.Count() != 0)
-            { 
-                return returnDishesFromMenu;
-            }
-            return null;
-        }
+        // [HttpGet("{date}")]
+        // public List<DishModel> Get(DateTime date)
+        // {
+        //     List<DishModel> returnDishesFromMenu = _iDbCrud.GetDishesByDate(date);
+        //     if (returnDishesFromMenu.Count() != 0)
+        //     { 
+        //         return returnDishesFromMenu;
+        //     }
+        //     return null;
+        // }
         
         [HttpPost]
         public async Task<IActionResult> Post(DateTime date, List<int> dishesList)

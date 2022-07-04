@@ -10,11 +10,18 @@ namespace BLL.Models
     {
         public int Id { get; set; }
         public int Position { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; }
         public decimal Price { get; set; }
         public DishModel() { }
         
         public DishModel(Dish d) { 
+            Id = d.Id;
+            Position = d.Position;
+            Name = d.Name;
+            Price = d.Price;
+        }
+
+        public DishModel(DishModel d) { 
             Id = d.Id;
             Position = d.Position;
             Name = d.Name;

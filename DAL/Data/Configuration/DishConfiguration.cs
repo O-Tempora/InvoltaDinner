@@ -19,76 +19,97 @@ namespace DAL.Data.Configuration
                 new Dish
                 {
                     Id = 1,
+                    Name = "Первое блюдо",
+                    Price = 0,
+                    Position = 1
+                },
+                new Dish
+                {
+                    Id = 2,
+                    Name = "Второе блюдо",
+                    Price = 0,
+                    Position = 2
+                },
+                new Dish
+                {
+                    Id = 3,
+                    Name = "Комплексный обед",
+                    Price = 0,
+                    Position = 3
+                },
+                new Dish
+                {
+                    Id = 4,
                     Name = "Борщ",
                     Price = 200,
                     Position = 1
                 },
                 new Dish
                 {
-                    Id = 2,
+                    Id = 5,
                     Name = "Окрошка",
                     Price = 200,
                     Position = 1
                 },
                 new Dish
                 {
-                    Id = 3,
+                    Id = 6,
                     Name = "Солянка",
                     Price = 220,
                     Position = 1
                 },
                 new Dish
                 {
-                    Id = 4,
+                    Id = 7,
                     Name = "Щи из свежей капустой",
                     Price = 200,
                     Position = 1
                 },
                 new Dish
                 {
-                    Id = 5,
+                    Id = 8,
                     Name = "Рассольник",
                     Price = 200,
                     Position = 1
                 },
                 new Dish
                 {
-                    Id = 6,
+                    Id = 9,
                     Name = "Уха",
                     Price = 220,
                     Position = 1
                 },
                 new Dish
                 {
-                    Id = 7,
+                    Id = 10,
                     Name = "Лапша с курицей",
                     Price = 180,
                     Position = 1
                 },
                 new Dish
                 {
-                    Id = 8,
+                    Id = 11,
                     Name = "Паста Карбонара",
                     Price = 250,
                     Position = 2
                 },
                 new Dish
                 {
-                    Id = 9,
+                    Id = 12,
                     Name = "Пюре с котлетой",
                     Price = 225,
                     Position = 2
                 },
                 new Dish
                 {
-                    Id = 10,
+                    Id = 13,
                     Name = "Хинкали",
                     Price = 230,
                     Position = 2
                 },
                 new Dish
                 {
-                    Id = 11,
+                    Id = 14,
                     Name = "Макароны с курицей",
                     Price = 180,
                     Position = 2

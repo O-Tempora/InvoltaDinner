@@ -25,35 +25,26 @@ namespace Dinner.Controllers
             _iDbCrud = iDbCrud;
         }
         
-        //api/dinnermenu/2022-07-12
         [HttpGet("id")]
-        public UserModel GetUserById(int id)
+        public UserModel GetUserById(string token)
         {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwt = tokenHandler.ReadJwtToken(token);
+            int id = Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value);
+
             UserModel returnUser = _iDbCrud.GetUserById(id);
             return returnUser;
         }
-        // [HttpGet]
-        // public UserModel GetUserData(string token)
-        // {
-        //     var tokenHandler = new JwtSecurityTokenHandler();
-        //     var jwt = tokenHandler.ReadJwtToken(token);
-        //     return new UserModel
-        //         {   
-        //             Id = Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value),
-        //             Balance = Convert.ToDecimal(jwt.Claims.First(claim => claim.Type == "balance").Value),
-        //             Email = jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Email).Value,
-        //             Name = jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Name).Value,
-        //             Role = jwt.Claims.First(claim => claim.Type == "role").Value
-        //         };
-        // }
+
         [HttpGet]
-        public (string UserName, decimal Balance) GetUserData(string token)
+        public (string UserName, decimal Balance, int Id) GetUserData(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwt = tokenHandler.ReadJwtToken(token);
             var tuple = (
                 UserName: jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Name).Value, 
-                Balance:Convert.ToDecimal(jwt.Claims.First(claim => claim.Type == "balance").Value));
+                Balance: Convert.ToDecimal(jwt.Claims.First(claim => claim.Type == "balance").Value),
+                Id: Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value));
             return tuple;
         }
     }

@@ -48,10 +48,9 @@ namespace Dinner.Controllers
             {
                 //Генерация токена
                 var token = GenerateJWT(user);
-                return Ok(new 
-                {
-                    access_token = token
-                });
+                return Ok(
+                    token
+                );
             }
             else
             {
@@ -66,9 +65,11 @@ namespace Dinner.Controllers
 
             var claims = new List<Claim>() {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Name, user.Name),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
             };
             claims.Add(new Claim("role", user.Role));
+            claims.Add(new Claim("balance", user.Balance.ToString()));
 
             var token = new JwtSecurityToken( AuthOptions.ISSUER,
                 AuthOptions.AUDIENCE,

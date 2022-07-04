@@ -9,7 +9,7 @@ namespace BLL.Models
     public class RecordDishModel
     {
         public int Id { get; set; }
-        public int? Dish { get; set; }
+        public int Dish { get; set; }
         public int Record { get; set; }
         public RecordDishModel() { }
         public RecordDishModel(RecordDish rd) {

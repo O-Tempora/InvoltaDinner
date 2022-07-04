@@ -304,7 +304,7 @@ namespace BLL.Services
             return Tuple.Create(current, next);
         }
 
-        public void CreateRecord(DateTime date, int userId, int position)
+        public void CreateOrUpdateRecord(DateTime date, int userId, int position)
         {
             RecordModel record = dataBase.RecordRepository.GetAll()
                                                             .Select(i => new RecordModel(i))
@@ -318,17 +318,30 @@ namespace BLL.Services
                 return;
             }
 
-            void createRecordDish (int? dishId, int recordId)
+            void createRecordDish (int dishId, int recordId)
             {
                 RecordDish recordDishItems = new RecordDish
-                    {
-                        Record = recordId,
-                        Dish = dishId
-                    };
+                {
+                    Record = recordId,
+                    Dish = dishId
+                };
                 dataBase.RecordDishRepository.Create(recordDishItems);
                 Save();
+                Record recordItem = new Record
+                {
+                    Id = record.Id,
+                    Date = record.Date,
+                    UserId = record.UserId,
+                    Price = record.Price + GetDish(dishId).Price,
+                    IsReady = record.isReady
+                };
+                // record.Price += GetDish(dishId).Price;
+                dataBase.RecordRepository.Update(recordItem);
+                // dataBase.RecordDishRepository.Create(recordDishItems);
+                // dataBase.RecordRepository.Update(recordItem);
+                Save();
             }
-            void createRecordsOnPos (int recordId, int? dishFirst, int? dishSecond)
+            void createRecordsOnPos (int recordId, int dishFirst, int dishSecond)
             {
                 //если стоит позиция "комплекс", то создаем записи на оба блюда
                 if (position == 3)
@@ -352,9 +365,9 @@ namespace BLL.Services
             }
 
             List<DishModel> dishes = GetDishesByDate(date);
-            //запись на еще не установленное блюдо создается на блюдо с id 0
-            int? dishFirstId = null; 
-            int? DishSecondId = null;
+            //запись на еще не установленное блюдо создается на блюдо с id 1 или 2
+            int dishFirstId = 1; 
+            int DishSecondId = 2;
             DishModel dishFirst = dishes.Select(i => new DishModel(i)).Where(i => i.Position == 1).LastOrDefault();
             if (dishFirst != default(DishModel))
             {
@@ -384,8 +397,9 @@ namespace BLL.Services
                     foreach (RecordDishModel recordDish in recordDishes)
                     {
                         dataBase.RecordDishRepository.Delete(recordDish.Id);
-                        Save();
                     }
+                    record.Price = 0;
+                    Save();
                 }
 
                 //если стоит позиция "комплекс" и в бд уже есть запись на оба блюда,

@@ -21,7 +21,7 @@ namespace Dinner.Controllers
             _iDbCrud = iDbCrud;
         }
 
-        [HttpPost]
+        [HttpPost("updateMany")]
         public async Task<IActionResult> Post([FromBody]List<RecordInfoModel> recordInfoModels)
         {
             try
@@ -29,8 +29,23 @@ namespace Dinner.Controllers
                 foreach (RecordInfoModel recordInfoModel in recordInfoModels)  
                 { 
                     recordInfoModel.date = recordInfoModel.date.Date;             
-                    _iDbCrud.CreateRecord(recordInfoModel.date, recordInfoModel.userId, recordInfoModel.position);
+                    _iDbCrud.CreateOrUpdateRecord(recordInfoModel.date, recordInfoModel.userId, recordInfoModel.position);
                 }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("updateOne")]
+        public async Task<IActionResult> PostOneRecord([FromBody]RecordInfoModel recordInfoModel)
+        {
+            try
+            {
+                recordInfoModel.date = recordInfoModel.date.Date;             
+                _iDbCrud.CreateOrUpdateRecord(recordInfoModel.date, recordInfoModel.userId, recordInfoModel.position);
                 return Ok();
             }
             catch

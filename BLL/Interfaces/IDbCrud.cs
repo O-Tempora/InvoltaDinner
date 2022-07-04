@@ -30,7 +30,7 @@ namespace BLL.Interfaces
         void DeleteDishMenu(int id);
         void DeleteDish(int id);
         void DeleteRecord(int id);
-
+        void CreateUser(SignUpModel upm);
         void CreateDishAndDinnerMenu(DateTime date, List<int> dishesList);
         void CreateDish(string name, decimal price, int position);
         void CreateOrUpdateRecord(DateTime date, int userId, int position);

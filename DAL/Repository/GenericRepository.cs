@@ -22,7 +22,7 @@ namespace DAL.Repository
 
         public virtual List<T> GetAll()
         {
-            return _dbSet.ToList();
+            return _dbSet.AsNoTracking().ToList();
         }
 
         public virtual T? Get(int id)
@@ -51,7 +51,7 @@ namespace DAL.Repository
 
         public virtual void Update(T entityToUpdate)
         {
-            _dbSet.Attach(entityToUpdate);
+            // _dbSet.Attach(entityToUpdate);
             _context.Entry(entityToUpdate).State = EntityState.Modified;
             _context.SaveChanges();
         }

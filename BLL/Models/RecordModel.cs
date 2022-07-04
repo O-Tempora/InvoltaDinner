@@ -11,13 +11,17 @@ namespace BLL.Models
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
+        public sbyte isReady { get; set; }
+        public DateTime Date { get; set; }
         
         public RecordModel() { }
         public RecordModel(Record r) { 
             Id = r.Id;
             UserId = r.UserId;
             Price = r.Price;
+            Date = r.Date;
+            isReady = r.IsReady;
         }
     }
 }

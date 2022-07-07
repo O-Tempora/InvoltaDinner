@@ -129,7 +129,7 @@ namespace DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     User = table.Column<int>(type: "int", nullable: false),
-                    Admin = table.Column<int>(type: "int", nullable: false),
+                    Admin = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -219,9 +219,9 @@ namespace DAL.Migrations
                 columns: new[] { "Id", "Email", "IsApproved", "Name", "Password", "Role" },
                 values: new object[,]
                 {
-                    { 1, "dinneradmin@gmail.com", (sbyte)0, "Виталий Волков", "qwerty_Admin", "admin" },
-                    { 2, "dinnercook@gmail.com", (sbyte)0, "Вова Вист", "asdf_Cook", "cook" },
-                    { 3, "casualuser@gmail.com", (sbyte)0, "Алекс Дарксталкер98", "devkabezruki", "user" }
+                    { 9, "admin@gmail.com", (sbyte)1, "Admin1", "8eqn6A6N11WY0k4j8PLlVfcmDvnUQZJOvTtxdBYtINA=:5tZTJitFXi/473n+fWFzog==", "admin" },
+                    { 10, "cook@gmail.com", (sbyte)1, "Cook1", "ucPtmgnShnsbFBQVZg7kNukEDDluMTr2/fYAq3odDF8=:amw/M3NvUh1kzCQkIJnVIg==", "cook" },
+                    { 8, "reksmbd@gmail.com", (sbyte)1, "MishaBausov", "1U+u9QwJ8SdXuiRip3b83S7jiu06Z0PxlaPHFOJZJ+Q=:tiUz98Ow0IbpP7gWSLBCcA==", "user" }
                 });
 
             migrationBuilder.InsertData(

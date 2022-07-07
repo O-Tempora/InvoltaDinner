@@ -20,33 +20,12 @@ namespace DAL.Data.Configuration
             builder.Property(e => e.Role).HasMaxLength(45);
 
             builder.HasData(
-                new User
-                {
-                    Id = 1,
-                    //Balance = 3400,
-                    Email = "dinneradmin@gmail.com",
-                    Name = "Виталий Волков",
-                    Password = "qwerty_Admin",
-                    Role = "admin"
-                },
-                new User
-                {
-                    Id = 2,
-                    //Balance = 2150,
-                    Email = "dinnercook@gmail.com",
-                    Name = "Вова Вист",
-                    Password = "asdf_Cook",
-                    Role = "cook"
-                },
-                new User
-                {
-                    Id = 3,
-                    //Balance = 4870,
-                    Email = "casualuser@gmail.com",
-                    Name = "Алекс Дарксталкер98",
-                    Password = "devkabezruki",
-                    Role = "user"
-                }
+                new
+                { Id = 8, Email = "reksmbd@gmail.com", IsApproved = (sbyte)1, Name = "MishaBausov", Password = "1U+u9QwJ8SdXuiRip3b83S7jiu06Z0PxlaPHFOJZJ+Q=:tiUz98Ow0IbpP7gWSLBCcA==", Role = "user" },
+                new
+                { Id = 9, Email = "admin@gmail.com", IsApproved = (sbyte)1, Name = "Admin1", Password = "8eqn6A6N11WY0k4j8PLlVfcmDvnUQZJOvTtxdBYtINA=:5tZTJitFXi/473n+fWFzog==", Role = "admin" },
+                new
+                { Id = 10, Email = "cook@gmail.com", IsApproved = (sbyte)1, Name = "Cook1", Password = "ucPtmgnShnsbFBQVZg7kNukEDDluMTr2/fYAq3odDF8=:amw/M3NvUh1kzCQkIJnVIg==", Role = "cook" }
             );
     }
     }

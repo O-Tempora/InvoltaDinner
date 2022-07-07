@@ -457,6 +457,28 @@ namespace BLL.Services
             dataBase.UserRepository.Create(user);
             Save();
         }
+        public void CreateTransaction(int admin, int user, decimal price, DateTime date) {
+            Transaction transaction = new Transaction
+            {
+                User = user,
+                Admin = admin,
+                Price = price,
+                Date = date
+            };
+            dataBase.TransactionRepository.Create(transaction);
+            Save();
+        }
+        public void CreateTransaction(int user, decimal price, DateTime date) {
+            Transaction transaction = new Transaction
+            {
+                User = user,
+                Admin = null,
+                Price = price,
+                Date = date
+            };
+            dataBase.TransactionRepository.Create(transaction);
+            Save();
+        }
         public bool Save()
         {
             dataBase.Save();

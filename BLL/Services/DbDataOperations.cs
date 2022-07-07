@@ -444,7 +444,6 @@ namespace BLL.Services
                 Name = upm.UserName,
                 Password = HashPassword.HashUserPassword(upm.Password),
                 Email = upm.Email,
-                Balance = 0
             };
             dataBase.UserRepository.Create(user);
             Save();

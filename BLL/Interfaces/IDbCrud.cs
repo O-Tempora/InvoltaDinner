@@ -24,6 +24,7 @@ namespace BLL.Interfaces
         UserModel GetUserById(int id);
         UserModel GetUserByEmailAndPassword(string email, string password);
         Dictionary<DateTime, List<DishModel>> GetPeriodDish(DateTime datefirst,DateTime seconddate);
+        List<TransactionModel> GetUserTransations(int User);
 
         void DeleteDinnnerMenu(DateTime date);
         void DeletePeriodDinnnerMenu(DateTime dateFirst, DateTime dateSecond);

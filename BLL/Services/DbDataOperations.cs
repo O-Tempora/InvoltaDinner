@@ -100,6 +100,14 @@ namespace BLL.Services
             }
             return datesAndDishesDict;
         }
+        public List<TransactionModel> GetUserTransations(int User)
+        {
+            List<TransactionModel> userTransactions = dataBase.TransactionRepository.GetAll()
+                                                                                    .Select(i => new TransactionModel(i))
+                                                                                    .Where(i => i.User == User)
+                                                                                    .ToList();
+            return userTransactions;
+        }
 
         public void DeleteDinnnerMenu(DateTime date)
         {

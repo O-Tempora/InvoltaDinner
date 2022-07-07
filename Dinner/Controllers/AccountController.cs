@@ -58,6 +58,33 @@ namespace Dinner.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("api/account/resetpassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] string email)
+        {
+            if (_iDbCrud.CheckUserByEmail(email) == true)
+            {
+                await _iDbCrud.ResetPasswordOfUser(email);
+                return Ok("Новый пароль отправлен на электронную почту!");
+            }
+            else return BadRequest("Данного пользователя не существует!");
+        }
+
+        [HttpPut]
+        [Route("api/account/changepassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel changePasswordModel)
+        {
+            if (changePasswordModel.NewPassword.Length <= 30 && changePasswordModel.NewPassword.Length >= 6)
+            {
+                bool correctPassword = _iDbCrud.ChangePasswordOfUser(changePasswordModel);
+                if (correctPassword == true)
+                    return Ok("Ваш пароль изменён!");
+                else return BadRequest("Старый пароль был введен неправильно!");
+            }
+            else return BadRequest("Длина пароля должна быть больше 5 и меньше 31 символа");
+        }
+
+
         private string GenerateJWT (UserModel user)
         {
             var securityKey  = AuthOptions.GetSymmetricSecurityKey();

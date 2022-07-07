@@ -19,7 +19,7 @@ namespace BLL.Models
         public TransactionModel(Transaction r) { 
             Id = r.Id;
             User = r.User;
-            Admin = r.Admin;
+            Admin = (int)r.Admin;
             Price = r.Price;
             Date = r.Date;
         }

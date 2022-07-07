@@ -14,15 +14,16 @@ namespace BLL.Models
         public string Password { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string Role { get; set; } = null!;
+        public bool IsApproved {get; set;}
         
         public UserModel() { }
         public UserModel(User u) { 
             Id = u.Id;
-            Balance = u.Balance;
             Email = u.Email;
             Password = u.Password;
             Name = u.Name;
             Role = u.Role;
+            IsApproved = !(u.IsApproved == 0);
         }
     }
 }

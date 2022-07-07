@@ -37,5 +37,7 @@ namespace BLL.Interfaces
         void CreateOrUpdateRecord(DateTime date, int userId, int position);
         Tuple<List<MenuModel>, List<MenuModel>> GetPeriodMenu();
         void UpdateDishMenu(DateTime date, List<int> dishesList);
+        void ApproveUser(int userId);
+        void ChangeUserBalance(int adminId, int userId, decimal price, DateTime date);
     }
 }

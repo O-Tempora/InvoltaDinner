@@ -222,6 +222,37 @@ namespace BLL.Services
             }
             Save(); 
         }
+
+        public void ApproveUser(int userId)
+        {
+            User user = dataBase.UserRepository.GetAll().Where(i => i.Id.Equals(userId)).FirstOrDefault();
+            if (user != null)
+            {
+                user.IsApproved = 1;
+                dataBase.UserRepository.Update(user);
+                Save();
+            }
+
+        }
+
+        public void ChangeUserBalance(int adminId, int userId, decimal price, DateTime date)
+        {
+            User user = dataBase.UserRepository.GetAll().Where(i => i.Id.Equals(userId)).FirstOrDefault();
+            if (user != null)
+            {
+                List<TransactionModel> userTransactions = GetUserTransations(userId);
+                decimal userDebt = 0;
+                foreach(TransactionModel tr in userTransactions)
+                {
+                    userDebt += tr.Price;
+                }
+                decimal transactionPrice = -(userDebt - price);
+                CreateTransaction(adminId, userId, transactionPrice, date);
+            }
+        }
+
+
+
         public Tuple<List<MenuModel>, List<MenuModel>> GetPeriodMenu()
         {
             DateTime date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -451,8 +482,7 @@ namespace BLL.Services
                 Role = "user",
                 Name = upm.UserName,
                 Password = HashPassword.HashUserPassword(upm.Password),
-                Email = upm.Email,
-                Balance = 0
+                Email = upm.Email
             };
             dataBase.UserRepository.Create(user);
             Save();

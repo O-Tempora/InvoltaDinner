@@ -100,7 +100,7 @@ namespace BLL.Services
             }
             return datesAndDishesDict;
         }
-        public List<TransactionModel> GetUserTransations(int User)
+        public List<TransactionModel> GetUserTransactions(int User)
         {
             List<TransactionModel> userTransactions = dataBase.TransactionRepository.GetAll()
                                                                                     .Select(i => new TransactionModel(i))
@@ -108,6 +108,23 @@ namespace BLL.Services
                                                                                     .ToList();
             return userTransactions;
         }
+
+        public decimal GetUserBalance(int userId)
+        {
+            User user = dataBase.UserRepository.GetAll().Where(i => i.Id.Equals(userId)).FirstOrDefault();
+            if(user != null)
+            {
+                List<TransactionModel> userTransactions = GetUserTransactions(userId);
+                decimal balance = 0;
+                foreach (TransactionModel tr in userTransactions)
+                {
+                    balance += tr.Price;
+                }
+                return balance;
+            }
+            return 0;
+        }
+
 
         public void DeleteDinnnerMenu(DateTime date)
         {
@@ -240,7 +257,7 @@ namespace BLL.Services
             User user = dataBase.UserRepository.GetAll().Where(i => i.Id.Equals(userId)).FirstOrDefault();
             if (user != null)
             {
-                List<TransactionModel> userTransactions = GetUserTransations(userId);
+                List<TransactionModel> userTransactions = GetUserTransactions(userId);
                 decimal userDebt = 0;
                 foreach(TransactionModel tr in userTransactions)
                 {

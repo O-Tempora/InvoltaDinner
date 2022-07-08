@@ -11,7 +11,7 @@ namespace BLL.Models
     {
         public int Id { get; set; }
         public int User { get; set; }
-        public int Admin { get; set; }
+        public int? Admin { get; set; }
         public decimal Price { get; set; }
         public DateTime Date { get; set; }
         

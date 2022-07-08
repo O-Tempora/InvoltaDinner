@@ -37,13 +37,12 @@ namespace Dinner.Controllers
         }
 
         [HttpGet]
-        public (string UserName, decimal Balance, int Id) GetUserData(string token)
+        public (string UserName, int Id) GetUserData(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwt = tokenHandler.ReadJwtToken(token);
             var tuple = (
                 UserName: jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Name).Value, 
-                Balance: Convert.ToDecimal(jwt.Claims.First(claim => claim.Type == "balance").Value),
                 Id: Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value));
             return tuple;
         }

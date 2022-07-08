@@ -7,6 +7,10 @@ using BLL.Interfaces;
 using DAL.Data;
 using BLL.Models;
 using System.Collections.ObjectModel;
+using System.IdentityModel.Tokens.Jwt;
+using MimeKit;
+using MailKit.Net.Smtp;
+using Newtonsoft.Json;
 
 namespace BLL.Services
 {
@@ -235,6 +239,7 @@ namespace BLL.Services
             foreach (int di in dishesList)
             {
                 dishMenuItems[i].Dish = di;
+                dataBase.MenuDishRepository.Update(dishMenuItems[i]);
                 i++;
             }
             Save(); 
@@ -530,6 +535,77 @@ namespace BLL.Services
         {
             dataBase.Save();
             return true;
+        }
+
+         public bool CheckUserByEmail(string email) 
+        {
+            UserModel user = dataBase.UserRepository.GetAll()
+                                                    .Select(i => new UserModel(i))
+                                                    .Where(i => i.Email == email)
+                                                    .FirstOrDefault();
+            if (user == null)
+                return false;
+            else return true;
+        }
+        public async Task ResetPasswordOfUser(string email) 
+        {
+            User user = dataBase.UserRepository.GetAll()
+                                                .Where(i => i.Email == email)
+                                                .FirstOrDefault();
+            Random rd = new Random();
+            int length = rd.Next(6,30);
+
+            const string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < length; i++)
+            {
+                int index = rd.Next(chars.Length);
+                sb.Append(chars[index]);
+            }
+            user.Password = HashPassword.HashUserPassword(sb.ToString());
+            dataBase.UserRepository.Update(user);
+            Save();
+
+            var emailMessage = new MimeMessage(); 
+            emailMessage.From.Add(new MailboxAddress("Involta.Обеды", "InvoltaLunch@yandex.ru"));
+            emailMessage.To.Add(new MailboxAddress("", email));
+            emailMessage.Subject = "Новый пароль";
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            {
+                Text = "Ваш пароль был сброшен. Ваш новый пароль - " + sb.ToString()
+            };
+
+            string jsonFromFile;
+            using (var reader = new StreamReader("./SenderCredentials.json"))
+            {
+                jsonFromFile = reader.ReadToEnd();
+            }
+            var credentialsFromJson = JsonConvert.DeserializeObject<CredentialsModel>(jsonFromFile);
+             
+            using (var client = new SmtpClient())
+            {
+                await client.ConnectAsync("smtp.yandex.ru", 25, false);
+                await client.AuthenticateAsync(credentialsFromJson.Email, credentialsFromJson.Password);
+                await client.SendAsync(emailMessage);
+ 
+                await client.DisconnectAsync(true);
+            }
+        }
+
+        public bool ChangePasswordOfUser(ChangePasswordModel changePasswordModel) 
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwt = tokenHandler.ReadJwtToken(changePasswordModel.token);
+            int id = Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value);
+            User user = dataBase.UserRepository.GetAll().Where(i => i.Id == id).FirstOrDefault();
+            if (HashPassword.VerifyUserPassword(changePasswordModel.OldPassword, user.Password))
+            {
+                user.Password = HashPassword.HashUserPassword(changePasswordModel.NewPassword);
+                dataBase.UserRepository.Update(user);
+                Save();
+                return true;
+            }
+            else return false;
         }
     }
 }

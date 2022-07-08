@@ -13,7 +13,6 @@ namespace DAL.Data
         }
 
         public int Id { get; set; }
-        public decimal Balance { get; set; }
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string Name { get; set; } = null!;

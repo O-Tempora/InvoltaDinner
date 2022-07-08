@@ -40,5 +40,8 @@ namespace BLL.Interfaces
         void UpdateDishMenu(DateTime date, List<int> dishesList);
         void ApproveUser(int userId);
         void ChangeUserBalance(int adminId, int userId, decimal price, DateTime date);
+        bool CheckUserByEmail(string email);
+        Task ResetPasswordOfUser(string email);
+        bool ChangePasswordOfUser(ChangePasswordModel changePasswordModel);
     }
 }

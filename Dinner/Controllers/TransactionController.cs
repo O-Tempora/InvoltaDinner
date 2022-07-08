@@ -24,7 +24,7 @@ namespace Dinner.Controllers
         [HttpGet]
         public List<TransactionModel> Get(int User)
         {
-            return _iDbCrud.GetUserTransations(User);
+            return _iDbCrud.GetUserTransactions(User);
         }
     }
 }

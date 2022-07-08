@@ -46,5 +46,24 @@ namespace Dinner.Controllers
                 Id: Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value));
             return tuple;
         }
+
+        [HttpGet("userId")]
+        public async Task<IActionResult> GetUserBalance(int userId)
+        {
+            if(ModelState.IsValid)
+            {
+                decimal balance = _iDbCrud.GetUserBalance(userId);
+                
+                return new ObjectResult(balance);
+            }
+            else{
+                var errorMsg = new
+                {
+                    message = "Неверные входные данные",
+                    error = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
+                };
+                return BadRequest(errorMsg);
+            }
+        }
     }
 }

@@ -24,7 +24,8 @@ namespace BLL.Interfaces
         UserModel GetUserById(int id);
         UserModel GetUserByEmailAndPassword(string email, string password);
         Dictionary<DateTime, List<DishModel>> GetPeriodDish(DateTime datefirst,DateTime seconddate);
-        List<TransactionModel> GetUserTransations(int User);
+        List<TransactionModel> GetUserTransactions(int User);
+        decimal GetUserBalance(int userId);
 
         void DeleteDinnnerMenu(DateTime date);
         void DeletePeriodDinnnerMenu(DateTime dateFirst, DateTime dateSecond);
@@ -37,8 +38,7 @@ namespace BLL.Interfaces
         void CreateOrUpdateRecord(DateTime date, int userId, int position);
         Tuple<List<MenuModel>, List<MenuModel>> GetPeriodMenu();
         void UpdateDishMenu(DateTime date, List<int> dishesList);
-        bool CheckUserByEmail(string email);
-        Task ResetPasswordOfUser(string email);
-        bool ChangePasswordOfUser(ChangePasswordModel changePasswordModel);
+        void ApproveUser(int userId);
+        void ChangeUserBalance(int adminId, int userId, decimal price, DateTime date);
     }
 }

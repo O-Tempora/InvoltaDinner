@@ -20,6 +20,7 @@ namespace BLL.Interfaces
         DishMenuModel GetDishMenu(int id);
         DishModel GetDish(int id);
         RecordModel GetRecord(int id);
+        List<RecordNameModel> GetDayRecords(DateTime date);
         public Tuple<List<RecordPosModel>, List<RecordPosModel>> GetPeriodRecord(int id);
         UserModel GetUserById(int id);
         UserModel GetUserByEmailAndPassword(string email, string password);
@@ -38,6 +39,7 @@ namespace BLL.Interfaces
         void CreateOrUpdateRecord(DateTime date, int userId, int position);
         Tuple<List<MenuModel>, List<MenuModel>> GetPeriodMenu();
         void UpdateDishMenu(DateTime date, List<int> dishesList);
+        void UpdateRecordStatus(int id, sbyte status);
         void ApproveUser(int userId);
         void ChangeUserBalance(int adminId, int userId, decimal price, DateTime date);
         bool CheckUserByEmail(string email);

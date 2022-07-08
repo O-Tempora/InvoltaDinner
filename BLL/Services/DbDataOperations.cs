@@ -51,6 +51,34 @@ namespace BLL.Services
         {
             return dataBase.DishRepository.GetAll().Select(i => new DishModel(i)).Where(i => i.Id == id).FirstOrDefault();
         }
+        public List<RecordNameModel> GetDayRecords(DateTime date)
+        {
+            List<RecordNameModel> dayRecordsList = new List<RecordNameModel>();
+            List<RecordModel> dayrecords = dataBase.RecordRepository.GetAll()
+                                        .Select(i => new RecordModel(i))
+                                        .Where (i => i.Date == date).ToList();
+            foreach (RecordModel d in dayrecords)
+            {
+                UserModel user = dataBase.UserRepository.GetAll()
+                                .Select(i => new UserModel(i))
+                                .Where (i => i.Id == d.UserId).FirstOrDefault();
+                string username = user.Name;
+                List<RecordDishModel> recordDishes = dataBase.RecordDishRepository.GetAll()
+                                                .Select(i => new RecordDishModel(i))
+                                                .Where(i => i.Record == d.Id).ToList();
+                List<string> dishNames = new List<string>();
+                foreach (RecordDishModel rd in recordDishes)
+                {
+                    DishModel currDish = dataBase.DishRepository.GetAll()
+                                        .Select(i => new DishModel(i))
+                                        .Where(i => i.Id == rd.Dish).FirstOrDefault();
+                    dishNames.Add(currDish.Name);
+                }
+                dayRecordsList.Add(new RecordNameModel(username, dishNames));
+            }
+            return dayRecordsList;
+        }
+
         public RecordModel GetRecord(int id)
         {
             return dataBase.RecordRepository.GetAll().Select(i => new RecordModel(i)).Where(i => i.Id == id).FirstOrDefault();
@@ -272,9 +300,23 @@ namespace BLL.Services
                 CreateTransaction(adminId, userId, transactionPrice, date);
             }
         }
+        public void UpdateRecordStatus(int id, sbyte status)
+        {
+            RecordModel recordmodel = dataBase.RecordRepository.GetAll()
+                                .Select(i => new RecordModel(i))
+                                .Where(i => i.Id == id).FirstOrDefault();
 
-
-
+            Record record = new Record
+            {
+                Id = recordmodel.Id,
+                UserId = recordmodel.UserId,
+                Price = recordmodel.Price,
+                Date = recordmodel.Date,
+                IsReady = status
+            };
+            dataBase.RecordRepository.Update(record);
+            Save();
+        }
         public Tuple<List<MenuModel>, List<MenuModel>> GetPeriodMenu()
         {
             DateTime date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);

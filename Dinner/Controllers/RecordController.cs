@@ -58,6 +58,25 @@ namespace Dinner.Controllers
         public Tuple<List<RecordPosModel>, List<RecordPosModel>> GetCurrentAndNextMonth(int id)
         {
             return _iDbCrud.GetPeriodRecord(id);
+        }        [HttpGet("recordsByDate")]
+        public List<RecordNameModel> GetRecordsByDate(DateTime date)
+        {
+            return _iDbCrud.GetDayRecords(date);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Put(int id, sbyte status)
+        {
+            try
+            {
+                _iDbCrud.UpdateRecordStatus(id, status);     
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

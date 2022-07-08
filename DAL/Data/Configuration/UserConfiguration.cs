@@ -11,8 +11,6 @@ namespace DAL.Data.Configuration
 
             builder.Property(e => e.Id).ValueGeneratedOnAdd();
 
-            builder.Property(e => e.Balance).HasPrecision(6, 2);
-
             builder.Property(e => e.Email).HasMaxLength(50);
 
             builder.Property(e => e.Name).HasMaxLength(45);
@@ -25,7 +23,6 @@ namespace DAL.Data.Configuration
                 new User
                 {
                     Id = 1,
-                    Balance = 3400,
                     Email = "dinneradmin@gmail.com",
                     Name = "Виталий Волков",
                     Password = "qwerty_Admin",
@@ -34,7 +31,6 @@ namespace DAL.Data.Configuration
                 new User
                 {
                     Id = 2,
-                    Balance = 2150,
                     Email = "dinnercook@gmail.com",
                     Name = "Вова Вист",
                     Password = "asdf_Cook",
@@ -43,7 +39,6 @@ namespace DAL.Data.Configuration
                 new User
                 {
                     Id = 3,
-                    Balance = 4870,
                     Email = "casualuser@gmail.com",
                     Name = "Алекс Дарксталкер98",
                     Password = "devkabezruki",

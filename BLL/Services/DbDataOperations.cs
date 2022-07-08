@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.IdentityModel.Tokens.Jwt;
 using MimeKit;
 using MailKit.Net.Smtp;
+using Newtonsoft.Json;
 
 namespace BLL.Services
 {
@@ -221,6 +222,7 @@ namespace BLL.Services
             foreach (int di in dishesList)
             {
                 dishMenuItems[i].Dish = di;
+                dataBase.MenuDishRepository.Update(dishMenuItems[i]);
                 i++;
             }
             Save(); 
@@ -455,7 +457,6 @@ namespace BLL.Services
                 Name = upm.UserName,
                 Password = HashPassword.HashUserPassword(upm.Password),
                 Email = upm.Email,
-                Balance = 0
             };
             dataBase.UserRepository.Create(user);
             Save();
@@ -505,21 +506,19 @@ namespace BLL.Services
                                                 .FirstOrDefault();
             Random rd = new Random();
             int length = rd.Next(6,30);
+
             const string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             StringBuilder sb = new StringBuilder();
-
             for (int i = 0; i < length; i++)
             {
                 int index = rd.Next(chars.Length);
                 sb.Append(chars[index]);
             }
-            string newPassword = sb.ToString();
-            user.Password = HashPassword.HashUserPassword(newPassword);
+            user.Password = HashPassword.HashUserPassword(sb.ToString());
             dataBase.UserRepository.Update(user);
             Save();
 
-            var emailMessage = new MimeMessage();
- 
+            var emailMessage = new MimeMessage(); 
             emailMessage.From.Add(new MailboxAddress("Involta.Обеды", "InvoltaLunch@yandex.ru"));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = "Новый пароль";
@@ -527,11 +526,18 @@ namespace BLL.Services
             {
                 Text = "Ваш пароль был сброшен. Ваш новый пароль - " + sb.ToString()
             };
+
+            string jsonFromFile;
+            using (var reader = new StreamReader("./SenderCredentials.json"))
+            {
+                jsonFromFile = reader.ReadToEnd();
+            }
+            var credentialsFromJson = JsonConvert.DeserializeObject<CredentialsModel>(jsonFromFile);
              
             using (var client = new SmtpClient())
             {
                 await client.ConnectAsync("smtp.yandex.ru", 25, false);
-                await client.AuthenticateAsync("InvoltaLunch@yandex.ru", "BACK_inv_LUN_34578_A");
+                await client.AuthenticateAsync(credentialsFromJson.Email, credentialsFromJson.Password);
                 await client.SendAsync(emailMessage);
  
                 await client.DisconnectAsync(true);

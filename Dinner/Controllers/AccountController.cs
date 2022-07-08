@@ -96,7 +96,6 @@ namespace Dinner.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
             };
             claims.Add(new Claim("role", user.Role));
-            claims.Add(new Claim("balance", user.Balance.ToString()));
 
             var token = new JwtSecurityToken( AuthOptions.ISSUER,
                 AuthOptions.AUDIENCE,

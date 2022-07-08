@@ -29,7 +29,7 @@ namespace DAL.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql("server=localhost;user=root;password=InMySQL;database=dinner", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
+                optionsBuilder.UseMySql("server=localhost;user=root;password=MySql;database=dinner", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
             }
         }
 

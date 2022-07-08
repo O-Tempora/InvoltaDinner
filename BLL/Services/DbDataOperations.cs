@@ -411,15 +411,27 @@ namespace BLL.Services
             return Tuple.Create(current, next);
         }
 
-        public void CreateOrUpdateRecord(DateTime date, int userId, int position)
+         public void CreateOrUpdateRecord(DateTime date, int userId, int position)
         {
-            RecordModel record = dataBase.RecordRepository.GetAll()
-                                                            .Select(i => new RecordModel(i))
-                                                            .Where(i => i.Date == date && i.UserId == userId)
-                                                            .FirstOrDefault();
-
+            Record record = dataBase.RecordRepository.GetAll()
+                                                     .Where(i => i.Date == date && i.UserId == userId)
+                                                     .FirstOrDefault();
+            if (record != default(Record))
+            {
+                List<RecordDish> recDishes = dataBase.RecordDishRepository.GetAll().Where(i => i.Record == record.Id).ToList();
+                if (recDishes.Count() > 1 && position == 3)
+                    return;
+                else if (recDishes.Count() == 1)
+                {
+                    Dish dish = dataBase.DishRepository.Get(recDishes[0].Dish);
+                    if (dish.Position == position)
+                        return;
+                }
+            }
+            else if (position == 4)
+                return;
             //если запись на дату уже сделана и стоит позиция "не ест", то удаляем запись
-            if (position == 4 && record != default(RecordModel))
+            if (position == 4 && record != default(Record))
             {
                 dataBase.RecordRepository.Delete(record.Id);
                 return;
@@ -434,16 +446,18 @@ namespace BLL.Services
                 };
                 dataBase.RecordDishRepository.Create(recordDishItems);
                 Save();
-                Record recordItem = new Record
-                {
-                    Id = record.Id,
-                    Date = record.Date,
-                    UserId = record.UserId,
-                    Price = record.Price + GetDish(dishId).Price,
-                    IsReady = record.isReady
-                };
+                // Record recordItem = new Record
+                // {
+                //     Id = record.Id,
+                //     Date = record.Date,
+                //     UserId = record.UserId,
+                //     Price = record.Price + GetDish(dishId).Price,
+                //     IsReady = record.IsReady
+                // };
+                Record recordItems = dataBase.RecordRepository.Get(recordId);
+                recordItems.Price = recordItems.Price + GetDish(dishId).Price;
                 // record.Price += GetDish(dishId).Price;
-                dataBase.RecordRepository.Update(recordItem);
+                dataBase.RecordRepository.Update(recordItems);
                 // dataBase.RecordDishRepository.Create(recordDishItems);
                 // dataBase.RecordRepository.Update(recordItem);
                 Save();
@@ -487,7 +501,7 @@ namespace BLL.Services
             }
 
             //если запись на дату уже сделана
-            if (record != default(RecordModel))
+            if (record != default(Record))
             {
                 //составляем список перектрестной таблицы по записям на блюда
                 List<RecordDishModel> recordDishes = dataBase.RecordDishRepository.GetAll()
@@ -506,13 +520,10 @@ namespace BLL.Services
                         dataBase.RecordDishRepository.Delete(recordDish.Id);
                     }
                     record.Price = 0;
+                    dataBase.RecordRepository.Update(record);
                     Save();
                 }
 
-                //если стоит позиция "комплекс" и в бд уже есть запись на оба блюда,
-                //то изменять нечего, выходим из метода
-                if (recordDishes.Count() > 1 && position == 3)
-                    return;
                 //если стоит позиция "комплекс", то создаем записи на оба блюда
                 createRecordsOnPos(record.Id, dishFirstId, DishSecondId);
             }

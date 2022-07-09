@@ -29,7 +29,7 @@ namespace Dinner.BackgroundTasks
             DateTime currentTime = DateTime.Now;
             DateTime desiredTime = new DateTime(DateTime.Now.Year,
                 DateTime.Now.Month, 1, 0, 0, 0);
-            desiredTime.AddMonths(1);
+            desiredTime = desiredTime.AddMonths(1);
             TimeSpan timeDifference = desiredTime - currentTime;
             return timeDifference;
         }

@@ -15,6 +15,7 @@ namespace BLL.Models
         public string Name { get; set; } = null!;
         public string Role { get; set; } = null!;
         public bool IsApproved {get; set;}
+        public string? RefreshToken {get;set;}
         
         public UserModel() { }
         public UserModel(User u) { 
@@ -24,6 +25,7 @@ namespace BLL.Models
             Name = u.Name;
             Role = u.Role;
             IsApproved = !(u.IsApproved == 0);
+            RefreshToken = u.RefreshToken;
         }
     }
 }

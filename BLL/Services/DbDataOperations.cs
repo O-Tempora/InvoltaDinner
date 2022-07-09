@@ -569,7 +569,9 @@ namespace BLL.Services
                 Role = "user",
                 Name = upm.UserName,
                 Password = HashPassword.HashUserPassword(upm.Password),
-                Email = upm.Email
+                Email = upm.Email,
+                IsApproved = 0,
+                RefreshToken = null
             };
             dataBase.UserRepository.Create(user);
             Save();
@@ -671,6 +673,13 @@ namespace BLL.Services
                 return true;
             }
             else return false;
+        }
+        public void UpdateUser(UserModel um)
+        {
+            var user = dataBase.UserRepository.Get(um.Id);
+            user.RefreshToken = um.RefreshToken;
+            dataBase.UserRepository.Update(user);
+            Save();
         }
     }
 }

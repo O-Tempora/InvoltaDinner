@@ -19,6 +19,8 @@ namespace DAL.Data.Configuration
 
             builder.Property(e => e.Role).HasMaxLength(45);
 
+            builder.Property(e => e.RefreshToken).HasMaxLength(200);
+
             builder.HasData(
                 new
                 { Id = 8, Email = "reksmbd@gmail.com", IsApproved = (sbyte)1, Name = "MishaBausov", Password = "1U+u9QwJ8SdXuiRip3b83S7jiu06Z0PxlaPHFOJZJ+Q=:tiUz98Ow0IbpP7gWSLBCcA==", Role = "user" },

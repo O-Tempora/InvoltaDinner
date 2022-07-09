@@ -312,6 +312,11 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
+                    
+                    b.Property<string>("RefreshToken")
+                        .IsRequired(false)
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
 
                     b.HasKey("Id");
 

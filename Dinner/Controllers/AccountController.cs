@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using BLL.Services;
 
 namespace Dinner.Controllers
 {
@@ -55,9 +56,12 @@ namespace Dinner.Controllers
             if (user != null)
             {
                 //Генерация токена
-                var token = GenerateJWT(user);
+                var token = TokenService.GenerateJWT(user);
+                var refreshToken = TokenService.GenerateRefreshToken();
+                user.RefreshToken = refreshToken;
+                _iDbCrud.UpdateUser(user);
                 return Ok(
-                    token
+                    (token, refreshToken)
                 );
             }
             else
@@ -93,25 +97,25 @@ namespace Dinner.Controllers
         }
 
 
-        private string GenerateJWT (UserModel user)
-        {
-            var securityKey  = AuthOptions.GetSymmetricSecurityKey();
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        // private string GenerateJWT (UserModel user)
+        // {
+        //     var securityKey  = AuthOptions.GetSymmetricSecurityKey();
+        //     var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new List<Claim>() {
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Name, user.Name),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
-            };
-            claims.Add(new Claim("role", user.Role));
+        //     var claims = new List<Claim>() {
+        //         new Claim(JwtRegisteredClaimNames.Email, user.Email),
+        //         new Claim(JwtRegisteredClaimNames.Name, user.Name),
+        //         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
+        //     };
+        //     claims.Add(new Claim("role", user.Role));
 
-            var token = new JwtSecurityToken( AuthOptions.ISSUER,
-                AuthOptions.AUDIENCE,
-                claims,
-                expires: DateTime.Now.AddSeconds(AuthOptions.LIFETIME),
-                signingCredentials: credentials);
+        //     var token = new JwtSecurityToken( AuthOptions.ISSUER,
+        //         AuthOptions.AUDIENCE,
+        //         claims,
+        //         expires: DateTime.Now.AddSeconds(AuthOptions.LIFETIME),
+        //         signingCredentials: credentials);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        //     return new JwtSecurityTokenHandler().WriteToken(token);
+        // }
     }
 }

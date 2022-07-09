@@ -101,9 +101,9 @@ namespace Dinner.Controllers
             var claims = new List<Claim>() {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Name, user.Name),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.Role)
             };
-            claims.Add(new Claim("role", user.Role));
 
             var token = new JwtSecurityToken( AuthOptions.ISSUER,
                 AuthOptions.AUDIENCE,

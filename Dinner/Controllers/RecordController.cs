@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using BLL.Models;
 using BLL.Interfaces;
 using BLL;
+using Microsoft.AspNetCore.Authorization;
 
- 
 namespace Dinner.Controllers
 {
 
@@ -55,6 +55,7 @@ namespace Dinner.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "cook")]
         public Tuple<List<RecordPosModel>, List<RecordPosModel>> GetCurrentAndNextMonth(int id)
         {
             return _iDbCrud.GetPeriodRecord(id);

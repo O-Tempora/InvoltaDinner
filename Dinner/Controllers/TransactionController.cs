@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using BLL.Models;
 using BLL.Interfaces;
 using BLL;
+using Microsoft.AspNetCore.Authorization;
 
- 
 namespace Dinner.Controllers
 {
 
@@ -22,6 +22,7 @@ namespace Dinner.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public List<TransactionModel> Get(int User)
         {
             return _iDbCrud.GetUserTransactions(User);

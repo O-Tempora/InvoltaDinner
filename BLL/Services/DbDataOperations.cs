@@ -685,7 +685,8 @@ namespace BLL.Services
         public void UpdateMonthMenu()
         {
             sbyte status = 0;
-            DateTime date = new DateTime(DateTime.Now.Year, DateTime.Now.Month - 1, 1);
+            DateTime date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            date = date.AddMonths(-1);
             bool isAnyPrevious = dataBase.MenuRepository.GetAll()
                                 .Select (i => new DinnerMenuModel(i))
                                 .Where (i => i.Date.Month == date.Month).Any();
@@ -702,7 +703,8 @@ namespace BLL.Services
                 } 
             }
             //создаем Menu на следующий месяц
-            date = new DateTime(DateTime.Now.Year, DateTime.Now.Month + 1, 1);
+            date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            date = date.AddMonths(1);
             for (DateTime counter = date; counter.Month == date.Month; counter = counter.AddDays(1))
             {
                 if ((int)counter.DayOfWeek == 0 || (int)counter.DayOfWeek == 6) //если суббота или воскресенье

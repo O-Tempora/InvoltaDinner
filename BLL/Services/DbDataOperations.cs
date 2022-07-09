@@ -285,6 +285,16 @@ namespace BLL.Services
             Save(); 
         }
 
+        public void DeleteUser(int userId) 
+        {
+            User user = dataBase.UserRepository.GetAll().Where(i => i.Id == userId).FirstOrDefault();
+            if (user != null)
+            {
+                dataBase.UserRepository.Delete(user.Id);
+                Save();
+            }
+        }
+
         public void ApproveUser(int userId)
         {
             User user = dataBase.UserRepository.GetAll().Where(i => i.Id.Equals(userId)).FirstOrDefault();

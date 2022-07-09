@@ -43,6 +43,7 @@ namespace BLL.Interfaces
         Tuple<List<MenuModel>, List<MenuModel>> GetPeriodMenu();
         void UpdateDishMenu(DateTime date, List<int> dishesList);
         void UpdateRecordStatus(int id, sbyte status);
+        void UpdateMonthMenu();
         void ApproveUser(int userId);
         void ChangeUserBalance(int adminId, int userId, decimal price, DateTime date);
         bool CheckUserByEmail(string email);

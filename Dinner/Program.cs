@@ -10,6 +10,7 @@ using BLL.Interfaces;
 using BLL.Models;
 using BLL.Services;
 using DAL.Data;
+using Dinner.BackgroundTasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -28,6 +29,7 @@ builder.Services.AddScoped<IDbCrud, DBDataOperations>();
 
 //builder.Services.AddHostedService<ClaimRecordsTask>();
 builder.Services.AddSingleton<IHostedService, ClaimRecordsTask>();
+builder.Services.AddSingleton<IHostedService, MenuTask>();
 
 builder.Services.AddDbContext<dinnerContext>(options =>
     options.UseSqlServer(connectionString));

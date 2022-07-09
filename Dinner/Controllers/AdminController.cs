@@ -59,6 +59,24 @@ namespace Dinner.Controllers
             
         }
 
+        [HttpDelete("UserId")]
+        public async Task<IActionResult> DeleteUser(int userId)
+        {
+            if(ModelState.IsValid)
+            {
+                _iDbCrud.DeleteUser(userId);
+
+                var msg = new 
+                {
+                    message = "Пользователь был удален"
+                };
+                return Ok(msg);
+            }
+            else {
+                return BadRequest();
+            }
+        }
+
         [HttpPost("{adminId}/{userId}/{price}/{date}")]
         public async Task<IActionResult> ChangeUserBalance (int adminId,int userId, decimal price, DateTime date)
         {

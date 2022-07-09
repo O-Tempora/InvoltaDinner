@@ -26,10 +26,18 @@ namespace Dinner.Controllers
         [Route("api/account/signup")]
         public async Task<IActionResult> SignUp([FromBody] SignUpModel user)
         {
-            if (ModelState.IsValid) {
-                _iDbCrud.CreateUser(user);
-                return Ok("Новый пользователь добавлен!");
+            if (_iDbCrud.CheckUserByEmail(user.Email) != true)
+            {
+                if (user.Password.Length <= 30 && user.Password.Length >= 6)
+                {
+                    if (ModelState.IsValid) {
+                        _iDbCrud.CreateUser(user);
+                        return Ok("Новый пользователь добавлен!");
+                    }
+                }
+                else return BadRequest("Длина пароля должна быть от 6 до 30 символов!");
             }
+            else return BadRequest("Аккаунт с данной электронной почтой уже существует!");
             return BadRequest("Не удалось добавить пользователя");
         }
 

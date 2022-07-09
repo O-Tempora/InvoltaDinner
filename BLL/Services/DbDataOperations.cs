@@ -723,5 +723,12 @@ namespace BLL.Services
                 Save();
             } 
         }
+        public void UpdateUser(UserModel um)
+        {
+            var user = dataBase.UserRepository.Get(um.Id);
+            user.RefreshToken = um.RefreshToken;
+            dataBase.UserRepository.Update(user);
+            Save();
+		}
     }
 }

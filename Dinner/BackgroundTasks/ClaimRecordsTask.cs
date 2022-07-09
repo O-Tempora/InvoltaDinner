@@ -10,13 +10,11 @@ namespace BLL.Services
 {
     public class ClaimRecordsTask : BackgroundService
     {
-        //private readonly IDbCrud _iDbCrud;
         private readonly IServiceScopeFactory _scopeFactory;
         private PeriodicTimer _timer = new (GetTimeUntilNoon());
 
         public ClaimRecordsTask(IServiceScopeFactory scopeFactory)
         {      
-            //_iDbCrud = iDbCrud;
             _scopeFactory = scopeFactory;
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
@@ -46,11 +44,10 @@ namespace BLL.Services
         {
             DateTime currentTime = DateTime.Now;
             DateTime desiredTime = new DateTime(DateTime.Now.Year,
-                DateTime.Now.Month, DateTime.Now.Day, 18, 0, 0);
+                DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0);
             TimeSpan timeDifference = (currentTime - desiredTime);
-            var timePeriod = currentTime.Hour >= 18 ?
+            var timePeriod = currentTime.Hour >= 12 ?
                 (desiredTime.AddDays(1) - currentTime) :
-                //(timeDifference + TimeSpan.FromHours(24));
                 -timeDifference;
                 Console.WriteLine("Time counted: ");
                 Console.WriteLine(timePeriod.TotalMilliseconds);

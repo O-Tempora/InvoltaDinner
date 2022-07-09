@@ -21,15 +21,20 @@ var connectionString = builder.Configuration.GetConnectionString("MyDefaultConne
 builder.Services.AddControllers().AddNewtonsoftJson(x => 
  x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+var serviceProvider = builder.Services.BuildServiceProvider();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IDbCrud, DBDataOperations>();
+
+//builder.Services.AddHostedService<ClaimRecordsTask>();
+builder.Services.AddSingleton<IHostedService, ClaimRecordsTask>();
 
 builder.Services.AddDbContext<dinnerContext>(options =>
     options.UseSqlServer(connectionString));
 //var serviceProvider = builder.Services.BuildServiceProvider();
 
 // Добавление функциональности JWT-токенов
-//public AuthOptions authOptions;
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

@@ -28,6 +28,7 @@ namespace BLL.Interfaces
         List<TransactionModel> GetUserTransactions(int User);
         decimal GetUserBalance(int userId);
 
+        void SwitchMenuStatus(DateTime date);
         void DeleteDinnnerMenu(DateTime date);
         void DeletePeriodDinnnerMenu(DateTime dateFirst, DateTime dateSecond);
         void DeleteDishMenu(int id);

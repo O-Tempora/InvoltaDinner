@@ -29,18 +29,21 @@ var connectionString = builder.Configuration.GetConnectionString("MyDefaultConne
 builder.Services.AddControllers().AddNewtonsoftJson(x => 
  x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+var serviceProvider = builder.Services.BuildServiceProvider();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IDbCrud, DBDataOperations>();
+
+//builder.Services.AddHostedService<ClaimRecordsTask>();
+builder.Services.AddSingleton<IHostedService, ClaimRecordsTask>();
 
 builder.Services.AddDbContext<dinnerContext>(options =>
     options.UseSqlServer(connectionString));
 
-
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-var serviceProvider = builder.Services.BuildServiceProvider();
 
 // Добавление функциональности JWT-токенов
-//public AuthOptions authOptions;
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
@@ -58,8 +61,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                             ValidateIssuerSigningKey = true,
                         };
                     });
-//builder.Services.AddControllersWithViews();
-
 
 // Add services to the container.
 
@@ -67,8 +68,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-
 
 var app = builder.Build();
 

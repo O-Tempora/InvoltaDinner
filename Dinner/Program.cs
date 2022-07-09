@@ -4,15 +4,8 @@ using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Globalization;
 using System.Threading.Tasks.Dataflow;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Mvc;
 using BLL.Interfaces;
 using BLL.Models;
 using BLL.Services;
@@ -22,7 +15,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var connectionString = builder.Configuration.GetConnectionString("MyDefaultConnection");
 
 
@@ -39,28 +31,29 @@ builder.Services.AddSingleton<IHostedService, ClaimRecordsTask>();
 
 builder.Services.AddDbContext<dinnerContext>(options =>
     options.UseSqlServer(connectionString));
-
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+//var serviceProvider = builder.Services.BuildServiceProvider();
 
 // Добавление функциональности JWT-токенов
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                    {
-                        options.RequireHttpsMetadata = false;
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = true,
-                            ValidIssuer = AuthOptions.ISSUER,
- 
-                            ValidateAudience = true,
-                            ValidAudience = AuthOptions.AUDIENCE,
-                            ValidateLifetime = true,
- 
-                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                            ValidateIssuerSigningKey = true,
-                        };
-                    });
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = AuthOptions.ISSUER,
+
+            ValidateAudience = true,
+            ValidAudience = AuthOptions.AUDIENCE,
+            ValidateLifetime = true,
+
+            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+            ValidateIssuerSigningKey = true,
+        };
+    });
+//builder.Services.AddControllersWithViews();
+
 
 // Add services to the container.
 
@@ -69,9 +62,29 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllHeaders",
+            builder =>
+            {
+                builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+            });
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+using (var datb = new dinnerContext())
+{
+    //var db = scope.ServiceProvider.GetRequiredService<dinnerContext>();
+    if(datb.Database.GetPendingMigrations().Count() > 0)
+    {
+        datb.Database.Migrate();
+    }
+}
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -86,6 +99,7 @@ app.UseSwaggerUI(options =>
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseStaticFiles();
+app.UseCors("AllowAllHeaders");
 
 app.UseAuthentication();
 app.UseAuthorization();

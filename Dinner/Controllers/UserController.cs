@@ -37,15 +37,33 @@ namespace Dinner.Controllers
         }
 
         [HttpGet]
-        public (string UserName, decimal Balance, int Id) GetUserData(string token)
+        public (string UserName, int Id) GetUserData(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwt = tokenHandler.ReadJwtToken(token);
             var tuple = (
                 UserName: jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Name).Value, 
-                Balance: Convert.ToDecimal(jwt.Claims.First(claim => claim.Type == "balance").Value),
                 Id: Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value));
             return tuple;
+        }
+
+        [HttpGet("userId")]
+        public async Task<IActionResult> GetUserBalance(int userId)
+        {
+            if(ModelState.IsValid)
+            {
+                decimal balance = _iDbCrud.GetUserBalance(userId);
+                
+                return new ObjectResult(balance);
+            }
+            else{
+                var errorMsg = new
+                {
+                    message = "Неверные входные данные",
+                    error = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
+                };
+                return BadRequest(errorMsg);
+            }
         }
     }
 }

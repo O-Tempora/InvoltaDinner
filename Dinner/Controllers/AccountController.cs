@@ -26,10 +26,18 @@ namespace Dinner.Controllers
         [Route("api/account/signup")]
         public async Task<IActionResult> SignUp([FromBody] SignUpModel user)
         {
-            if (ModelState.IsValid) {
-                _iDbCrud.CreateUser(user);
-                return Ok("Новый пользователь добавлен!");
+            if (_iDbCrud.CheckUserByEmail(user.Email) != true)
+            {
+                if (user.Password.Length <= 30 && user.Password.Length >= 6)
+                {
+                    if (ModelState.IsValid) {
+                        _iDbCrud.CreateUser(user);
+                        return Ok("Новый пользователь добавлен!");
+                    }
+                }
+                else return BadRequest("Длина пароля должна быть от 6 до 30 символов!");
             }
+            else return BadRequest("Аккаунт с данной электронной почтой уже существует!");
             return BadRequest("Не удалось добавить пользователя");
         }
 
@@ -58,6 +66,33 @@ namespace Dinner.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("api/account/resetpassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] string email)
+        {
+            if (_iDbCrud.CheckUserByEmail(email) == true)
+            {
+                await _iDbCrud.ResetPasswordOfUser(email);
+                return Ok("Новый пароль отправлен на электронную почту!");
+            }
+            else return BadRequest("Данного пользователя не существует!");
+        }
+
+        [HttpPut]
+        [Route("api/account/changepassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel changePasswordModel)
+        {
+            if (changePasswordModel.NewPassword.Length <= 30 && changePasswordModel.NewPassword.Length >= 6)
+            {
+                bool correctPassword = _iDbCrud.ChangePasswordOfUser(changePasswordModel);
+                if (correctPassword == true)
+                    return Ok("Ваш пароль изменён!");
+                else return BadRequest("Старый пароль был введен неправильно!");
+            }
+            else return BadRequest("Длина пароля должна быть больше 5 и меньше 31 символа");
+        }
+
+
         private string GenerateJWT (UserModel user)
         {
             var securityKey  = AuthOptions.GetSymmetricSecurityKey();
@@ -69,7 +104,6 @@ namespace Dinner.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
             };
             claims.Add(new Claim("role", user.Role));
-            claims.Add(new Claim("balance", user.Balance.ToString()));
 
             var token = new JwtSecurityToken( AuthOptions.ISSUER,
                 AuthOptions.AUDIENCE,

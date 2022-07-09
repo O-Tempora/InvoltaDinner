@@ -7,6 +7,10 @@ using BLL.Interfaces;
 using DAL.Data;
 using BLL.Models;
 using System.Collections.ObjectModel;
+using System.IdentityModel.Tokens.Jwt;
+using MimeKit;
+using MailKit.Net.Smtp;
+using Newtonsoft.Json;
 
 namespace BLL.Services
 {
@@ -47,6 +51,34 @@ namespace BLL.Services
         {
             return dataBase.DishRepository.GetAll().Select(i => new DishModel(i)).Where(i => i.Id == id).FirstOrDefault();
         }
+        public List<RecordNameModel> GetDayRecords(DateTime date)
+        {
+            List<RecordNameModel> dayRecordsList = new List<RecordNameModel>();
+            List<RecordModel> dayrecords = dataBase.RecordRepository.GetAll()
+                                        .Select(i => new RecordModel(i))
+                                        .Where (i => i.Date == date).ToList();
+            foreach (RecordModel d in dayrecords)
+            {
+                UserModel user = dataBase.UserRepository.GetAll()
+                                .Select(i => new UserModel(i))
+                                .Where (i => i.Id == d.UserId).FirstOrDefault();
+                string username = user.Name;
+                List<RecordDishModel> recordDishes = dataBase.RecordDishRepository.GetAll()
+                                                .Select(i => new RecordDishModel(i))
+                                                .Where(i => i.Record == d.Id).ToList();
+                List<string> dishNames = new List<string>();
+                foreach (RecordDishModel rd in recordDishes)
+                {
+                    DishModel currDish = dataBase.DishRepository.GetAll()
+                                        .Select(i => new DishModel(i))
+                                        .Where(i => i.Id == rd.Dish).FirstOrDefault();
+                    dishNames.Add(currDish.Name);
+                }
+                dayRecordsList.Add(new RecordNameModel(username, dishNames));
+            }
+            return dayRecordsList;
+        }
+
         public RecordModel GetRecord(int id)
         {
             return dataBase.RecordRepository.GetAll().Select(i => new RecordModel(i)).Where(i => i.Id == id).FirstOrDefault();
@@ -100,7 +132,7 @@ namespace BLL.Services
             }
             return datesAndDishesDict;
         }
-        public List<TransactionModel> GetUserTransations(int User)
+        public List<TransactionModel> GetUserTransactions(int User)
         {
             List<TransactionModel> userTransactions = dataBase.TransactionRepository.GetAll()
                                                                                     .Select(i => new TransactionModel(i))
@@ -109,6 +141,35 @@ namespace BLL.Services
             return userTransactions;
         }
 
+        public decimal GetUserBalance(int userId)
+        {
+            User user = dataBase.UserRepository.GetAll().Where(i => i.Id.Equals(userId)).FirstOrDefault();
+            if(user != null)
+            {
+                List<TransactionModel> userTransactions = GetUserTransactions(userId);
+                decimal balance = 0;
+                foreach (TransactionModel tr in userTransactions)
+                {
+                    balance += tr.Price;
+                }
+                return balance;
+            }
+            return 0;
+        }
+
+        public void SwitchMenuStatus(DateTime date)
+        {
+            Menu dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date == date).FirstOrDefault();
+            if (dinnerMenu != default(Menu))
+            {
+                if (dinnerMenu.IsActive == 0)
+                    dinnerMenu.IsActive = 1;
+                else dinnerMenu.IsActive = 0;
+                dataBase.MenuRepository.Update(dinnerMenu);
+                Save();
+            }
+        }
+        
         public void DeleteDinnnerMenu(DateTime date)
         {
             Menu dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date == date).FirstOrDefault();
@@ -218,9 +279,55 @@ namespace BLL.Services
             foreach (int di in dishesList)
             {
                 dishMenuItems[i].Dish = di;
+                dataBase.MenuDishRepository.Update(dishMenuItems[i]);
                 i++;
             }
             Save(); 
+        }
+
+        public void ApproveUser(int userId)
+        {
+            User user = dataBase.UserRepository.GetAll().Where(i => i.Id.Equals(userId)).FirstOrDefault();
+            if (user != null)
+            {
+                user.IsApproved = 1;
+                dataBase.UserRepository.Update(user);
+                Save();
+            }
+
+        }
+
+        public void ChangeUserBalance(int adminId, int userId, decimal price, DateTime date)
+        {
+            User user = dataBase.UserRepository.GetAll().Where(i => i.Id.Equals(userId)).FirstOrDefault();
+            if (user != null)
+            {
+                List<TransactionModel> userTransactions = GetUserTransactions(userId);
+                decimal userDebt = 0;
+                foreach(TransactionModel tr in userTransactions)
+                {
+                    userDebt += tr.Price;
+                }
+                decimal transactionPrice = -(userDebt - price);
+                CreateTransaction(adminId, userId, transactionPrice, date);
+            }
+        }
+        public void UpdateRecordStatus(int id, sbyte status)
+        {
+            RecordModel recordmodel = dataBase.RecordRepository.GetAll()
+                                .Select(i => new RecordModel(i))
+                                .Where(i => i.Id == id).FirstOrDefault();
+
+            Record record = new Record
+            {
+                Id = recordmodel.Id,
+                UserId = recordmodel.UserId,
+                Price = recordmodel.Price,
+                Date = recordmodel.Date,
+                IsReady = status
+            };
+            dataBase.RecordRepository.Update(record);
+            Save();
         }
         public Tuple<List<MenuModel>, List<MenuModel>> GetPeriodMenu()
         {
@@ -316,15 +423,27 @@ namespace BLL.Services
             return Tuple.Create(current, next);
         }
 
-        public void CreateOrUpdateRecord(DateTime date, int userId, int position)
+         public void CreateOrUpdateRecord(DateTime date, int userId, int position)
         {
-            RecordModel record = dataBase.RecordRepository.GetAll()
-                                                            .Select(i => new RecordModel(i))
-                                                            .Where(i => i.Date == date && i.UserId == userId)
-                                                            .FirstOrDefault();
-
+            Record record = dataBase.RecordRepository.GetAll()
+                                                     .Where(i => i.Date == date && i.UserId == userId)
+                                                     .FirstOrDefault();
+            if (record != default(Record))
+            {
+                List<RecordDish> recDishes = dataBase.RecordDishRepository.GetAll().Where(i => i.Record == record.Id).ToList();
+                if (recDishes.Count() > 1 && position == 3)
+                    return;
+                else if (recDishes.Count() == 1)
+                {
+                    Dish dish = dataBase.DishRepository.Get(recDishes[0].Dish);
+                    if (dish.Position == position)
+                        return;
+                }
+            }
+            else if (position == 4)
+                return;
             //если запись на дату уже сделана и стоит позиция "не ест", то удаляем запись
-            if (position == 4 && record != default(RecordModel))
+            if (position == 4 && record != default(Record))
             {
                 dataBase.RecordRepository.Delete(record.Id);
                 return;
@@ -339,16 +458,18 @@ namespace BLL.Services
                 };
                 dataBase.RecordDishRepository.Create(recordDishItems);
                 Save();
-                Record recordItem = new Record
-                {
-                    Id = record.Id,
-                    Date = record.Date,
-                    UserId = record.UserId,
-                    Price = record.Price + GetDish(dishId).Price,
-                    IsReady = record.isReady
-                };
+                // Record recordItem = new Record
+                // {
+                //     Id = record.Id,
+                //     Date = record.Date,
+                //     UserId = record.UserId,
+                //     Price = record.Price + GetDish(dishId).Price,
+                //     IsReady = record.IsReady
+                // };
+                Record recordItems = dataBase.RecordRepository.Get(recordId);
+                recordItems.Price = recordItems.Price + GetDish(dishId).Price;
                 // record.Price += GetDish(dishId).Price;
-                dataBase.RecordRepository.Update(recordItem);
+                dataBase.RecordRepository.Update(recordItems);
                 // dataBase.RecordDishRepository.Create(recordDishItems);
                 // dataBase.RecordRepository.Update(recordItem);
                 Save();
@@ -392,7 +513,7 @@ namespace BLL.Services
             }
 
             //если запись на дату уже сделана
-            if (record != default(RecordModel))
+            if (record != default(Record))
             {
                 //составляем список перектрестной таблицы по записям на блюда
                 List<RecordDishModel> recordDishes = dataBase.RecordDishRepository.GetAll()
@@ -411,13 +532,10 @@ namespace BLL.Services
                         dataBase.RecordDishRepository.Delete(recordDish.Id);
                     }
                     record.Price = 0;
+                    dataBase.RecordRepository.Update(record);
                     Save();
                 }
 
-                //если стоит позиция "комплекс" и в бд уже есть запись на оба блюда,
-                //то изменять нечего, выходим из метода
-                if (recordDishes.Count() > 1 && position == 3)
-                    return;
                 //если стоит позиция "комплекс", то создаем записи на оба блюда
                 createRecordsOnPos(record.Id, dishFirstId, DishSecondId);
             }
@@ -451,8 +569,7 @@ namespace BLL.Services
                 Role = "user",
                 Name = upm.UserName,
                 Password = HashPassword.HashUserPassword(upm.Password),
-                Email = upm.Email,
-                Balance = 0
+                Email = upm.Email
             };
             dataBase.UserRepository.Create(user);
             Save();
@@ -483,6 +600,77 @@ namespace BLL.Services
         {
             dataBase.Save();
             return true;
+        }
+
+         public bool CheckUserByEmail(string email) 
+        {
+            UserModel user = dataBase.UserRepository.GetAll()
+                                                    .Select(i => new UserModel(i))
+                                                    .Where(i => i.Email == email)
+                                                    .FirstOrDefault();
+            if (user == null)
+                return false;
+            else return true;
+        }
+        public async Task ResetPasswordOfUser(string email) 
+        {
+            User user = dataBase.UserRepository.GetAll()
+                                                .Where(i => i.Email == email)
+                                                .FirstOrDefault();
+            Random rd = new Random();
+            int length = rd.Next(6,30);
+
+            const string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < length; i++)
+            {
+                int index = rd.Next(chars.Length);
+                sb.Append(chars[index]);
+            }
+            user.Password = HashPassword.HashUserPassword(sb.ToString());
+            dataBase.UserRepository.Update(user);
+            Save();
+
+            var emailMessage = new MimeMessage(); 
+            emailMessage.From.Add(new MailboxAddress("Involta.Обеды", "InvoltaLunch@yandex.ru"));
+            emailMessage.To.Add(new MailboxAddress("", email));
+            emailMessage.Subject = "Новый пароль";
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            {
+                Text = "Ваш пароль был сброшен. Ваш новый пароль - " + sb.ToString()
+            };
+
+            string jsonFromFile;
+            using (var reader = new StreamReader("./SenderCredentials.json"))
+            {
+                jsonFromFile = reader.ReadToEnd();
+            }
+            var credentialsFromJson = JsonConvert.DeserializeObject<CredentialsModel>(jsonFromFile);
+             
+            using (var client = new SmtpClient())
+            {
+                await client.ConnectAsync("smtp.yandex.ru", 25, false);
+                await client.AuthenticateAsync(credentialsFromJson.Email, credentialsFromJson.Password);
+                await client.SendAsync(emailMessage);
+ 
+                await client.DisconnectAsync(true);
+            }
+        }
+
+        public bool ChangePasswordOfUser(ChangePasswordModel changePasswordModel) 
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwt = tokenHandler.ReadJwtToken(changePasswordModel.token);
+            int id = Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value);
+            User user = dataBase.UserRepository.GetAll().Where(i => i.Id == id).FirstOrDefault();
+            if (HashPassword.VerifyUserPassword(changePasswordModel.OldPassword, user.Password))
+            {
+                user.Password = HashPassword.HashUserPassword(changePasswordModel.NewPassword);
+                dataBase.UserRepository.Update(user);
+                Save();
+                return true;
+            }
+            else return false;
         }
     }
 }

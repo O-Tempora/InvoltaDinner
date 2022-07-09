@@ -34,8 +34,8 @@ namespace DAL.Data.Configuration
                 new Transaction
                 {
                     Id = 1,
-                    User = 3,
-                    Admin = 1,
+                    User = 8,
+                    Admin = 9,
                     Price = 225,
                     Date = new DateTime(2022, 07, 12) 
                 }

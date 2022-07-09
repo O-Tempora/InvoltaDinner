@@ -26,7 +26,7 @@ namespace DAL.Data.Configuration
                 new Record
                 {
                     Id = 1,
-                    UserId = 3,
+                    UserId = 8,
                     Price = 450,
                     Date = new DateTime(2022, 07, 11),
                     IsReady = 0
@@ -34,7 +34,7 @@ namespace DAL.Data.Configuration
                 new Record
                 {
                     Id = 2,
-                    UserId = 3,
+                    UserId = 8,
                     Price = 225,
                     Date = new DateTime(2022, 07, 12),
                     IsReady = 0

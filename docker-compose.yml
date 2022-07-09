@@ -1,0 +1,47 @@
+version: '3.8'
+
+
+services:
+  database:
+    container_name: database
+    image: percona:ps-8.0.26-16
+    ports:
+      - "3306:3306"
+    environment: 
+      MYSQL_DATABASE: dinner
+      MYSQL_USER: testUser
+      MYSQL_PASSWORD: dieisgaylol
+      MYSQL_ROOT_PASSWORD: 1944Rommel1944
+    volumes:
+      - ./database:/var/lib/mysql:cached
+  lunch-backend:
+    image: lunch-backend
+    container_name: lunch-backend
+    build:
+      context: .
+      dockerfile: ./lunch-backend/Dockerfile
+    links: 
+      - database
+    ports:
+      - "5005:80"
+    restart: always
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=database
+      - DB_DATABASE=dinner
+      - DB_USERNAME=testUser
+      - DB_PASSWORD=dieisgaylol
+      - ASPNETCORE_ENVIRONMENT=Development
+  lunch-frontend:
+    image: lunch-frontend
+    build:
+      context: .
+      dockerfile: ./lunch-frontend/Dockerfile
+    depends_on: 
+      - lunch-backend
+    ports:
+      - "4000:8080"
+    container_name: lunch-frontend
+    volumes:
+       - ./lunch-frontend:/usr/src/app/lunch-frontend
+       - /usr/src/app/lunch-frontend/node_modules

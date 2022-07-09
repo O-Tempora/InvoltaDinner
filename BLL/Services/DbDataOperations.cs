@@ -672,5 +672,42 @@ namespace BLL.Services
             }
             else return false;
         }
+        public void UpdateMonthMenu()
+        {
+            sbyte status = 0;
+            DateTime date = new DateTime(DateTime.Now.Year, DateTime.Now.Month - 1, 1);
+            bool isAnyPrevious = dataBase.MenuRepository.GetAll()
+                                .Select (i => new DinnerMenuModel(i))
+                                .Where (i => i.Date.Month == date.Month).Any();
+            //если есть Menu за прошлый месяц, то удаляем их
+            if (isAnyPrevious)
+            {
+                for (DateTime counter = date; counter.Month == date.Month; counter = counter.AddDays(1))
+                {
+                    DinnerMenuModel currDay = dataBase.MenuRepository.GetAll()
+                                            .Select (i => new DinnerMenuModel(i))
+                                            .Where (i => i.Date == counter).FirstOrDefault();
+                    dataBase.MenuRepository.Delete(currDay.Id);
+                    Save();
+                } 
+            }
+            //создаем Menu на следующий месяц
+            date = new DateTime(DateTime.Now.Year, DateTime.Now.Month + 1, 1);
+            for (DateTime counter = date; counter.Month == date.Month; counter = counter.AddDays(1))
+            {
+                if ((int)counter.DayOfWeek == 0 || (int)counter.DayOfWeek == 6) //если суббота или воскресенье
+                {
+                    status = 0;
+                }
+                else status = 1;
+                Menu currDay = new Menu
+                {
+                    Date = counter,
+                    IsActive = status
+                };
+                dataBase.MenuRepository.Create(currDay);
+                Save();
+            } 
+        }
     }
 }

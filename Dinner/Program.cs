@@ -29,7 +29,7 @@ builder.Services.AddScoped<IDbCrud, DBDataOperations>();
 
 //builder.Services.AddHostedService<ClaimRecordsTask>();
 builder.Services.AddSingleton<IHostedService, ClaimRecordsTask>();
-builder.Services.AddSingleton<IHostedService, UpdateMenuTask>();
+builder.Services.AddSingleton<IHostedService, MenuTask>();
 
 builder.Services.AddDbContext<dinnerContext>(options =>
     options.UseSqlServer(connectionString));

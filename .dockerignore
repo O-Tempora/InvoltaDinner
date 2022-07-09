@@ -5,3 +5,5 @@
 /DAL/obj
 /Dinner/bin
 /Dinner/obj
+.git
+DockerFile

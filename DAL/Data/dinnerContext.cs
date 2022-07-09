@@ -29,7 +29,9 @@ namespace DAL.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql("server=localhost;user=root;password=InMySQL;database=dinner", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
+                optionsBuilder.UseMySql("server=database;user=root;password=1944Rommel1944;database=dinner;", 
+                Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"), 
+                options => options.EnableRetryOnFailure());
             }
         }
 
@@ -40,10 +42,10 @@ namespace DAL.Data
 
             modelBuilder.ApplyConfiguration(new DishConfiguration());
             modelBuilder.ApplyConfiguration(new MenuConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new MenuDishConfiguration());
             modelBuilder.ApplyConfiguration(new RecordConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RecordDishConfiguration());
 
             OnModelCreatingPartial(modelBuilder);

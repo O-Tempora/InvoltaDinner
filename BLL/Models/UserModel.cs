@@ -9,10 +9,12 @@ namespace BLL.Models
     public class UserModel
     {
         public int Id { get; set; }
+
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string Role { get; set; } = null!;
+        public bool IsApproved {get; set;}
         
         public UserModel() { }
         public UserModel(User u) { 
@@ -21,6 +23,7 @@ namespace BLL.Models
             Password = u.Password;
             Name = u.Name;
             Role = u.Role;
+            IsApproved = !(u.IsApproved == 0);
         }
     }
 }

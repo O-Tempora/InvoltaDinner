@@ -63,13 +63,6 @@ namespace DAL.Migrations
                         },
                         new
                         {
-                            Id = 3,
-                            Name = "Комплексный обед",
-                            Position = 3,
-                            Price = 0m
-                        },
-                        new
-                        {
                             Id = 4,
                             Name = "Борщ",
                             Position = 1,
@@ -229,55 +222,55 @@ namespace DAL.Migrations
                     b.ToTable("menu_dish", (string)null);
 
                     b.HasData(
-                        new
+                        new 
                         {
                             Id = 1,
-                            Dish = 1,
+                            Dish = 4,
                             Menu = 1
                         },
-                        new
+                        new 
                         {
                             Id = 2,
-                            Dish = 8,
+                            Dish = 11,
                             Menu = 1
                         },
-                        new
+                        new 
                         {
                             Id = 3,
-                            Dish = 2,
+                            Dish = 6,
                             Menu = 2
                         },
-                        new
+                        new 
                         {
                             Id = 4,
-                            Dish = 9,
+                            Dish = 12,
                             Menu = 2
                         },
-                        new
+                        new 
                         {
                             Id = 5,
-                            Dish = 3,
+                            Dish = 7,
                             Menu = 3
                         },
-                        new
+                        new 
                         {
                             Id = 6,
-                            Dish = 10,
+                            Dish = 14,
                             Menu = 3
                         },
-                        new
+                        new 
                         {
                             Id = 7,
                             Dish = 4,
                             Menu = 4
                         },
-                        new
+                        new 
                         {
                             Id = 8,
                             Dish = 11,
                             Menu = 4
                         },
-                        new
+                        new 
                         {
                             Id = 9,
                             Dish = 5,
@@ -286,7 +279,7 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 10,
-                            Dish = 8,
+                            Dish = 13,
                             Menu = 5
                         });
                 });

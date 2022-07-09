@@ -32,13 +32,6 @@ namespace DAL.Data.Configuration
                 },
                 new Dish
                 {
-                    Id = 3,
-                    Name = "Комплексный обед",
-                    Price = 0,
-                    Position = 3
-                },
-                new Dish
-                {
                     Id = 4,
                     Name = "Борщ",
                     Price = 200,

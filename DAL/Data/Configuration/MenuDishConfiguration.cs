@@ -29,37 +29,37 @@ namespace DAL.Data.Configuration
                 new MenuDish
                 {
                     Id = 1,
-                    Dish = 1,
+                    Dish = 4,
                     Menu = 1
                 },
                 new MenuDish
                 {
                     Id = 2,
-                    Dish = 8,
+                    Dish = 11,
                     Menu = 1
                 },
                 new MenuDish
                 {
                     Id = 3,
-                    Dish = 2,
+                    Dish = 6,
                     Menu = 2
                 },
                 new MenuDish
                 {
                     Id = 4,
-                    Dish = 9,
+                    Dish = 12,
                     Menu = 2
                 },
                 new MenuDish
                 {
                     Id = 5,
-                    Dish = 3,
+                    Dish = 7,
                     Menu = 3
                 },
                 new MenuDish
                 {
                     Id = 6,
-                    Dish = 10,
+                    Dish = 14,
                     Menu = 3
                 },
                 new MenuDish
@@ -83,7 +83,7 @@ namespace DAL.Data.Configuration
                 new MenuDish
                 {
                     Id = 10,
-                    Dish = 8,
+                    Dish = 13,
                     Menu = 5
                 }
             );

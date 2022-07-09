@@ -7,4 +7,5 @@
         |__ lunch_backend
         |__ lunch-frontend
         |__ docker-compose.yml
-3. Открыть терминал в созданной директории и прописать команды "docker-compose build" и "docker-compose up -d"
+3. В файле lunch_backend/Dinner/SenderCredentials.json в полях Email и Password указать почту, с которой будут отсылаться пароли для восстановления, и ее пароль       
+4. Открыть терминал в созданной директории и прописать команды "docker-compose build" и "docker-compose up -d"

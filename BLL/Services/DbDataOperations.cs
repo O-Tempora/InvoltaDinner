@@ -672,5 +672,15 @@ namespace BLL.Services
             }
             else return false;
         }
+
+        public void DeleteUser(int userId) 
+        {
+            User user = dataBase.UserRepository.GetAll().Where(i => i.Id == userId).FirstOrDefault();
+            if (user != null)
+            {
+                dataBase.UserRepository.Delete(user.Id);
+                Save();
+            }
+        }
     }
 }

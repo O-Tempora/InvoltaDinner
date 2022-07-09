@@ -102,12 +102,12 @@ namespace Dinner.Controllers
         //     var securityKey  = AuthOptions.GetSymmetricSecurityKey();
         //     var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new List<Claim>() {
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Name, user.Name),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, user.Role)
-            };
+            // var claims = new List<Claim>() {
+            //     new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            //     new Claim(JwtRegisteredClaimNames.Name, user.Name),
+            //     new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            //     new Claim(ClaimTypes.Role, user.Role)
+            // };
 
         //     var token = new JwtSecurityToken( AuthOptions.ISSUER,
         //         AuthOptions.AUDIENCE,

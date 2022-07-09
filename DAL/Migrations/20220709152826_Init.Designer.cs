@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(dinnerContext))]
-    [Migration("20220708195218_Init")]
+    [Migration("20220709152826_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -222,55 +222,55 @@ namespace DAL.Migrations
                     b.ToTable("menu_dish", (string)null);
 
                     b.HasData(
-                        new 
+                        new
                         {
                             Id = 1,
                             Dish = 4,
                             Menu = 1
                         },
-                        new 
+                        new
                         {
                             Id = 2,
                             Dish = 11,
                             Menu = 1
                         },
-                        new 
+                        new
                         {
                             Id = 3,
                             Dish = 6,
                             Menu = 2
                         },
-                        new 
+                        new
                         {
                             Id = 4,
                             Dish = 12,
                             Menu = 2
                         },
-                        new 
+                        new
                         {
                             Id = 5,
                             Dish = 7,
                             Menu = 3
                         },
-                        new 
+                        new
                         {
                             Id = 6,
                             Dish = 14,
                             Menu = 3
                         },
-                        new 
+                        new
                         {
                             Id = 7,
                             Dish = 4,
                             Menu = 4
                         },
-                        new 
+                        new
                         {
                             Id = 8,
                             Dish = 11,
                             Menu = 4
                         },
-                        new 
+                        new
                         {
                             Id = 9,
                             Dish = 5,
@@ -312,6 +312,11 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
+                    
+                    b.Property<string>("RefreshToken")
+                        .IsRequired(false)
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
 
                     b.HasKey("Id");
 
@@ -439,7 +444,7 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Admin")
+                    b.Property<int?>("Admin")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -465,7 +470,7 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 1,
-                            Admin = 1,
+                            Admin = 9,
                             Date = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Price = 225m,
                             User = 8
@@ -531,7 +536,6 @@ namespace DAL.Migrations
                     b.HasOne("DAL.Data.User", "AdminNavigation")
                         .WithMany("TransactionAdminNavigations")
                         .HasForeignKey("Admin")
-                        .IsRequired()
                         .HasConstraintName("admin");
 
                     b.HasOne("DAL.Data.User", "UserNavigation")

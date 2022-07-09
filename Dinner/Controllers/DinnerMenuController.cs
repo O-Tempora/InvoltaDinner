@@ -67,6 +67,20 @@ namespace Dinner.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPut("{date}")]
+        public async Task<IActionResult> Put(DateTime date)
+        {
+            try
+            {
+                _iDbCrud.SwitchMenuStatus(date);      
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
         
         [HttpGet("{dateFirst}/{dateSecond}")]
         public Dictionary<DateTime, List<DishModel>> GetPeriod(DateTime dateFirst, DateTime dateSecond)

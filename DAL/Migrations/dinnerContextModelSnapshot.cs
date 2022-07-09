@@ -61,13 +61,6 @@ namespace DAL.Migrations
                         },
                         new
                         {
-                            Id = 3,
-                            Name = "Комплексный обед",
-                            Position = 3,
-                            Price = 0m
-                        },
-                        new
-                        {
                             Id = 4,
                             Name = "Борщ",
                             Position = 1,
@@ -230,37 +223,37 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 1,
-                            Dish = 1,
+                            Dish = 4,
                             Menu = 1
                         },
                         new
                         {
                             Id = 2,
-                            Dish = 8,
+                            Dish = 11,
                             Menu = 1
                         },
                         new
                         {
                             Id = 3,
-                            Dish = 2,
+                            Dish = 6,
                             Menu = 2
                         },
                         new
                         {
                             Id = 4,
-                            Dish = 9,
+                            Dish = 12,
                             Menu = 2
                         },
                         new
                         {
                             Id = 5,
-                            Dish = 3,
+                            Dish = 7,
                             Menu = 3
                         },
                         new
                         {
                             Id = 6,
-                            Dish = 10,
+                            Dish = 14,
                             Menu = 3
                         },
                         new
@@ -284,7 +277,7 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 10,
-                            Dish = 8,
+                            Dish = 13,
                             Menu = 5
                         });
                 });
@@ -321,7 +314,7 @@ namespace DAL.Migrations
                             Date = new DateTime(2022, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsReady = (sbyte)0,
                             Price = 450m,
-                            UserId = 3
+                            UserId = 8
                         },
                         new
                         {
@@ -329,7 +322,7 @@ namespace DAL.Migrations
                             Date = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsReady = (sbyte)0,
                             Price = 225m,
-                            UserId = 3
+                            UserId = 8
                         });
                 });
 
@@ -381,7 +374,7 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Admin")
+                    b.Property<int?>("Admin")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -407,10 +400,10 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 1,
-                            Admin = 1,
+                            Admin = 9,
                             Date = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Price = 225m,
-                            User = 3
+                            User = 8
                         });
                 });
 
@@ -536,7 +529,6 @@ namespace DAL.Migrations
                     b.HasOne("DAL.Data.User", "AdminNavigation")
                         .WithMany("TransactionAdminNavigations")
                         .HasForeignKey("Admin")
-                        .IsRequired()
                         .HasConstraintName("admin");
 
                     b.HasOne("DAL.Data.User", "UserNavigation")

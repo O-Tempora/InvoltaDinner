@@ -61,7 +61,9 @@ namespace DAL.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Role = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false, collation: "utf8mb4_0900_ai_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsApproved = table.Column<sbyte>(type: "tinyint", nullable: false)
+                    IsApproved = table.Column<sbyte>(type: "tinyint", nullable: false),
+                    RefreshToken = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true, collation: "utf8mb4_0900_ai_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -224,20 +226,6 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "record",
-                columns: new[] { "Id", "Date", "IsReady", "Price", "UserId" },
-                values: new object[,]
-                {
-                    { 1, new DateTime(2022, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), (sbyte)0, 450m, 8 },
-                    { 2, new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), (sbyte)0, 225m, 8 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "transaction",
-                columns: new[] { "Id", "Admin", "Date", "Price", "User" },
-                values: new object[] { 1, 9, new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 225m, 8 });
-
-            migrationBuilder.InsertData(
                 table: "menu_dish",
                 columns: new[] { "Id", "Dish", "Menu" },
                 values: new object[,]
@@ -255,14 +243,33 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "record_dish",
-                columns: new[] { "Id", "Dish", "Record" },
+                table: "record",
+                columns: new[] { "Id", "Date", "IsReady", "Price", "UserId" },
                 values: new object[,]
                 {
-                    { 1, 1, 1 },
-                    { 2, 8, 1 },
-                    { 3, 9, 2 }
+                    { 1, new DateTime(2022, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), (sbyte)0, 450m, 8 },
+                    { 2, new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), (sbyte)0, 225m, 8 }
                 });
+
+            migrationBuilder.InsertData(
+                table: "transaction",
+                columns: new[] { "Id", "Admin", "Date", "Price", "User" },
+                values: new object[] { 1, 9, new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 225m, 8 });
+
+            migrationBuilder.InsertData(
+                table: "record_dish",
+                columns: new[] { "Id", "Dish", "Record" },
+                values: new object[] { 1, 1, 1 });
+
+            migrationBuilder.InsertData(
+                table: "record_dish",
+                columns: new[] { "Id", "Dish", "Record" },
+                values: new object[] { 2, 8, 1 });
+
+            migrationBuilder.InsertData(
+                table: "record_dish",
+                columns: new[] { "Id", "Dish", "Record" },
+                values: new object[] { 3, 9, 2 });
 
             migrationBuilder.CreateIndex(
                 name: "dish_idx",

@@ -18,6 +18,7 @@ namespace DAL.Data
         public string Name { get; set; } = null!;
         public string Role { get; set; } = null!;
         public sbyte IsApproved {get; set;}
+        public string? RefreshToken {get;set;}
 
         public virtual ICollection<Record> Records { get; set; }
         public virtual ICollection<Transaction> TransactionAdminNavigations { get; set; }

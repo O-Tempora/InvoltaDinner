@@ -157,7 +157,19 @@ namespace BLL.Services
             return 0;
         }
 
-
+        public void SwitchMenuStatus(DateTime date)
+        {
+            Menu dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date == date).FirstOrDefault();
+            if (dinnerMenu != default(Menu))
+            {
+                if (dinnerMenu.IsActive == 0)
+                    dinnerMenu.IsActive = 1;
+                else dinnerMenu.IsActive = 0;
+                dataBase.MenuRepository.Update(dinnerMenu);
+                Save();
+            }
+        }
+        
         public void DeleteDinnnerMenu(DateTime date)
         {
             Menu dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date == date).FirstOrDefault();
@@ -271,6 +283,16 @@ namespace BLL.Services
                 i++;
             }
             Save(); 
+        }
+
+        public void DeleteUser(int userId) 
+        {
+            User user = dataBase.UserRepository.GetAll().Where(i => i.Id == userId).FirstOrDefault();
+            if (user != null)
+            {
+                dataBase.UserRepository.Delete(user.Id);
+                Save();
+            }
         }
 
         public void ApproveUser(int userId)
@@ -557,7 +579,9 @@ namespace BLL.Services
                 Role = "user",
                 Name = upm.UserName,
                 Password = HashPassword.HashUserPassword(upm.Password),
-                Email = upm.Email
+                Email = upm.Email,
+                IsApproved = 0,
+                RefreshToken = null
             };
             dataBase.UserRepository.Create(user);
             Save();
@@ -660,5 +684,51 @@ namespace BLL.Services
             }
             else return false;
         }
+        public void UpdateMonthMenu()
+        {
+            sbyte status = 0;
+            DateTime date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            date = date.AddMonths(-1);
+            bool isAnyPrevious = dataBase.MenuRepository.GetAll()
+                                .Select (i => new DinnerMenuModel(i))
+                                .Where (i => i.Date.Month == date.Month).Any();
+            //если есть Menu за прошлый месяц, то удаляем их
+            if (isAnyPrevious)
+            {
+                for (DateTime counter = date; counter.Month == date.Month; counter = counter.AddDays(1))
+                {
+                    DinnerMenuModel currDay = dataBase.MenuRepository.GetAll()
+                                            .Select (i => new DinnerMenuModel(i))
+                                            .Where (i => i.Date == counter).FirstOrDefault();
+                    dataBase.MenuRepository.Delete(currDay.Id);
+                    Save();
+                } 
+            }
+            //создаем Menu на следующий месяц
+            date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            date = date.AddMonths(1);
+            for (DateTime counter = date; counter.Month == date.Month; counter = counter.AddDays(1))
+            {
+                if ((int)counter.DayOfWeek == 0 || (int)counter.DayOfWeek == 6) //если суббота или воскресенье
+                {
+                    status = 0;
+                }
+                else status = 1;
+                Menu currDay = new Menu
+                {
+                    Date = counter,
+                    IsActive = status
+                };
+                dataBase.MenuRepository.Create(currDay);
+                Save();
+            } 
+        }
+        public void UpdateUser(UserModel um)
+        {
+            var user = dataBase.UserRepository.Get(um.Id);
+            user.RefreshToken = um.RefreshToken;
+            dataBase.UserRepository.Update(user);
+            Save();
+		}
     }
 }

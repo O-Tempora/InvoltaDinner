@@ -157,7 +157,19 @@ namespace BLL.Services
             return 0;
         }
 
-
+        public void SwitchMenuStatus(DateTime date)
+        {
+            Menu dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date == date).FirstOrDefault();
+            if (dinnerMenu != default(Menu))
+            {
+                if (dinnerMenu.IsActive == 0)
+                    dinnerMenu.IsActive = 1;
+                else dinnerMenu.IsActive = 0;
+                dataBase.MenuRepository.Update(dinnerMenu);
+                Save();
+            }
+        }
+        
         public void DeleteDinnnerMenu(DateTime date)
         {
             Menu dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date == date).FirstOrDefault();

@@ -6,7 +6,7 @@ using BLL.Interfaces;
 using BLL.Models;
 using BLL.Services;
 
-namespace BLL.Services
+namespace Dinner.BackgroundTasks
 {
     public class ClaimRecordsTask : BackgroundService
     {

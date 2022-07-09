@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(dinnerContext))]
-    [Migration("20220705190220_Creation")]
-    partial class Creation
+    [Migration("20220708195218_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -291,6 +291,69 @@ namespace DAL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("DAL.Data.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<sbyte>("IsApproved")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("varchar(45)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("varchar(45)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("user", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 8,
+                            Email = "reksmbd@gmail.com",
+                            IsApproved = (sbyte)1,
+                            Name = "MishaBausov",
+                            Password = "1U+u9QwJ8SdXuiRip3b83S7jiu06Z0PxlaPHFOJZJ+Q=:tiUz98Ow0IbpP7gWSLBCcA==",
+                            Role = "user"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Email = "admin@gmail.com",
+                            IsApproved = (sbyte)1,
+                            Name = "Admin1",
+                            Password = "8eqn6A6N11WY0k4j8PLlVfcmDvnUQZJOvTtxdBYtINA=:5tZTJitFXi/473n+fWFzog==",
+                            Role = "admin"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Email = "cook@gmail.com",
+                            IsApproved = (sbyte)1,
+                            Name = "Cook1",
+                            Password = "ucPtmgnShnsbFBQVZg7kNukEDDluMTr2/fYAq3odDF8=:amw/M3NvUh1kzCQkIJnVIg==",
+                            Role = "cook"
+                        });
+                });
+
             modelBuilder.Entity("DAL.Data.Record", b =>
                 {
                     b.Property<int>("Id")
@@ -323,7 +386,7 @@ namespace DAL.Migrations
                             Date = new DateTime(2022, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsReady = (sbyte)0,
                             Price = 450m,
-                            UserId = 3
+                            UserId = 8
                         },
                         new
                         {
@@ -331,7 +394,7 @@ namespace DAL.Migrations
                             Date = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsReady = (sbyte)0,
                             Price = 225m,
-                            UserId = 3
+                            UserId = 8
                         });
                 });
 
@@ -384,8 +447,7 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Admin")
-                        .HasColumnType("int")
-                        .IsRequired(false);
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime");
@@ -413,51 +475,8 @@ namespace DAL.Migrations
                             Admin = 1,
                             Date = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Price = 225m,
-                            User = 3
+                            User = 8
                         });
-                });
-
-            modelBuilder.Entity("DAL.Data.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<sbyte>("IsApproved")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(45)
-                        .HasColumnType("varchar(45)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(45)
-                        .HasColumnType("varchar(45)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("user", (string)null);
-
-                    b.HasData(
-                        new
-                        { Id = 8, Email = "reksmbd@gmail.com", IsApproved = (sbyte)1, Name = "MishaBausov", Password = "1U+u9QwJ8SdXuiRip3b83S7jiu06Z0PxlaPHFOJZJ+Q=:tiUz98Ow0IbpP7gWSLBCcA==", Role = "user" },
-                        new
-                        { Id = 9, Email = "admin@gmail.com", IsApproved = (sbyte)1, Name = "Admin1", Password = "8eqn6A6N11WY0k4j8PLlVfcmDvnUQZJOvTtxdBYtINA=:5tZTJitFXi/473n+fWFzog==", Role = "admin" },
-                        new
-                        { Id = 10, Email = "cook@gmail.com", IsApproved = (sbyte)1, Name = "Cook1", Password = "ucPtmgnShnsbFBQVZg7kNukEDDluMTr2/fYAq3odDF8=:amw/M3NvUh1kzCQkIJnVIg==", Role = "cook" }
-                    );
                 });
 
             modelBuilder.Entity("DAL.Data.MenuDish", b =>

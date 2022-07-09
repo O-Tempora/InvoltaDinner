@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.Migrations
 {
-    public partial class Creation : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -219,10 +219,24 @@ namespace DAL.Migrations
                 columns: new[] { "Id", "Email", "IsApproved", "Name", "Password", "Role" },
                 values: new object[,]
                 {
+                    { 8, "reksmbd@gmail.com", (sbyte)1, "MishaBausov", "1U+u9QwJ8SdXuiRip3b83S7jiu06Z0PxlaPHFOJZJ+Q=:tiUz98Ow0IbpP7gWSLBCcA==", "user" },
                     { 9, "admin@gmail.com", (sbyte)1, "Admin1", "8eqn6A6N11WY0k4j8PLlVfcmDvnUQZJOvTtxdBYtINA=:5tZTJitFXi/473n+fWFzog==", "admin" },
-                    { 10, "cook@gmail.com", (sbyte)1, "Cook1", "ucPtmgnShnsbFBQVZg7kNukEDDluMTr2/fYAq3odDF8=:amw/M3NvUh1kzCQkIJnVIg==", "cook" },
-                    { 8, "reksmbd@gmail.com", (sbyte)1, "MishaBausov", "1U+u9QwJ8SdXuiRip3b83S7jiu06Z0PxlaPHFOJZJ+Q=:tiUz98Ow0IbpP7gWSLBCcA==", "user" }
+                    { 10, "cook@gmail.com", (sbyte)1, "Cook1", "ucPtmgnShnsbFBQVZg7kNukEDDluMTr2/fYAq3odDF8=:amw/M3NvUh1kzCQkIJnVIg==", "cook" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "record",
+                columns: new[] { "Id", "Date", "IsReady", "Price", "UserId" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2022, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), (sbyte)0, 450m, 8 },
+                    { 2, new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), (sbyte)0, 225m, 8 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "transaction",
+                columns: new[] { "Id", "Admin", "Date", "Price", "User" },
+                values: new object[] { 1, 9, new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 225m, 8 });
 
             migrationBuilder.InsertData(
                 table: "menu_dish",
@@ -242,33 +256,14 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "record",
-                columns: new[] { "Id", "Date", "IsReady", "Price", "UserId" },
+                table: "record_dish",
+                columns: new[] { "Id", "Dish", "Record" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), (sbyte)0, 450m, 3 },
-                    { 2, new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), (sbyte)0, 225m, 3 }
+                    { 1, 1, 1 },
+                    { 2, 8, 1 },
+                    { 3, 9, 2 }
                 });
-
-            migrationBuilder.InsertData(
-                table: "transaction",
-                columns: new[] { "Id", "Admin", "Date", "Price", "User" },
-                values: new object[] { 1, 1, new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 225m, 3 });
-
-            migrationBuilder.InsertData(
-                table: "record_dish",
-                columns: new[] { "Id", "Dish", "Record" },
-                values: new object[] { 1, 1, 1 });
-
-            migrationBuilder.InsertData(
-                table: "record_dish",
-                columns: new[] { "Id", "Dish", "Record" },
-                values: new object[] { 2, 8, 1 });
-
-            migrationBuilder.InsertData(
-                table: "record_dish",
-                columns: new[] { "Id", "Dish", "Record" },
-                values: new object[] { 3, 9, 2 });
 
             migrationBuilder.CreateIndex(
                 name: "dish_idx",

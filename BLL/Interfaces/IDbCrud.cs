@@ -48,5 +48,6 @@ namespace BLL.Interfaces
         bool CheckUserByEmail(string email);
         Task ResetPasswordOfUser(string email);
         bool ChangePasswordOfUser(ChangePasswordModel changePasswordModel);
+        void DeleteUser(int userId);
     }
 }

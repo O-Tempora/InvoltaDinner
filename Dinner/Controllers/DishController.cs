@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using BLL.Models;
 using DAL.Interfaces;
 using BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Dinner.Controllers
 {
@@ -17,6 +18,7 @@ namespace Dinner.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "cook")]
         public async Task<IActionResult> Post (string name, decimal price, int position) 
         {
 
@@ -79,6 +81,7 @@ namespace Dinner.Controllers
         }
 
         [HttpDelete ("{id}")]
+        [Authorize(Roles = "cook")]
         public async Task<IActionResult> Delete(int id)
         {
             if(ModelState.IsValid)

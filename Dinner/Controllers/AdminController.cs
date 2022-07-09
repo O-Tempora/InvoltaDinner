@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using BLL.Models;
 using DAL.Interfaces;
 using BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Dinner.Controllers
 {
@@ -17,6 +18,7 @@ namespace Dinner.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllUsers()
         {
             if(ModelState.IsValid)
@@ -36,6 +38,7 @@ namespace Dinner.Controllers
         }
 
         [HttpPut("UserId")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ApproveUser(int userId)
         {
             if(ModelState.IsValid)
@@ -78,6 +81,7 @@ namespace Dinner.Controllers
         }
 
         [HttpPost("{adminId}/{userId}/{price}/{date}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ChangeUserBalance (int adminId,int userId, decimal price, DateTime date)
         {
             if(ModelState.IsValid)

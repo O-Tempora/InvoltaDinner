@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using BLL.Models;
 using BLL.Interfaces;
 using BLL;
+using Microsoft.AspNetCore.Authorization;
 
- 
 namespace Dinner.Controllers
 {
     [ApiController]
@@ -39,6 +39,7 @@ namespace Dinner.Controllers
         // }
         
         [HttpPost]
+        [Authorize(Roles = "cook")]
         public async Task<IActionResult> Post(DateTime date, List<int> dishesList)
         {
             try
@@ -53,6 +54,7 @@ namespace Dinner.Controllers
         }
 
         [HttpPut("{date}/{dishesList}")]
+        [Authorize(Roles = "cook")]
         public async Task<IActionResult> Put(DateTime date, List<int> dishesList)
         {
             try
@@ -93,6 +95,7 @@ namespace Dinner.Controllers
         }
 
         [HttpDelete("{date}")]
+        [Authorize(Roles = "cook")]
         public async Task<IActionResult> Delete(DateTime date)
         {
             try
@@ -107,6 +110,7 @@ namespace Dinner.Controllers
         }
 
         [HttpDelete("{dateFirst}/{dateSecond}")]
+        [Authorize(Roles = "cook")]
         public async Task<IActionResult> DeletePeriod(DateTime dateFirst, DateTime dateSecond)
         {
             try

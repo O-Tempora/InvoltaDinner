@@ -24,17 +24,6 @@ namespace Dinner.Controllers
         {      
             _iDbCrud = iDbCrud;
         }
-        
-        [HttpGet("id")]
-        public UserModel GetUserById(string token)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwt = tokenHandler.ReadJwtToken(token);
-            int id = Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value);
-
-            UserModel returnUser = _iDbCrud.GetUserById(id);
-            return returnUser;
-        }
 
         [HttpGet]
         public (string UserName, int Id) GetUserData(string token)

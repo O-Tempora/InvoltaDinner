@@ -273,7 +273,6 @@ namespace BLL.Services
             DinnerMenuModel dinnerMenu = dataBase.MenuRepository.GetAll()
                                         .Select(i => new DinnerMenuModel(i))
                                         .Where(i => i.Date == date).FirstOrDefault();
-           // List<DishMenuModel> dishMenus = dataBase.DishMenuRepository.GetAll().Select(i => new DishMenuModel(i)).Where(i => i.Menu == dinnerMenu.Id).ToList();
             List<MenuDish> dishMenuItems = dataBase.MenuDishRepository.GetAll().Where(i => i.Menu == dinnerMenu.Id).ToList();
             int i = 0;
             foreach (int di in dishesList)
@@ -304,7 +303,6 @@ namespace BLL.Services
                 dataBase.UserRepository.Update(user);
                 Save();
             }
-
         }
 
         public void ChangeUserBalance(int adminId, int userId, decimal price, DateTime date)
@@ -468,20 +466,10 @@ namespace BLL.Services
                 };
                 dataBase.RecordDishRepository.Create(recordDishItems);
                 Save();
-                // Record recordItem = new Record
-                // {
-                //     Id = record.Id,
-                //     Date = record.Date,
-                //     UserId = record.UserId,
-                //     Price = record.Price + GetDish(dishId).Price,
-                //     IsReady = record.IsReady
-                // };
+
                 Record recordItems = dataBase.RecordRepository.Get(recordId);
                 recordItems.Price = recordItems.Price + GetDish(dishId).Price;
-                // record.Price += GetDish(dishId).Price;
                 dataBase.RecordRepository.Update(recordItems);
-                // dataBase.RecordDishRepository.Create(recordDishItems);
-                // dataBase.RecordRepository.Update(recordItem);
                 Save();
             }
             void createRecordsOnPos (int recordId, int dishFirst, int dishSecond)

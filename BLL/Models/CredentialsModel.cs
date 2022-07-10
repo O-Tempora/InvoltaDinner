@@ -11,5 +11,11 @@ namespace BLL.Models
         public string Email { get; set; }
         public string Password { get; set; }
 
+        public CredentialsModel() { }
+        public CredentialsModel(string email, string password) 
+        {
+            Email = email;
+            Password = password;
+        }
     }
 }

@@ -19,12 +19,12 @@ namespace Dinner.Controllers
 
         [HttpPost]
         [Authorize(Roles = "cook")]
-        public async Task<IActionResult> Post (string name, decimal price, int position) 
+        public async Task<IActionResult> Post ([FromBody] CreateDishModel createDish) 
         {
 
             if(ModelState.IsValid)
             {
-                _iDbCrud.CreateDish(name, price, position);
+                _iDbCrud.CreateDish(createDish.Name, createDish.Price, createDish.Position);
 
                 var msg = new 
                 {
@@ -32,7 +32,7 @@ namespace Dinner.Controllers
                 };
                 return Ok(msg);
             }
-            else{
+            else {
                 var errorMsg = new
                 {
                     message = "Неверные входные данные",
@@ -51,7 +51,7 @@ namespace Dinner.Controllers
 
                 return new ObjectResult(dish);
             }
-            else{
+            else {
                 var errorMsg = new
                 {
                     message = "Неверные входные данные",
@@ -70,7 +70,7 @@ namespace Dinner.Controllers
 
                 return new ObjectResult(allDishes);
             }
-            else{
+            else {
                 var errorMsg = new
                 {
                     message = "Неверные входные данные",
@@ -94,7 +94,7 @@ namespace Dinner.Controllers
                 };
                 return Ok(msg);
             }
-            else{
+            else {
                 var errorMsg = new
                 {
                     message = "Неверные входные данные",

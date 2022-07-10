@@ -55,11 +55,11 @@ namespace Dinner.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "cook")]
         public Tuple<List<RecordPosModel>, List<RecordPosModel>> GetCurrentAndNextMonth(int id)
         {
             return _iDbCrud.GetPeriodRecord(id);
         }        
+        
         [HttpGet("recordsByDate")]
         public List<RecordNameModel> GetRecordsByDate(DateTime date)
         {
@@ -67,11 +67,11 @@ namespace Dinner.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(int id, sbyte status)
+        public async Task<IActionResult> Put([FromBody] UpdateRecordStatusModel updateRecord)
         {
             try
             {
-                _iDbCrud.UpdateRecordStatus(id, status);     
+                _iDbCrud.UpdateRecordStatus(updateRecord.Id, updateRecord.Status);     
                 return Ok();
             }
             catch

@@ -26,25 +26,14 @@ namespace Dinner.Controllers
         {
             return _iDbCrud.GetPeriodMenu();
         }
-
-        // [HttpGet("{date}")]
-        // public List<DishModel> Get(DateTime date)
-        // {
-        //     List<DishModel> returnDishesFromMenu = _iDbCrud.GetDishesByDate(date);
-        //     if (returnDishesFromMenu.Count() != 0)
-        //     { 
-        //         return returnDishesFromMenu;
-        //     }
-        //     return null;
-        // }
         
         [HttpPost]
         [Authorize(Roles = "cook")]
-        public async Task<IActionResult> Post(DateTime date, List<int> dishesList)
+        public async Task<IActionResult> Post([FromBody] CreateUpdateDishModel createUpdateDish)
         {
             try
             {                
-                _iDbCrud.CreateDishAndDinnerMenu(date, dishesList);
+                _iDbCrud.CreateDishAndDinnerMenu(createUpdateDish.Date, createUpdateDish.DishesList);
                 return Ok();
             }
             catch
@@ -53,13 +42,13 @@ namespace Dinner.Controllers
             }
         }
 
-        [HttpPut("{date}/{dishesList}")]
+        [HttpPut]
         [Authorize(Roles = "cook")]
-        public async Task<IActionResult> Put(DateTime date, List<int> dishesList)
+        public async Task<IActionResult> Put([FromBody] CreateUpdateDishModel createUpdateDish)
         {
             try
             {
-                _iDbCrud.UpdateDishMenu(date, dishesList);      
+                _iDbCrud.UpdateDishMenu(createUpdateDish.Date, createUpdateDish.DishesList);      
                 return Ok();
             }
             catch
@@ -82,16 +71,15 @@ namespace Dinner.Controllers
             }
         }
         
-        [HttpGet("{dateFirst}/{dateSecond}")]
-        public Dictionary<DateTime, List<DishModel>> GetPeriod(DateTime dateFirst, DateTime dateSecond)
+        [HttpGet("periodMenu")]
+        public Dictionary<DateTime, List<DishModel>> GetPeriod([FromBody] PeriodModel period)
         {
-            Dictionary<DateTime, List<DishModel>> returnDishFromMenu = _iDbCrud.GetPeriodDish(dateFirst, dateSecond);
+            Dictionary<DateTime, List<DishModel>> returnDishFromMenu = _iDbCrud.GetPeriodDish(period.DateFirst, period.DateSecond);
             if (returnDishFromMenu.Count() != 0)
             { 
                 return returnDishFromMenu;
             }
             return null;
-
         }
 
         [HttpDelete("{date}")]
@@ -109,13 +97,13 @@ namespace Dinner.Controllers
             }
         }
 
-        [HttpDelete("{dateFirst}/{dateSecond}")]
+        [HttpDelete]
         [Authorize(Roles = "cook")]
-        public async Task<IActionResult> DeletePeriod(DateTime dateFirst, DateTime dateSecond)
+        public async Task<IActionResult> DeletePeriod([FromBody] PeriodModel period)
         {
             try
             {
-                _iDbCrud.DeletePeriodDinnnerMenu(dateFirst, dateSecond);      
+                _iDbCrud.DeletePeriodDinnnerMenu(period.DateFirst, period.DateSecond);      
                 return Ok();
             }
             catch

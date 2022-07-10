@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using BLL.Services;
+using BLL.Models;
 
 namespace Dinner.Controllers
 {
@@ -22,16 +23,16 @@ namespace Dinner.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RefreshToken(string refreshToken, string jwtToken) 
+        public async Task<IActionResult> RefreshToken([FromBody] TokenModel tokenModel) 
         {
             if(ModelState.IsValid)
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var jwt = tokenHandler.ReadJwtToken(jwtToken);
+                var jwt = tokenHandler.ReadJwtToken(tokenModel.JWTtoken);
                 var userId = Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value);
 
                 var user = _iDbCrud.GetUserById(userId);
-                if(user.RefreshToken != refreshToken)
+                if(user.RefreshToken != tokenModel.RefreshToken)
                 {
                     return BadRequest("Токены не совпадают");
                 }

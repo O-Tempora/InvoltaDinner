@@ -80,13 +80,13 @@ namespace Dinner.Controllers
             }
         }
 
-        [HttpPost("{adminId}/{userId}/{price}/{date}")]
+        [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> ChangeUserBalance (int adminId,int userId, decimal price, DateTime date)
+        public async Task<IActionResult> ChangeUserBalance ([FromBody] ChangeUserBalanceModel changeUserBalance)
         {
             if(ModelState.IsValid)
             {
-                _iDbCrud.ChangeUserBalance(adminId, userId, price, date);
+                _iDbCrud.ChangeUserBalance(changeUserBalance.AdminId, changeUserBalance.UserId, changeUserBalance.Price, changeUserBalance.Date);
 
                 var msg = new 
                 {

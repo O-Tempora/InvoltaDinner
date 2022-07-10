@@ -433,6 +433,11 @@ namespace BLL.Services
 
          public void CreateOrUpdateRecord(DateTime date, int userId, int position)
         {
+            TimeSpan timePeriod = date - DateTime.Now;
+            if (timePeriod < TimeSpan.FromHours(12))
+            {
+                return;
+            }
             Record record = dataBase.RecordRepository.GetAll()
                                                      .Where(i => i.Date == date && i.UserId == userId)
                                                      .FirstOrDefault();

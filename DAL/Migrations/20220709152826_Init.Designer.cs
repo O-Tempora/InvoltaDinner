@@ -157,48 +157,69 @@ namespace DAL.Migrations
                     b.ToTable("menu", (string)null);
 
                     b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Date = new DateTime(2022, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = (sbyte)1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Date = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = (sbyte)1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Date = new DateTime(2022, 7, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = (sbyte)1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Date = new DateTime(2022, 7, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = (sbyte)1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Date = new DateTime(2022, 7, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = (sbyte)1
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Date = new DateTime(2022, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = (sbyte)0
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Date = new DateTime(2022, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = (sbyte)0
-                        });
+                        new { Id = 1, Date = new DateTime(2022, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 2, Date = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 3, Date = new DateTime(2022, 7, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 4, Date = new DateTime(2022, 7, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 5, Date = new DateTime(2022, 7, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 6, Date = new DateTime(2022, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 7, Date = new DateTime(2022, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 8, Date = new DateTime(2022, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 9, Date = new DateTime(2022, 7, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 10, Date = new DateTime(2022, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 11, Date = new DateTime(2022, 7, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 12, Date = new DateTime(2022, 7, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 13, Date = new DateTime(2022, 7, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 14, Date = new DateTime(2022, 7, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 15, Date = new DateTime(2022, 7, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 16, Date = new DateTime(2022, 7, 26, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 17, Date = new DateTime(2022, 7, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 18, Date = new DateTime(2022, 7, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 19, Date = new DateTime(2022, 7, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 20, Date = new DateTime(2022, 7, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 21, Date = new DateTime(2022, 7, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 22, Date = new DateTime(2022, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 23, Date = new DateTime(2022, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 24, Date = new DateTime(2022, 8, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 25, Date = new DateTime(2022, 8, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 26, Date = new DateTime(2022, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 27, Date = new DateTime(2022, 8, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 28, Date = new DateTime(2022, 8, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 29, Date = new DateTime(2022, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 30, Date = new DateTime(2022, 8, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 31, Date = new DateTime(2022, 8, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 32, Date = new DateTime(2022, 8, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 33, Date = new DateTime(2022, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 34, Date = new DateTime(2022, 8, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 35, Date = new DateTime(2022, 8, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 36, Date = new DateTime(2022, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 37, Date = new DateTime(2022, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 38, Date = new DateTime(2022, 8, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 39, Date = new DateTime(2022, 8, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 40, Date = new DateTime(2022, 8, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 41, Date = new DateTime(2022, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 42, Date = new DateTime(2022, 8, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 43, Date = new DateTime(2022, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 44, Date = new DateTime(2022, 8, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 45, Date = new DateTime(2022, 8, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 46, Date = new DateTime(2022, 8, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 47, Date = new DateTime(2022, 8, 26, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 48, Date = new DateTime(2022, 8, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 49, Date = new DateTime(2022, 8, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 50, Date = new DateTime(2022, 8, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 51, Date = new DateTime(2022, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 52, Date = new DateTime(2022, 8, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 53, Date = new DateTime(2022, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 54, Date = new DateTime(2022, 7, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 55, Date = new DateTime(2022, 7, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 56, Date = new DateTime(2022, 7, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 57, Date = new DateTime(2022, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 58, Date = new DateTime(2022, 7, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 59, Date = new DateTime(2022, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 60, Date = new DateTime(2022, 7, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)1 },
+                        new { Id = 61, Date = new DateTime(2022, 7, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 },
+                        new { Id = 62, Date = new DateTime(2022, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), IsActive = (sbyte)0 }
+                    );
                 });
 
             modelBuilder.Entity("DAL.Data.MenuDish", b =>

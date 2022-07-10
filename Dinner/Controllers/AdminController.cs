@@ -103,5 +103,37 @@ namespace Dinner.Controllers
                 return BadRequest(errorMsg);
             }
         }
+        [HttpPost("roles")]
+        //[Authorize(Roles = "admin")]
+        public async Task<IActionResult> ChangeUserRole ([FromBody] ChangeRoleModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = _iDbCrud.GetUserById(model.UserId);
+                if(user != null)
+                {
+                    if(user.IsApproved == false)
+                    {
+                        return BadRequest("Нельзя менять роль у неподтвержденного пользователя!");
+                    }   
+                    var changed_user = new UserModel 
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        Password = user.Password,
+                        Name = user.Name,
+                        Role = model.Role,
+                        IsApproved = user.IsApproved,
+                        RefreshToken = user.RefreshToken
+                    };
+                    _iDbCrud.ChangeUserRole(changed_user);
+                }
+                return Ok("Роль успешно изменена");
+            }
+            else
+            {
+                return BadRequest("Ошибка изменения пользователя");
+            }
+        }
     }
 }

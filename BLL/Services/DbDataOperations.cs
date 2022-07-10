@@ -723,5 +723,12 @@ namespace BLL.Services
             dataBase.UserRepository.Update(user);
             Save();
 		}
+        public void ChangeUserRole(UserModel um)
+        {
+            var user = dataBase.UserRepository.Get(um.Id);
+            user.Role = um.Role;
+            dataBase.UserRepository.Update(user);
+            Save();
+        }
     }
 }

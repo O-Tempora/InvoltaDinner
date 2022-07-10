@@ -7,5 +7,7 @@
         |__ lunch_backend
         |__ lunch-frontend
         |__ docker-compose.yml
-3. В файле lunch_backend/Dinner/SenderCredentials.json в полях Email и Password указать почту, с которой будут отсылаться пароли для восстановления, и ее пароль       
-4. Открыть терминал в созданной директории и прописать команды "docker-compose build" и "docker-compose up -d"
+3. В файле lunch_backend/Dinner/SenderCredentials.json в полях Email и Password указать почту, с которой будут отсылаться пароли для восстановления, и ее пароль 
+4. Убедиться, что в файлах lunch-backend/Dinner/appsettings.json и lunch-backend/DAL/Data/dinnerContext в строках подключения указано "server=database"
+5. Убедиться, что в файле lunch-backend/Dinner/Properties/launchSettings.json в "profiles", "applicationUrl" первым параметром указано https://database
+6. Открыть терминал в созданной директории и прописать команды "docker-compose build" и "docker-compose up -d"

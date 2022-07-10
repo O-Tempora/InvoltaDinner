@@ -51,5 +51,6 @@ namespace BLL.Interfaces
         bool ChangePasswordOfUser(ChangePasswordModel changePasswordModel);
         void UpdateUser(UserModel um);
         void DeleteUser(int userId);
+        void ChangeUserRole(UserModel um);
     }
 }

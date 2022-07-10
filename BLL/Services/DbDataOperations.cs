@@ -395,7 +395,12 @@ namespace BLL.Services
             {
                 for (DateTime counter = date; counter.Month == date.Month; counter = counter.AddDays(1))
                 {
-                    int positionCounter = allUserRecords.Where(i => i.Date == counter).Count();
+                    RecordModel record = allUserRecords.Where(i => i.Date == counter).FirstOrDefault();
+  //                  int positionCounter = allUserRecords.Where(i => i.Date == counter).Count();
+                    int positionCounter = 0;
+                    if (record != null)
+                        positionCounter = dataBase.RecordDishRepository.GetAll().Where(i => i.Record == record.Id).Count();
+                    
                     if (positionCounter == 0)
                     {
                         recordPosList.Add(new RecordPosModel(counter, 4));  //не ест
@@ -406,10 +411,10 @@ namespace BLL.Services
                     }
                     if (positionCounter == 1)
                     {
-                        RecordModel currDayRecords = allUserRecords.Where(i => i.Date == counter).FirstOrDefault();
+                       // RecordModel currDayRecords = allUserRecords.Where(i => i.Date == counter).FirstOrDefault();
                         RecordDishModel currRecordDish = dataBase.RecordDishRepository.GetAll()
                                                 .Select(i => new RecordDishModel(i))
-                                                .Where(i => i.Record == currDayRecords.Id).FirstOrDefault();
+                                                .Where(i => i.Record == record.Id).FirstOrDefault();
                         DishModel currDish = dataBase.DishRepository.GetAll()
                                                 .Select(i => new DishModel(i))
                                                 .Where(i => i.Id == currRecordDish.Dish).FirstOrDefault();

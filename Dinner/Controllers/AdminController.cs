@@ -19,7 +19,7 @@ namespace Dinner.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllUsers()
         {
             if(ModelState.IsValid)
@@ -39,7 +39,7 @@ namespace Dinner.Controllers
         }
 
         [HttpPut("UserId")]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ApproveUser(int userId)
         {
             if(ModelState.IsValid)
@@ -64,6 +64,7 @@ namespace Dinner.Controllers
         }
 
         [HttpDelete("UserId")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
             if(ModelState.IsValid)
@@ -82,7 +83,7 @@ namespace Dinner.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ChangeUserBalance ([FromBody] ChangeUserBalanceModel changeUserBalance)
         {
             if(ModelState.IsValid)

@@ -38,6 +38,17 @@ namespace BLL.Services
         public List<UserModel> GetAllUsers() {
             return dataBase.UserRepository.GetAll().Select(i => new UserModel(i)).ToList();
         }
+        public List<TransactionModel> GetAllTransactions() {
+            List<TransactionModel> transactionName = new List<TransactionModel>();
+            List<TransactionModel> transactions = dataBase.TransactionRepository.GetAll().Select(i => new TransactionModel(i)).ToList();
+            List<UserModel> users = GetAllUsers();
+            foreach (TransactionModel t in transactions)
+            {
+                t.Username = users.Where(i => i.Id == t.User).FirstOrDefault().Name;
+                transactionName.Add(t);
+            }
+            return transactionName;
+        }
 
          public DinnerMenuModel GetDinnerMenu(int id)
         {
@@ -175,10 +186,10 @@ namespace BLL.Services
         public void DeleteDinnnerMenu(DateTime date)
         {
             Menu dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date == date).FirstOrDefault();
-            List<MenuDish> dishMenus = dataBase.MenuDishRepository.GetAll()
-                                        .Where(i => i.Menu == dinnerMenu.Id).ToList();
             if (dinnerMenu != null)
             {
+                List<MenuDish> dishMenus = dataBase.MenuDishRepository.GetAll()
+                                        .Where(i => i.Menu == dinnerMenu.Id).ToList();
                 foreach (MenuDish dm in dishMenus)
                 {
                     dataBase.MenuDishRepository.Delete(dm.Id);
@@ -702,8 +713,8 @@ namespace BLL.Services
                                             .Select (i => new DinnerMenuModel(i))
                                             .Where (i => i.Date == counter).FirstOrDefault();
                     dataBase.MenuRepository.Delete(currDay.Id);
-                    Save();
-                } 
+                }
+                Save();
             }
             //создаем Menu на следующий месяц
             date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -721,8 +732,8 @@ namespace BLL.Services
                     IsActive = status
                 };
                 dataBase.MenuRepository.Create(currDay);
-                Save();
-            } 
+            }
+            Save();
         }
         public void UpdateUser(UserModel um)
         {
@@ -737,6 +748,15 @@ namespace BLL.Services
             user.Role = um.Role;
             dataBase.UserRepository.Update(user);
             Save();
+        }
+        public sbyte GetUserStatus(int id)
+        {
+            User user = dataBase.UserRepository.Get(id);
+            if (user != null)
+            {
+                return user.IsApproved;
+            }
+            else return 0;
         }
     }
 }

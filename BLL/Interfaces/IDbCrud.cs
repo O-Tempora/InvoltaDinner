@@ -15,6 +15,7 @@ namespace BLL.Interfaces
         List<RecordModel> GetAllRecords();
         List<DishModel> GetAllDishes();
         List<UserModel> GetAllUsers();
+        public List<TransactionModel> GetAllTransactions();
 
         DinnerMenuModel GetDinnerMenu(int id);
         DishMenuModel GetDishMenu(int id);
@@ -52,5 +53,6 @@ namespace BLL.Interfaces
         void UpdateUser(UserModel um);
         void DeleteUser(int userId);
         void ChangeUserRole(UserModel um);
+        sbyte GetUserStatus(int id);
     }
 }

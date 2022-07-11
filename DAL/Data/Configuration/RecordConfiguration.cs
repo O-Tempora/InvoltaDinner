@@ -15,7 +15,7 @@ namespace DAL.Data.Configuration
 
             builder.Property(e => e.Date).HasColumnType("datetime");
 
-            builder.Property(e => e.Price).HasPrecision(5, 2);
+            builder.Property(e => e.Price).HasPrecision(8, 2);
 
             builder.HasOne(d => d.User)
                 .WithMany(p => p.Records)

@@ -13,7 +13,7 @@ namespace DAL.Data.Configuration
 
             builder.Property(e => e.Name).HasMaxLength(50);
 
-            builder.Property(e => e.Price).HasPrecision(5, 2);
+            builder.Property(e => e.Price).HasPrecision(8, 2);
 
             builder.HasData(
                 new Dish

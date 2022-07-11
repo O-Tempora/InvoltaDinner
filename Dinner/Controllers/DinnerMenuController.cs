@@ -28,12 +28,12 @@ namespace Dinner.Controllers
         }
         
         [HttpPost]
-        [Authorize(Roles = "cook")]
+        //[Authorize(Roles = "cook")]
         public async Task<IActionResult> Post([FromBody] CreateUpdateDishModel createUpdateDish)
         {
             try
             {                
-                _iDbCrud.CreateDishAndDinnerMenu(createUpdateDish.Date, createUpdateDish.DishesList);
+                _iDbCrud.CreateDishAndDinnerMenu(createUpdateDish.Date.Date, createUpdateDish.DishesList);
                 return Ok();
             }
             catch
@@ -43,12 +43,12 @@ namespace Dinner.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "cook")]
+        //[Authorize(Roles = "cook")]
         public async Task<IActionResult> Put([FromBody] CreateUpdateDishModel createUpdateDish)
         {
             try
             {
-                _iDbCrud.UpdateDishMenu(createUpdateDish.Date, createUpdateDish.DishesList);      
+                _iDbCrud.UpdateDishMenu(createUpdateDish.Date.Date, createUpdateDish.DishesList);      
                 return Ok();
             }
             catch
@@ -62,7 +62,7 @@ namespace Dinner.Controllers
         {
             try
             {
-                _iDbCrud.SwitchMenuStatus(date);      
+                _iDbCrud.SwitchMenuStatus(date.Date);      
                 return Ok();
             }
             catch
@@ -74,7 +74,7 @@ namespace Dinner.Controllers
         [HttpGet("periodMenu")]
         public Dictionary<DateTime, List<DishModel>> GetPeriod([FromBody] PeriodModel period)
         {
-            Dictionary<DateTime, List<DishModel>> returnDishFromMenu = _iDbCrud.GetPeriodDish(period.DateFirst, period.DateSecond);
+            Dictionary<DateTime, List<DishModel>> returnDishFromMenu = _iDbCrud.GetPeriodDish(period.DateFirst.Date, period.DateSecond.Date);
             if (returnDishFromMenu.Count() != 0)
             { 
                 return returnDishFromMenu;
@@ -83,12 +83,12 @@ namespace Dinner.Controllers
         }
 
         [HttpDelete("{date}")]
-        [Authorize(Roles = "cook")]
+        //[Authorize(Roles = "cook")]
         public async Task<IActionResult> Delete(DateTime date)
         {
             try
             {
-                _iDbCrud.DeleteDinnnerMenu(date);      
+                _iDbCrud.DeleteDinnnerMenu(date.Date);      
                 return Ok();
             }
             catch
@@ -98,12 +98,12 @@ namespace Dinner.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "cook")]
+        //[Authorize(Roles = "cook")]
         public async Task<IActionResult> DeletePeriod([FromBody] PeriodModel period)
         {
             try
             {
-                _iDbCrud.DeletePeriodDinnnerMenu(period.DateFirst, period.DateSecond);      
+                _iDbCrud.DeletePeriodDinnnerMenu(period.DateFirst.Date, period.DateSecond.Date);      
                 return Ok();
             }
             catch

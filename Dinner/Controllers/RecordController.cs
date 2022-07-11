@@ -63,7 +63,7 @@ namespace Dinner.Controllers
         [HttpGet("recordsByDate")]
         public List<RecordNameModel> GetRecordsByDate(DateTime date)
         {
-            return _iDbCrud.GetDayRecords(date);
+            return _iDbCrud.GetDayRecords(date.Date);
         }
 
         [HttpPut]

@@ -22,7 +22,7 @@ namespace Dinner.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         public List<TransactionModel> Get(int User)
         {
             return _iDbCrud.GetUserTransactions(User);

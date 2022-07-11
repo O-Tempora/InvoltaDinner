@@ -636,25 +636,33 @@ namespace BLL.Services
             dataBase.UserRepository.Update(user);
             Save();
 
-            var emailMessage = new MimeMessage(); 
-            emailMessage.From.Add(new MailboxAddress("Involta.Обеды", "InvoltaLunch@yandex.ru"));
-            emailMessage.To.Add(new MailboxAddress("", email));
-            emailMessage.Subject = "Новый пароль";
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
-            {
-                Text = "Ваш пароль был сброшен. Ваш новый пароль - " + sb.ToString()
-            };
-
             string jsonFromFile;
             using (var reader = new StreamReader("./SenderCredentials.json"))
             {
                 jsonFromFile = reader.ReadToEnd();
             }
             var credentialsFromJson = JsonConvert.DeserializeObject<CredentialsModel>(jsonFromFile);
+
+            var emailMessage = new MimeMessage(); 
+            emailMessage.From.Add(new MailboxAddress("Involta.Обеды", credentialsFromJson.Email));
+            emailMessage.To.Add(new MailboxAddress("", email));
+            emailMessage.Subject = "Новый пароль";
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            {
+                Text = "Ваш пароль был сброшен. Ваш новый пароль - " + sb.ToString()
+            };
              
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync("smtp.yandex.ru", 25, false);
+                if (credentialsFromJson.Email.Contains("@yandex.ru")) {
+                    await client.ConnectAsync("smtp.yandex.ru", 25, false); 
+                }
+                else if (credentialsFromJson.Email.Contains("@gmail.com")) {
+                    await client.ConnectAsync("smtp.gmail.com", 587, false);
+                }
+                else if (credentialsFromJson.Email.Contains("@mail.ru")) {
+                    await client.ConnectAsync("smtp.mail.ru", 25, false);
+                }
                 await client.AuthenticateAsync(credentialsFromJson.Email, credentialsFromJson.Password);
                 await client.SendAsync(emailMessage);
  

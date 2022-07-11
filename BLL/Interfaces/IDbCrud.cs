@@ -53,5 +53,6 @@ namespace BLL.Interfaces
         void UpdateUser(UserModel um);
         void DeleteUser(int userId);
         void ChangeUserRole(UserModel um);
+        sbyte GetUserStatus(int id);
     }
 }

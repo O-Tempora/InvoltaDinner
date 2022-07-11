@@ -26,14 +26,15 @@ namespace Dinner.Controllers
         }
 
         [HttpGet]
-        public (string UserName, int Id, string Role) GetUserData(string token)
+        public (string UserName, int Id, string Role, sbyte IsApproved) GetUserData(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwt = tokenHandler.ReadJwtToken(token);
             var tuple = (
                 UserName: jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Name).Value, 
                 Id: Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value),
-                Role: jwt.Claims.First(claim => claim.Type == ClaimTypes.Role).Value);
+                Role: jwt.Claims.First(claim => claim.Type == ClaimTypes.Role).Value,
+                IsApproved: _iDbCrud.GetUserStatus(Int32.Parse(jwt.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value)));
             return tuple;
         }
 

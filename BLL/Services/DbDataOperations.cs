@@ -749,5 +749,14 @@ namespace BLL.Services
             dataBase.UserRepository.Update(user);
             Save();
         }
+        public sbyte GetUserStatus(int id)
+        {
+            User user = dataBase.UserRepository.Get(id);
+            if (user != null)
+            {
+                return user.IsApproved;
+            }
+            else return 0;
+        }
     }
 }

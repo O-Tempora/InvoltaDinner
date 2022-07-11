@@ -39,7 +39,15 @@ namespace BLL.Services
             return dataBase.UserRepository.GetAll().Select(i => new UserModel(i)).ToList();
         }
         public List<TransactionModel> GetAllTransactions() {
-            return dataBase.TransactionRepository.GetAll().Select(i => new TransactionModel(i)).ToList();
+            List<TransactionModel> transactionName = new List<TransactionModel>();
+            List<TransactionModel> transactions = dataBase.TransactionRepository.GetAll().Select(i => new TransactionModel(i)).ToList();
+            List<UserModel> users = GetAllUsers();
+            foreach (TransactionModel t in transactions)
+            {
+                t.Username = users.Where(i => i.Id == t.User).FirstOrDefault().Name;
+                transactionName.Add(t);
+            }
+            return transactionName;
         }
 
          public DinnerMenuModel GetDinnerMenu(int id)

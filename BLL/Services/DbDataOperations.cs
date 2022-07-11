@@ -186,10 +186,10 @@ namespace BLL.Services
         public void DeleteDinnnerMenu(DateTime date)
         {
             Menu dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date == date).FirstOrDefault();
-            List<MenuDish> dishMenus = dataBase.MenuDishRepository.GetAll()
-                                        .Where(i => i.Menu == dinnerMenu.Id).ToList();
             if (dinnerMenu != null)
             {
+                List<MenuDish> dishMenus = dataBase.MenuDishRepository.GetAll()
+                                        .Where(i => i.Menu == dinnerMenu.Id).ToList();
                 foreach (MenuDish dm in dishMenus)
                 {
                     dataBase.MenuDishRepository.Delete(dm.Id);

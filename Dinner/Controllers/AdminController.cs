@@ -105,7 +105,7 @@ namespace Dinner.Controllers
             }
         }
         [HttpPost("roles")]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ChangeUserRole ([FromBody] ChangeRoleModel model)
         {
             if(ModelState.IsValid)

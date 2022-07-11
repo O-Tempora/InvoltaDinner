@@ -39,8 +39,8 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
 
                     b.HasKey("Id");
 
@@ -386,8 +386,8 @@ namespace DAL.Migrations
                         .HasColumnType("tinyint");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -472,8 +472,8 @@ namespace DAL.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
 
                     b.Property<int>("User")
                         .HasColumnType("int");

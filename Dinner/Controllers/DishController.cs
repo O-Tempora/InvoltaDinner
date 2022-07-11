@@ -18,7 +18,7 @@ namespace Dinner.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "cook")]
+        [Authorize(Roles = "cook,admin")]
         public async Task<IActionResult> Post ([FromBody] CreateDishModel createDish) 
         {
 
@@ -81,7 +81,7 @@ namespace Dinner.Controllers
         }
 
         [HttpDelete ("{id}")]
-        //[Authorize(Roles = "cook")]
+        [Authorize(Roles = "cook,admin")]
         public async Task<IActionResult> Delete(int id)
         {
             if(ModelState.IsValid)

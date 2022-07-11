@@ -66,6 +66,7 @@ namespace BLL.Services
                 List<RecordDishModel> recordDishes = dataBase.RecordDishRepository.GetAll()
                                                 .Select(i => new RecordDishModel(i))
                                                 .Where(i => i.Record == d.Id).ToList();
+                recordDishes = (recordDishes == null) ? new List<RecordDishModel>() : recordDishes;
                 List<string> dishNames = new List<string>();
                 foreach (RecordDishModel rd in recordDishes)
                 {
@@ -74,7 +75,8 @@ namespace BLL.Services
                                         .Where(i => i.Id == rd.Dish).FirstOrDefault();
                     dishNames.Add(currDish.Name);
                 }
-                dayRecordsList.Add(new RecordNameModel(username, dishNames));
+
+                dayRecordsList.Add(new RecordNameModel(d.Id, username, d.isReady, dishNames));
             }
             return dayRecordsList;
         }
@@ -310,14 +312,7 @@ namespace BLL.Services
             User user = dataBase.UserRepository.GetAll().Where(i => i.Id.Equals(userId)).FirstOrDefault();
             if (user != null)
             {
-                List<TransactionModel> userTransactions = GetUserTransactions(userId);
-                decimal userDebt = 0;
-                foreach(TransactionModel tr in userTransactions)
-                {
-                    userDebt += tr.Price;
-                }
-                decimal transactionPrice = -(userDebt - price);
-                CreateTransaction(adminId, userId, transactionPrice, date);
+                CreateTransaction(adminId, userId, price, date);
             }
         }
         public void UpdateRecordStatus(int id, sbyte status)

@@ -3,6 +3,7 @@ using BLL.Models;
 using DAL.Interfaces;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using BLL.Services;
 
 namespace Dinner.Controllers
 {
@@ -104,7 +105,7 @@ namespace Dinner.Controllers
             }
         }
         [HttpPost("roles")]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ChangeUserRole ([FromBody] ChangeRoleModel model)
         {
             if(ModelState.IsValid)
@@ -127,8 +128,13 @@ namespace Dinner.Controllers
                         RefreshToken = user.RefreshToken
                     };
                     _iDbCrud.ChangeUserRole(changed_user);
+                    var new_token = TokenService.GenerateJWT(changed_user);
+                    return Ok(new_token);
                 }
-                return Ok("Роль успешно изменена");
+                else 
+                {
+                    return BadRequest("Такого пользователя не существует");
+                }
             }
             else
             {

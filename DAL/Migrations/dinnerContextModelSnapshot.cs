@@ -431,6 +431,10 @@ namespace DAL.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
+                    b.Property<string>("RefreshToken")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasMaxLength(45)

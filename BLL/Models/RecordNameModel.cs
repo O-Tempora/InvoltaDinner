@@ -9,13 +9,17 @@ namespace BLL.Models
 {
     public class RecordNameModel
     {
+        public int Id { get; set; }
         public string UserName { get; set; }
+        public int Status { get; set; }
         public List<string> DishesList { get; set; }
         
         public RecordNameModel() { }
-        public RecordNameModel(string username, List<string> dishes) { 
+        public RecordNameModel(int id, string username, int status, List<string> dishes) { 
             this.UserName = username;
             this.DishesList = dishes;
+            this.Id = id;
+            this.Status = status;
         }
     }
 }

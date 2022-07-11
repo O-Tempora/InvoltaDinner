@@ -319,14 +319,7 @@ namespace BLL.Services
             User user = dataBase.UserRepository.GetAll().Where(i => i.Id.Equals(userId)).FirstOrDefault();
             if (user != null)
             {
-                List<TransactionModel> userTransactions = GetUserTransactions(userId);
-                decimal userDebt = 0;
-                foreach(TransactionModel tr in userTransactions)
-                {
-                    userDebt += tr.Price;
-                }
-                decimal transactionPrice = -(userDebt - price);
-                CreateTransaction(adminId, userId, transactionPrice, date);
+                CreateTransaction(adminId, userId, price, date);
             }
         }
         public void UpdateRecordStatus(int id, sbyte status)

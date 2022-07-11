@@ -39,7 +39,6 @@ namespace Dinner.Controllers
 
                 var newJwtToken = TokenService.GenerateJWT(user);
                 return Ok(newJwtToken);
-
             }
             else
             {

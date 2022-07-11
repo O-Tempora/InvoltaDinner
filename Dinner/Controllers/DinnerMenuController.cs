@@ -28,7 +28,7 @@ namespace Dinner.Controllers
         }
         
         [HttpPost]
-        [Authorize(Roles = "cook")]
+        [Authorize(Roles = "cook,admin")]
         public async Task<IActionResult> Post([FromBody] CreateUpdateDishModel createUpdateDish)
         {
             try
@@ -43,7 +43,7 @@ namespace Dinner.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "cook")]
+        [Authorize(Roles = "cook,admin")]
         public async Task<IActionResult> Put([FromBody] CreateUpdateDishModel createUpdateDish)
         {
             try
@@ -83,7 +83,7 @@ namespace Dinner.Controllers
         }
 
         [HttpDelete("{date}")]
-        [Authorize(Roles = "cook")]
+        [Authorize(Roles = "cook,admin")]
         public async Task<IActionResult> Delete(DateTime date)
         {
             try
@@ -98,7 +98,7 @@ namespace Dinner.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "cook")]
+        [Authorize(Roles = "cook,admin")]
         public async Task<IActionResult> DeletePeriod([FromBody] PeriodModel period)
         {
             try

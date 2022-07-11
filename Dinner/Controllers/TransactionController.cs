@@ -27,5 +27,12 @@ namespace Dinner.Controllers
         {
             return _iDbCrud.GetUserTransactions(User);
         }
+
+        [HttpGet("getAll")]
+        [Authorize(Roles = "admin")]
+        public List<TransactionModel> GetAll()
+        {
+            return _iDbCrud.GetAllTransactions();
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace BLL.Interfaces
         List<RecordModel> GetAllRecords();
         List<DishModel> GetAllDishes();
         List<UserModel> GetAllUsers();
+        List<TransactionModel> GetAllTransactions();
 
         DinnerMenuModel GetDinnerMenu(int id);
         DishMenuModel GetDishMenu(int id);

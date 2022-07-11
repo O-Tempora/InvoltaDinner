@@ -38,6 +38,9 @@ namespace BLL.Services
         public List<UserModel> GetAllUsers() {
             return dataBase.UserRepository.GetAll().Select(i => new UserModel(i)).ToList();
         }
+        public List<TransactionModel> GetAllTransactions() {
+            return dataBase.TransactionRepository.GetAll().Select(i => new TransactionModel(i)).ToList();
+        }
 
          public DinnerMenuModel GetDinnerMenu(int id)
         {

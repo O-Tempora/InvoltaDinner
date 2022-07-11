@@ -63,7 +63,6 @@ namespace BLL.Services
                                 .Select(i => new UserModel(i))
                                 .Where (i => i.Id == d.UserId).FirstOrDefault();
                 string username = user.Name;
-                int status = 4;
                 List<RecordDishModel> recordDishes = dataBase.RecordDishRepository.GetAll()
                                                 .Select(i => new RecordDishModel(i))
                                                 .Where(i => i.Record == d.Id).ToList();
@@ -75,15 +74,9 @@ namespace BLL.Services
                                         .Select(i => new DishModel(i))
                                         .Where(i => i.Id == rd.Dish).FirstOrDefault();
                     dishNames.Add(currDish.Name);
-                    status = currDish.Position;
-                }
-                switch (recordDishes.Count())
-                {
-                    case 0: status = 4; break;
-                    case 2: status = 3; break;
                 }
 
-                dayRecordsList.Add(new RecordNameModel(d.Id, username, status, dishNames));
+                dayRecordsList.Add(new RecordNameModel(d.Id, username, d.isReady, dishNames));
             }
             return dayRecordsList;
         }

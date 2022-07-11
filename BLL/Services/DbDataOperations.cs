@@ -705,8 +705,8 @@ namespace BLL.Services
                                             .Select (i => new DinnerMenuModel(i))
                                             .Where (i => i.Date == counter).FirstOrDefault();
                     dataBase.MenuRepository.Delete(currDay.Id);
-                    Save();
-                } 
+                }
+                Save();
             }
             //создаем Menu на следующий месяц
             date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -724,8 +724,8 @@ namespace BLL.Services
                     IsActive = status
                 };
                 dataBase.MenuRepository.Create(currDay);
-                Save();
-            } 
+            }
+            Save();
         }
         public void UpdateUser(UserModel um)
         {

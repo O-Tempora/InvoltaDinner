@@ -78,16 +78,22 @@ namespace BLL.Services
                                                 .Select(i => new RecordDishModel(i))
                                                 .Where(i => i.Record == d.Id).ToList();
                 recordDishes = (recordDishes == null) ? new List<RecordDishModel>() : recordDishes;
-                List<string> dishNames = new List<string>();
+                List<DishWoPriceModel> dishesList = new List<DishWoPriceModel>();
                 foreach (RecordDishModel rd in recordDishes)
                 {
                     DishModel currDish = dataBase.DishRepository.GetAll()
                                         .Select(i => new DishModel(i))
                                         .Where(i => i.Id == rd.Dish).FirstOrDefault();
-                    dishNames.Add(currDish.Name);
+                    DishWoPriceModel newDish = new DishWoPriceModel
+                    {
+                        Id = currDish.Id,
+                        Position = currDish.Position,
+                        Name = currDish.Name
+                    };
+                    dishesList.Add(newDish);
                 }
 
-                dayRecordsList.Add(new RecordNameModel(d.Id, username, d.isReady, dishNames));
+                dayRecordsList.Add(new RecordNameModel(d.Id, username, d.isReady, dishesList));
             }
             return dayRecordsList;
         }

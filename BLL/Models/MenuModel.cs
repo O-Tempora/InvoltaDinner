@@ -14,7 +14,9 @@ namespace BLL.Models
         public bool is_dayOff { get; set; }
         public class DishInfoModel
         {
-            public string label { get; set; }
+            public int id { get; set; }
+            public int position { get; set; }
+            public string name { get; set; }
             public decimal price { get; set; }
         }
         public DishInfoModel first_course { get; set; }
@@ -26,12 +28,16 @@ namespace BLL.Models
             dayOfWeek = d.DayOfWeek;
             first_course = new DishInfoModel
             {
-                label = "",
+                id = 1,
+                position = 1,
+                name = "",
                 price = 0
             };
             second_course = new DishInfoModel
             {
-                label = "",
+                id = 2,
+                position = 2,
+                name = "",
                 price = 0
             };
         }
@@ -44,13 +50,17 @@ namespace BLL.Models
 
             first_course = new DishInfoModel
             {
-                label = "",
+                id = 1,
+                position = 1,
+                name = "",
                 price = 0
             };
 
             second_course = new DishInfoModel
             {
-                label = "",
+                id = 2,
+                position = 2,
+                name = "",
                 price = 0
             };
 
@@ -58,12 +68,14 @@ namespace BLL.Models
             {
                 if (d.Position == 1)
                 {
-                    first_course.label = d.Name;
+                    first_course.id = d.Id;
+                    first_course.name = d.Name;
                     first_course.price = d.Price;
                 }
                 else if (d.Position == 2)
                 {
-                    second_course.label = d.Name;
+                    second_course.id = d.Id;
+                    second_course.name = d.Name;
                     second_course.price = d.Price;
                 }
             }

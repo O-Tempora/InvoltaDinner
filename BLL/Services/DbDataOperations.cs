@@ -710,6 +710,9 @@ namespace BLL.Services
             bool isAnyPrevious = dataBase.MenuRepository.GetAll()
                                 .Select (i => new DinnerMenuModel(i))
                                 .Where (i => i.Date.Month == date.Month).Any();
+            bool isAnyPrevRecords = dataBase.RecordRepository.GetAll()
+                                .Select (i => new RecordModel(i))
+                                .Where (i => i.Date.Month == date.Month).Any();
             //если есть Menu за прошлый месяц, то удаляем их
             if (isAnyPrevious)
             {
@@ -719,6 +722,25 @@ namespace BLL.Services
                                             .Select (i => new DinnerMenuModel(i))
                                             .Where (i => i.Date == counter).FirstOrDefault();
                     dataBase.MenuRepository.Delete(currDay.Id);
+                }
+                Save();
+            }
+            //если есть записи Record и RecordDish за прошлый месяц, то удаляем их
+            if (isAnyPrevRecords)
+            {
+                List<RecordModel> prevRecords = dataBase.RecordRepository.GetAll()
+                                                .Select (i => new RecordModel(i))
+                                                .Where (i => i.Date.Month == date.Month).ToList();
+                foreach (RecordModel r in prevRecords)
+                {
+                    List<RecordDishModel> prevRecordDishes = dataBase.RecordDishRepository.GetAll()
+                                                            .Select (i => new RecordDishModel(i))
+                                                            .Where (i => i.Record == r.Id).ToList();
+                    foreach (RecordDishModel rd in prevRecordDishes)
+                    {
+                        dataBase.RecordDishRepository.Delete(rd.Id);
+                    }
+                    dataBase.RecordRepository.Delete(r.Id);
                 }
                 Save();
             }

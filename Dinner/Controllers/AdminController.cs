@@ -25,8 +25,13 @@ namespace Dinner.Controllers
             if(ModelState.IsValid)
             {
                 List<UserModel> allUsers = _iDbCrud.GetAllUsers();
+                List<UserInfoModel> userInfo = new List<UserInfoModel>();
+                foreach(UserModel u in allUsers)
+                {
+                    userInfo.Add(new UserInfoModel(u));
+                }
                 
-                return new ObjectResult(allUsers);
+                return new ObjectResult(userInfo);
             }
             else{
                 var errorMsg = new

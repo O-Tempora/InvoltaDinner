@@ -12,10 +12,10 @@ namespace BLL.Models
         public int Id { get; set; }
         public string UserName { get; set; }
         public int Status { get; set; }
-        public List<string> DishesList { get; set; }
+        public List<DishWoPriceModel> DishesList { get; set; }
         
         public RecordNameModel() { }
-        public RecordNameModel(int id, string username, int status, List<string> dishes) { 
+        public RecordNameModel(int id, string username, int status, List<DishWoPriceModel> dishes) { 
             this.UserName = username;
             this.DishesList = dishes;
             this.Id = id;

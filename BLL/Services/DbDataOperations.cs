@@ -241,11 +241,15 @@ namespace BLL.Services
         public void DeleteDish(int id)
         {
             Dish dish = dataBase.DishRepository.Get(id);
-            MenuDish dishMenu = dataBase.MenuDishRepository.GetAll()
-                                .Where(i => i.Dish == dish.Id).FirstOrDefault();
             if (dish != null)
             {
-                dataBase.MenuDishRepository.Delete(dishMenu.Id);
+                MenuDish dishMenu = dataBase.MenuDishRepository.GetAll()
+                                                                .Where(i => i.Dish == dish.Id)
+                                                                .FirstOrDefault();
+                if (dishMenu != null)
+                {
+                    dataBase.MenuDishRepository.Delete(dishMenu.Id);
+                }
                 dataBase.DishRepository.Delete(dish.Id);
                 Save();
             }          

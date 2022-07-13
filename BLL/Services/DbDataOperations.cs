@@ -250,10 +250,31 @@ namespace BLL.Services
                 {
                     dataBase.MenuDishRepository.Delete(dishMenu.Id);
                 }
+                List<RecordDish> recDishes = dataBase.RecordDishRepository.GetAll().Where(i => i.Dish == dish.Id).ToList();
+                foreach (RecordDish recsDishes in recDishes)
+                {
+                    Record rec = dataBase.RecordRepository.Get(recsDishes.Record);
+                    if (rec != null)
+                    {
+                        rec.Price -= dish.Price;
+                        dataBase.RecordRepository.Update(rec);
+                    }
+                    if (dish.Position == 1)
+                    {
+                        recsDishes.Dish = 1;
+                    }
+                    if (dish.Position == 2)
+                    {
+                        recsDishes.Dish = 2;
+                    }
+                    dataBase.RecordDishRepository.Update(recsDishes);
+                    Save();
+                }
                 dataBase.DishRepository.Delete(dish.Id);
                 Save();
             }          
         }
+        
         public void DeleteRecord(int id)
         {
             Record record = dataBase.RecordRepository.Get(id);

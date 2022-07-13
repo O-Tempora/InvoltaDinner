@@ -14,12 +14,15 @@ services:
       MYSQL_ROOT_PASSWORD: 1944Rommel1944
     volumes:
       - ./database:/var/lib/mysql:cached
+    networks:
+      - network-lunch
+
   lunch-backend:
     image: lunch-backend
     container_name: lunch-backend
     build:
-      context: .
-      dockerfile: ./lunch-backend/Dockerfile
+      context: ./lunch-backend
+      dockerfile: Dockerfile
     links: 
       - database
     ports:
@@ -32,11 +35,14 @@ services:
       - DB_USERNAME=testUser
       - DB_PASSWORD=dieisgaylol
       - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - network-lunch
+
   lunch-frontend:
     image: lunch-frontend
     build:
-      context: .
-      dockerfile: ./lunch-frontend/Dockerfile
+      context: ./lunch-frontend
+      dockerfile: Dockerfile
     depends_on: 
       - lunch-backend
     ports:
@@ -45,3 +51,8 @@ services:
     volumes:
        - ./lunch-frontend:/usr/src/app/lunch-frontend
        - /usr/src/app/lunch-frontend/node_modules
+    networks:
+      - network-lunch
+
+networks:
+  network-lunch:

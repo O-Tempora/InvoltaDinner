@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+########################################################################
+
+  database:
+    container_name: lunch-database
+    image: percona:ps-8.0.26-16
+    restart: always
+    ports:
+      - "3306:3306"
+    environment: 
+      MYSQL_DATABASE: dinner
+      MYSQL_USER: testUser
+      MYSQL_PASSWORD: dieisgaylol
+      MYSQL_ROOT_PASSWORD: 1944Rommel1944
+    volumes:
+      - ./database:/var/lib/mysql
+    networks:
+      - network-lunch
+########################################################################
+
+  lunch-backend:
+    image: registry.involta.pro/lunch/lunch-backend/lunch-backend:0.0.4
+    container_name: lunch-backend
+    links: 
+      - database
+    ports:
+      - "5005:80"
+    restart: always
+    networks:
+      - network-lunch
+########################################################################
+
+  lunch-frontend:
+    image: registry.involta.pro/lunch/lunch-frontend/lunch-frontend:0.0.7
+    restart: always
+    depends_on:
+      - lunch-backend
+    ports:
+      - "4000:8080"
+    container_name: lunch-frontend
+    networks:
+      - network-lunch
+########################################################################
+
+networks:
+  network-lunch:

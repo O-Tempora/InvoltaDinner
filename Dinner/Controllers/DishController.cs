@@ -42,6 +42,31 @@ namespace Dinner.Controllers
             }
         }
 
+        [HttpPut]
+        [Authorize(Roles = "cook,admin")]
+        public async Task<IActionResult> Post ([FromBody] UpdateDishModel updateDish) 
+        {
+
+            if(ModelState.IsValid)
+            {
+                _iDbCrud.UpdateDish(updateDish);
+
+                var msg = new 
+                {
+                    message = "Блюдо изменено"
+                };
+                return Ok(msg);
+            }
+            else {
+                var errorMsg = new
+                {
+                    message = "Неверные входные данные",
+                    error = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
+                };
+                return BadRequest(errorMsg);
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {

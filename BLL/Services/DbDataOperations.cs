@@ -894,5 +894,30 @@ namespace BLL.Services
             }
             else return 0;
         }
+
+        public void UpdateDish(UpdateDishModel updateDish)
+        {
+            Dish currDish = new Dish();
+            if (updateDish.Id != null && updateDish.Id != 0)
+            {
+                currDish = dataBase.DishRepository.Get(updateDish.Id);
+            }
+            if (currDish != null)
+            {
+                List<RecordDish> recDishes = dataBase.RecordDishRepository.GetAll().Where(i => i.Dish == currDish.Id).ToList();
+                foreach (RecordDish recs in recDishes)
+                {
+                    Record rec = dataBase.RecordRepository.GetAll().Where(i => i.Id == recs.Record).FirstOrDefault();
+                    rec.Price -= currDish.Price;
+                    rec.Price += updateDish.Price;
+                    dataBase.RecordRepository.Update(rec);
+                    Save();
+                }
+                currDish.Name = updateDish.Name;
+                currDish.Price = updateDish.Price;
+                dataBase.DishRepository.Update(currDish);
+                Save();
+            }
+        }
     }
 }

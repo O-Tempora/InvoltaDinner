@@ -49,8 +49,6 @@ namespace Dinner.BackgroundTasks
             var timePeriod = currentTime.Hour >= 12 ?
                 (desiredTime.AddDays(1) - currentTime) :
                 -timeDifference;
-                Console.WriteLine("Time counted: ");
-                Console.WriteLine(timePeriod.TotalMilliseconds);
             return timePeriod;
         }
     }

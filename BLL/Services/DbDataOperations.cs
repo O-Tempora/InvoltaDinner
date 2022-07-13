@@ -241,15 +241,40 @@ namespace BLL.Services
         public void DeleteDish(int id)
         {
             Dish dish = dataBase.DishRepository.Get(id);
-            MenuDish dishMenu = dataBase.MenuDishRepository.GetAll()
-                                .Where(i => i.Dish == dish.Id).FirstOrDefault();
             if (dish != null)
             {
-                dataBase.MenuDishRepository.Delete(dishMenu.Id);
+                MenuDish dishMenu = dataBase.MenuDishRepository.GetAll()
+                                                                .Where(i => i.Dish == dish.Id)
+                                                                .FirstOrDefault();
+                if (dishMenu != null)
+                {
+                    dataBase.MenuDishRepository.Delete(dishMenu.Id);
+                }
+                List<RecordDish> recDishes = dataBase.RecordDishRepository.GetAll().Where(i => i.Dish == dish.Id).ToList();
+                foreach (RecordDish recsDishes in recDishes)
+                {
+                    Record rec = dataBase.RecordRepository.Get(recsDishes.Record);
+                    if (rec != null)
+                    {
+                        rec.Price -= dish.Price;
+                        dataBase.RecordRepository.Update(rec);
+                    }
+                    if (dish.Position == 1)
+                    {
+                        recsDishes.Dish = 1;
+                    }
+                    if (dish.Position == 2)
+                    {
+                        recsDishes.Dish = 2;
+                    }
+                    dataBase.RecordDishRepository.Update(recsDishes);
+                    Save();
+                }
                 dataBase.DishRepository.Delete(dish.Id);
                 Save();
             }          
         }
+        
         public void DeleteRecord(int id)
         {
             Record record = dataBase.RecordRepository.Get(id);
@@ -889,6 +914,31 @@ namespace BLL.Services
                 return user.IsApproved;
             }
             else return 0;
+        }
+
+        public void UpdateDish(UpdateDishModel updateDish)
+        {
+            Dish currDish = new Dish();
+            if (updateDish.Id != null && updateDish.Id != 0)
+            {
+                currDish = dataBase.DishRepository.Get(updateDish.Id);
+            }
+            if (currDish != null)
+            {
+                List<RecordDish> recDishes = dataBase.RecordDishRepository.GetAll().Where(i => i.Dish == currDish.Id).ToList();
+                foreach (RecordDish recs in recDishes)
+                {
+                    Record rec = dataBase.RecordRepository.GetAll().Where(i => i.Id == recs.Record).FirstOrDefault();
+                    rec.Price -= currDish.Price;
+                    rec.Price += updateDish.Price;
+                    dataBase.RecordRepository.Update(rec);
+                    Save();
+                }
+                currDish.Name = updateDish.Name;
+                currDish.Price = updateDish.Price;
+                dataBase.DishRepository.Update(currDish);
+                Save();
+            }
         }
     }
 }

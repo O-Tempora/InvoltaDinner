@@ -40,7 +40,10 @@ namespace BLL.Services
         }
         public List<TransactionModel> GetAllTransactions() {
             List<TransactionModel> transactionName = new List<TransactionModel>();
-            List<TransactionModel> transactions = dataBase.TransactionRepository.GetAll().Select(i => new TransactionModel(i)).ToList();
+            List<TransactionModel> transactions = dataBase.TransactionRepository.GetAll()
+                                                                                .Select(i => new TransactionModel(i))
+                                                                                .OrderByDescending(i => i.Id)
+                                                                                .ToList();
             List<UserModel> users = GetAllUsers();
             foreach (TransactionModel t in transactions)
             {
@@ -150,6 +153,7 @@ namespace BLL.Services
             List<TransactionModel> userTransactions = dataBase.TransactionRepository.GetAll()
                                                                                     .Select(i => new TransactionModel(i))
                                                                                     .Where(i => i.User == User)
+                                                                                    .OrderByDescending(i => i.Id)
                                                                                     .ToList();
             return userTransactions;
         }

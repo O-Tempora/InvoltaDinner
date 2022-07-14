@@ -36,7 +36,11 @@ namespace BLL.Services
             return dataBase.DishRepository.GetAll().Select(i => new DishModel(i)).ToList();
         }
         public List<UserModel> GetAllUsers() {
-            return dataBase.UserRepository.GetAll().Select(i => new UserModel(i)).ToList();
+            return dataBase.UserRepository.GetAll().Select(i => new UserModel(i))
+                                                    .OrderBy(i => i.IsApproved)
+                                                    .ThenBy(i => i.Role)
+                                                    .ThenBy(i => i.Name)
+                                                    .ToList();
         }
         public List<TransactionModel> GetAllTransactions() {
             List<TransactionModel> transactionName = new List<TransactionModel>();

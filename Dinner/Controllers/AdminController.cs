@@ -74,13 +74,26 @@ namespace Dinner.Controllers
         {
             if(ModelState.IsValid)
             {
-                _iDbCrud.DeleteUser(userId);
+                var user = _iDbCrud.GetUserById(userId);
+                if (user.Role != "admin")
+                {    
+                    _iDbCrud.DeleteUser(userId);
 
-                var msg = new 
+                    var msg = new 
+                    {
+                        message = "Пользователь был удален"
+                    };
+                    return Ok(msg);
+                }
+                else 
                 {
-                    message = "Пользователь был удален"
-                };
-                return Ok(msg);
+                    var errorMsg = new
+                    {
+                        message = "Нельзя удалить администратора",
+                        error = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
+                    };
+                    return BadRequest(errorMsg);
+                }
             }
             else {
                 return BadRequest();
@@ -117,6 +130,15 @@ namespace Dinner.Controllers
             if(ModelState.IsValid)
             {
                 var user = _iDbCrud.GetUserById(model.UserId);
+                if (user.Role == "admin")
+                {
+                     var errorMsg = new
+                    {
+                        message = "Нельзя менять роль у администраторов",
+                        error = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
+                    };
+                    return BadRequest(errorMsg);
+                }
                 if(user != null)
                 {
                     if(user.IsApproved == false)

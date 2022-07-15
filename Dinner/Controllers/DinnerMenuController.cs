@@ -57,18 +57,22 @@ namespace Dinner.Controllers
             }
         }
 
-        [HttpPut("{date}")]
-        public async Task<IActionResult> Put(DateTime date)
+        [HttpPost("dates")]
+        public async Task<IActionResult> ChangeDaysActivity([FromBody]List<DateTime> dates)
         {
-            try
+            foreach(DateTime date in dates)
             {
-                _iDbCrud.SwitchMenuStatus(date.Date);      
-                return Ok();
+                try
+                {
+                    _iDbCrud.SwitchMenuStatus(date.Date);      
+                }
+                catch
+                {
+                    return BadRequest();
+                }  
             }
-            catch
-            {
-                return BadRequest();
-            }
+            return Ok();
+
         }
         
         [HttpGet("periodMenu")]

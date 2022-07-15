@@ -36,11 +36,18 @@ namespace BLL.Services
             return dataBase.DishRepository.GetAll().Select(i => new DishModel(i)).ToList();
         }
         public List<UserModel> GetAllUsers() {
-            return dataBase.UserRepository.GetAll().Select(i => new UserModel(i)).ToList();
+            return dataBase.UserRepository.GetAll().Select(i => new UserModel(i))
+                                                    .OrderBy(i => i.IsApproved)
+                                                    .ThenBy(i => i.Role)
+                                                    .ThenBy(i => i.Name)
+                                                    .ToList();
         }
         public List<TransactionModel> GetAllTransactions() {
             List<TransactionModel> transactionName = new List<TransactionModel>();
-            List<TransactionModel> transactions = dataBase.TransactionRepository.GetAll().Select(i => new TransactionModel(i)).ToList();
+            List<TransactionModel> transactions = dataBase.TransactionRepository.GetAll()
+                                                                                .Select(i => new TransactionModel(i))
+                                                                                .OrderByDescending(i => i.Id)
+                                                                                .ToList();
             List<UserModel> users = GetAllUsers();
             foreach (TransactionModel t in transactions)
             {
@@ -156,6 +163,7 @@ namespace BLL.Services
             List<TransactionModel> userTransactions = dataBase.TransactionRepository.GetAll()
                                                                                     .Select(i => new TransactionModel(i))
                                                                                     .Where(i => i.User == User)
+                                                                                    .OrderByDescending(i => i.Id)
                                                                                     .ToList();
             User user = dataBase.UserRepository.Get(User);
             foreach (TransactionModel t in userTransactions)

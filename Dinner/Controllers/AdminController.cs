@@ -28,7 +28,7 @@ namespace Dinner.Controllers
                 List<UserInfoModel> userInfo = new List<UserInfoModel>();
                 foreach(UserModel u in allUsers)
                 {
-                    userInfo.Add(new UserInfoModel(u));
+                    userInfo.Add(new UserInfoModel(u, _iDbCrud.GetUserBalance(u.Id)));
                 }
                 
                 return new ObjectResult(userInfo);

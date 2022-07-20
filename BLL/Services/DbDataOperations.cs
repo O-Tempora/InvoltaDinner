@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using MimeKit;
 using MailKit.Net.Smtp;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace BLL.Services
 {
@@ -192,11 +193,19 @@ namespace BLL.Services
         public void SwitchMenuStatus(DateTime date)
         {
             Menu dinnerMenu = dataBase.MenuRepository.GetAll().Where(i => i.Date == date).FirstOrDefault();
+            List<Record> records = dataBase.RecordRepository.GetAll().Where(i => i.Date == date).ToList();
+
             if (dinnerMenu != default(Menu))
             {
                 if (dinnerMenu.IsActive == 0)
                     dinnerMenu.IsActive = 1;
-                else dinnerMenu.IsActive = 0;
+                else {
+                    dinnerMenu.IsActive = 0;
+                    foreach (Record record in records)
+                    {
+                        dataBase.RecordRepository.Delete(record.Id);
+                    }
+                } 
                 dataBase.MenuRepository.Update(dinnerMenu);
                 Save();
             }

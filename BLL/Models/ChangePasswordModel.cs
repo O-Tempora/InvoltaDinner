@@ -16,6 +16,10 @@ namespace BLL.Models
         [DataType(DataType.Password)]
         public string NewPassword { get; set; }
 
+        [Required]
+        [DataType(DataType.Password)]
+        public string RepeatPassword { get; set; }
+
         public string token { get; set; }
     }
 }

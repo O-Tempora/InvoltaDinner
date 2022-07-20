@@ -86,6 +86,10 @@ namespace Dinner.Controllers
         [Route("api/account/changepassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel changePasswordModel)
         {
+            if (changePasswordModel.NewPassword != changePasswordModel.RepeatPassword)
+            {
+                return BadRequest("Пароли не совпадают");
+            }
             if (changePasswordModel.NewPassword.Length <= 30 && changePasswordModel.NewPassword.Length >= 6)
             {
                 bool correctPassword = _iDbCrud.ChangePasswordOfUser(changePasswordModel);

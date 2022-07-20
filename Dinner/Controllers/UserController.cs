@@ -26,8 +26,9 @@ namespace Dinner.Controllers
         }
 
         [HttpGet]
-        public UserDataModel GetUserData([FromHeader]string token)
+        public UserDataModel GetUserData([FromHeader]string Authorization)
         {
+            var token = Authorization.Substring(7);
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwt = tokenHandler.ReadJwtToken(token);
             var user = new UserDataModel();

@@ -34,7 +34,7 @@ namespace BLL.Services
             return dataBase.RecordRepository.GetAll().Select(i => new RecordModel(i)).ToList();
         }
         public List<DishModel> GetAllDishes() {
-            return dataBase.DishRepository.GetAll().Select(i => new DishModel(i)).ToList();
+            return dataBase.DishRepository.GetAll().Select(i => new DishModel(i)).OrderBy(i => i.Position).ThenBy(i => i.Name).ToList();
         }
         public List<UserModel> GetAllUsers() {
             return dataBase.UserRepository.GetAll().Select(i => new UserModel(i))
@@ -103,7 +103,7 @@ namespace BLL.Services
 
                 dayRecordsList.Add(new RecordNameModel(d.Id, username, d.isReady, dishesList));
             }
-            return dayRecordsList;
+            return dayRecordsList.OrderBy(i => i.Status).ThenBy(i => i.UserName).ToList();
         }
 
         public RecordModel GetRecord(int id)
